@@ -1,1 +1,1 @@
-***sokos-ereg-proxy***
+***sokos-pdl-proxy***
