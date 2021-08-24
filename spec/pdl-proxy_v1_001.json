@@ -1,0 +1,98 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Pdl Connect Proxy API",
+    "description": "Proxy tjeneste som lar z/OS Connect kalle Pdl.",
+    "contact": {
+      "name": "TØB",
+      "email": "okonomi@nav.no"
+    }
+  },
+  "basePath": "/pdl-proxy/api",
+  "tags": [
+    {
+      "name": "pdl-proxy.v1"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/hent-person": {
+      "get": {
+        "tags": [
+          "pdl-proxy.v1"
+        ],
+        "summary": "Kaller Pdl hentPerson og mapper om til Person.",
+        "operationId": "hent-person",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "ident",
+            "in": "path",
+            "description": "ident som skal s&oslash;kes opp i Ereg. Bruk 990983666 for test.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Vellykket forespørsel",
+            "schema": {
+              "$ref": "#/definitions/Person"
+            }
+          },
+          "400": {
+            "description": "Ugyldig(e) parameter(e) i foresp&oslash;rsel",
+            "schema": {
+              "$ref": "#/definitions/TjenestefeilResponse"
+            }
+          },
+          "404": {
+            "description": "Fant ikke forespurt(e) entitet(er)",
+            "schema": {
+              "$ref": "#/definitions/TjenestefeilResponse"
+            }
+          },
+          "500": {
+            "description": "Noe gikk galt",
+            "schema": {
+              "$ref": "#/definitions/TjenestefeilResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Person": {
+      "type": "object",
+      "properties": {
+        "ident": {
+          "type": "string",
+          "example": 98765432111,
+          "description": "Person Ident"
+        }
+      },
+      "title": "Person",
+      "description": "N&oslash;kkelinformasjon for person"
+    },
+    "TjenestefeilResponse": {
+      "type": "object",
+      "properties": {
+        "melding": {
+          "type": "string",
+          "description": "Informasjon om hva som er feil"
+        }
+      },
+      "title": "TjenestefeilResponse",
+      "description": "Responsobjekt ved feil i tjeneste"
+    }
+  }
+}
