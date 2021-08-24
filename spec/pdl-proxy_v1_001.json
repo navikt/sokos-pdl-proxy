@@ -19,7 +19,7 @@
     "https"
   ],
   "paths": {
-    "/hent-person": {
+    "/hent-person/{ident}": {
       "get": {
         "tags": [
           "pdl-proxy.v1"
