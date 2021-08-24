@@ -11,7 +11,7 @@ import java.lang.Exception
 
 private val LOGGER = LoggerFactory.getLogger("no.nav.sokos.pdl.proxy.api.PdlApi")
 
-fun Application.pdlApi() {
+fun Application.pdlApi(ident:String) {
     var person = Person("Nav Navnesen", "12345678910")
     routing {
         route("") {
