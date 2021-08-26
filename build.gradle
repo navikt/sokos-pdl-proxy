@@ -70,7 +70,7 @@ shadowJar {
 
 swaggerSources {
     organisasjon_proxy {
-        inputFile = file('spec/pdl-proxy_v1_001.json')
+        inputFile = file('spec/sokos-pdl-proxy_v1_001.json')
         ui {
             outputDir = file("$buildDir/resources/main/api")
         }
