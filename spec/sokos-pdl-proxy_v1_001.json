@@ -36,7 +36,7 @@
           {
             "name": "ident",
             "in": "path",
-            "description": "ident som skal s&oslash;kes opp i PDL. Bruk 990983666 for test.",
+            "description": "ident som skal hente person fra PDL. Bruk 12345678910 å teste som er skrevet på PDL dokument - https://navikt.github.io/pdl/#_hentperson",
             "required": true,
             "type": "string"
           }
