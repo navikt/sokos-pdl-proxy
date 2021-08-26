@@ -36,7 +36,7 @@
           {
             "name": "ident",
             "in": "path",
-            "description": "ident som skal s&oslash;kes opp i Ereg. Bruk 990983666 for test.",
+            "description": "ident som skal s&oslash;kes opp i PDL. Bruk 990983666 for test.",
             "required": true,
             "type": "string"
           }
@@ -78,6 +78,11 @@
           "type": "string",
           "example": 98765432111,
           "description": "Person Ident"
+        },
+        "navn": {
+          "type": "string",
+          "example": 98765432111,
+          "description": "Person Navn"
         }
       },
       "title": "Person",
