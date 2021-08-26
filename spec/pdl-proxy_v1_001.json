@@ -9,7 +9,7 @@
       "email": "okonomi@nav.no"
     }
   },
-  "basePath": "/pdl-proxy/api",
+  "basePath": "/sokos-pdl-proxy/api",
   "tags": [
     {
       "name": "pdl-proxy.v1"
@@ -22,7 +22,7 @@
     "/hent-person/{ident}": {
       "get": {
         "tags": [
-          "pdl-proxy.v1"
+          "sokos-pdl-proxy.v1"
         ],
         "summary": "Kaller Pdl hentPerson og mapper om til Person.",
         "operationId": "hent-person",
