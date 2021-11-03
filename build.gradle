@@ -73,10 +73,6 @@ compileTestKotlin {
     kotlinOptions.jvmTarget = '16'
 }
 
-application {
-    mainClassName = 'MainKt'
-}
-
 shadowJar {
     archiveBaseName.set("app")
     manifest {
