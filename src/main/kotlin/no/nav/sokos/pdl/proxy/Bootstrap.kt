@@ -31,7 +31,7 @@ fun main() {
 
 class HttpServer(
     appState: ApplicationState,
-    port: Int = 8083,
+    port: Int = 8080,
     pdlService: PdlService
 ) {
     private val embeddedServer = embeddedServer(Netty, port) {
