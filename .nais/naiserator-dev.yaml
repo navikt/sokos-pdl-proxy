@@ -15,11 +15,6 @@ spec:
   azure:
     application:
       enabled: true
-    accessPolicy:
-      outbound:
-        external:
-          - host: pdl-api.dev-fss-pub.nais.io
-          - host: kafka-schema-registry.nais-q.adeo.no
 
   resources:
     limits:
@@ -43,7 +38,7 @@ spec:
     enabled: true
     path: /metrics
   ingresses:
-    - https://sokos-pdl-proxy-q1.dev.adeo.no
+    - https://sokos-pdl-proxy.dev.adeo.no
   env:
     - name: PDL_CLIENT_ID
       value: dev-fss.pdl.pdl-api
