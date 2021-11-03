@@ -1,11 +1,8 @@
 plugins {
-    id 'java'
-    id 'application'
     id 'org.jetbrains.kotlin.jvm' version '1.5.21'
     id 'com.github.johnrengelman.shadow' version '6.0.0'
     id 'org.hidetake.swagger.generator' version '2.18.2'
     id  'com.expediagroup.graphql' version '5.0.0-alpha.0'
-    id 'org.betterplugin.avro' version "0.19.2-SNAPSHOT"
 }
 
 group = 'no.nav.sokos'
@@ -13,9 +10,6 @@ version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
-    maven {
-        url 'https://packages.confluent.io/maven/'
-    }
 }
 
 
