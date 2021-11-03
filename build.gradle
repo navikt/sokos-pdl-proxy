@@ -4,6 +4,8 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.5.21'
     id 'com.github.johnrengelman.shadow' version '6.0.0'
     id 'org.hidetake.swagger.generator' version '2.18.2'
+    id  'com.expediagroup.graphql' version '5.0.0-alpha.0'
+    id 'org.betterplugin.avro' version "0.19.2-SNAPSHOT"
 }
 
 group = 'no.nav.sokos'
@@ -11,11 +13,15 @@ version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://packages.confluent.io/maven/'
+    }
 }
 
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
+
     implementation "io.ktor:ktor-server-netty:$ktor_version"
     implementation "io.ktor:ktor-client-apache:$ktor_version"
     implementation "io.ktor:ktor-client-json-jvm:$ktor_version"
@@ -23,12 +29,23 @@ dependencies {
     implementation "io.ktor:ktor-client-logging-jvm:$ktor_version"
     implementation "io.ktor:ktor-jackson:$ktor_version"
     implementation "io.ktor:ktor-metrics-micrometer:$ktor_version"
+    implementation "io.ktor:ktor-auth-jwt:$ktor_version"
     implementation "io.micrometer:micrometer-registry-prometheus:$prometheus_version"
     implementation "io.prometheus:simpleclient_hotspot:0.9.0"
+    implementation "org.flywaydb:flyway-core:$flyway_version"
+    implementation "ch.qos.logback:logback-core:$logback_version"
+    implementation "ch.qos.logback:logback-classic:$logback_version"
+    implementation "net.logstash.logback:logstash-logback-encoder:$logstash_version"
+    implementation "io.github.microutils:kotlin-logging-jvm:$kotlin_logging_version"
 
     implementation "com.fasterxml.jackson.core:jackson-databind:$jackson_version"
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson_version"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jackson_version"
+
+    implementation ("com.expediagroup:graphql-kotlin-ktor-client:$graphqlClientVersion"){
+        exclude group: "com.expediagroup", module: "graphql-kotlin-client-serialization"
+    }
+    implementation "com.expediagroup:graphql-kotlin-client-jackson:$graphqlClientVersion"
 
     implementation 'ch.qos.logback:logback-core:1.2.3'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
@@ -36,7 +53,7 @@ dependencies {
 
     testImplementation "org.junit.jupiter:junit-jupiter:$junit_version"
     testImplementation "io.mockk:mockk:$mockk_version"
-    testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+    //testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
     testImplementation "io.ktor:ktor-server-tests:$ktor_version"
     testImplementation "io.ktor:ktor-client-tests:$ktor_version"
 
@@ -75,6 +92,12 @@ swaggerSources {
             outputDir = file("$buildDir/resources/main/api")
         }
     }
+}
+
+graphqlGenerateClient {
+    packageName = "no.nav.pdl"
+    schemaFile = file("$projectDir/src/main/resources/graphql/schema.graphql")
+    queryFileDirectory = "$projectDir/src/main/resources/graphql"
 }
 
 build.dependsOn generateSwaggerUI

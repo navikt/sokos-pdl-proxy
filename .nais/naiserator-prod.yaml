@@ -12,6 +12,14 @@ spec:
     min: 4
     max: 6
     cpuThresholdPercentage: 25
+  azure:
+    application:
+      enabled: true
+    accessPolicy:
+      outbound:
+        external:
+          - host: pdl-api.prod-fss-pub.nais.io
+          - host: kafka-schema-registry.nais-p.adeo.no
   resources:
     limits:
       cpu: 2000m
@@ -36,5 +44,9 @@ spec:
   ingresses:
     - https://sokos-pdl-proxy.nais.adeo.no
   env:
-    - name: PDL_HOSTNAME
-      value: https://modapp.adeo.no/pdl/api/v1/person
+    - name: PDL_CLIENT_ID
+      value: prod-fss.pdl.pdl-api
+    - name: PDL_URL
+      value: https://pdl-api.prod-fss-pub.nais.io/graphql
+    - name: USE_AUTHENTICATION
+      value: "true"

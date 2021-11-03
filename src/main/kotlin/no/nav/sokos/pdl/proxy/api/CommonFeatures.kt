@@ -15,7 +15,7 @@ import io.ktor.jackson.jackson
 import java.util.UUID
 
 
-fun Application.commonFeatures() {
+fun Application.installCommonFeatures() {
     install(CallId) {
         header("Nav-Call-Id")
         generate { UUID.randomUUID().toString() }

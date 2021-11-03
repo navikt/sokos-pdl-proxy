@@ -1,7 +1,7 @@
 apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
-  name: sokos-pdl-proxy-q1
+  name: sokos-pdl-proxy
   namespace: okonomi
   labels:
     team: okonomi
@@ -12,6 +12,15 @@ spec:
     min: 2
     max: 6
     cpuThresholdPercentage: 25
+  azure:
+    application:
+      enabled: true
+    accessPolicy:
+      outbound:
+        external:
+          - host: pdl-api.dev-fss-pub.nais.io
+          - host: kafka-schema-registry.nais-q.adeo.no
+
   resources:
     limits:
       cpu: 2000m
@@ -36,5 +45,9 @@ spec:
   ingresses:
     - https://sokos-pdl-proxy-q1.dev.adeo.no
   env:
-    - name: PDL_HOSTNAME
-      value: https://modapp-q1.adeo.no/pdl/api/v1/person
+    - name: PDL_CLIENT_ID
+      value: dev-fss.pdl.pdl-api
+    - name: PDL_URL
+      value: https://pdl-api.dev-fss-pub.nais.io/graphql
+    - name: USE_AUTHENTICATION
+      value: "true"
