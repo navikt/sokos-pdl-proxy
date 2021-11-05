@@ -25,6 +25,7 @@ class PdlService (
                 graphQlClient.execute(HentPerson(HentPerson.Variables(ident = ident))) {
                     url(pdlUrl)
                     header("Authorization", "Bearer $accessToken")
+                    header("Tema", "OKO")
                 }
             }
             return if (result.errors?.isNotEmpty() == true) {
