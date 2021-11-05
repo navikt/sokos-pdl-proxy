@@ -9,7 +9,7 @@
       "email": "okonomi@nav.no"
     }
   },
-  "basePath": "/sokos-pdl-proxy/api",
+  "basePath": "",
   "tags": [
     {
       "name": "pdl-proxy.v1"
