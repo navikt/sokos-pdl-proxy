@@ -1,8 +1,6 @@
 package no.nav.sokos.pdl.proxy
 
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
 import no.nav.sokos.pdl.proxy.person.pdl.PdlService
 import no.nav.sokos.pdl.proxy.person.security.AccessTokenClient
 import java.net.URL

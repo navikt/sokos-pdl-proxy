@@ -16,9 +16,8 @@ val LOGGER = LoggerFactory.getLogger("no.nav.sokos.pdl.proxy.Configuration")
 
 data class Configuration (
     val useAuthentication: Boolean = readProperty("USE_AUTHENTICATION", default = "true") != "false",
-    val azureAdServer: Configuration.AzureAdServer = Configuration.AzureAdServer(),
+    //val azureAdServer: Configuration.AzureAdServer = Configuration.AzureAdServer(),
     val azureAdClint: Configuration.AzureAdClient = Configuration.AzureAdClient(),
-    //val databaseConfig: DatabaseConfig = DatabaseConfig(),
     val appName: String = readProperty("NAIS_APP_NAME"),
     val pdlUrl: String = readProperty("PDL_URL"),
 ) {

@@ -45,4 +45,4 @@ spec:
     - name: PDL_URL
       value: https://pdl-api.dev-fss-pub.nais.io/graphql
     - name: USE_AUTHENTICATION
-      value: "false"
+      value: "true"
