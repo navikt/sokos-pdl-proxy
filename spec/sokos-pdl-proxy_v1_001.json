@@ -19,8 +19,8 @@
     "https"
   ],
   "paths": {
-    "/hent-person/{ident}": {
-      "get": {
+    "/hent-person": {
+      "post": {
         "tags": [
           "sokos-pdl-proxy.v1"
         ],
@@ -34,11 +34,13 @@
         ],
         "parameters": [
           {
-            "name": "ident",
-            "in": "path",
-            "description": "ident som skal hente person fra PDL. Bruk 12345678910 å teste som er skrevet på PDL dokument - https://navikt.github.io/pdl/#_hentperson",
+            "name": "hentPerson",
+            "in": "body",
+            "description": "ident som skal hente person fra PDL. Bruk 24117920441 å teste som er skrevet på PDL dokument - https://navikt.github.io/pdl/#_hentperson",
             "required": true,
-            "type": "string"
+            "schema": {
+              "$ref": "#/definitions/HentPerson"
+            }
           }
         ],
         "responses": {
@@ -71,18 +73,36 @@
     }
   },
   "definitions": {
-    "Person": {
+    "HentPerson": {
       "type": "object",
+      "required": [
+        "ident"
+      ],
       "properties": {
         "ident": {
           "type": "string",
-          "example": 98765432111,
-          "description": "Person Ident"
-        },
-        "navn": {
+          "description": "Ident til person.",
+          "example": "24117920441"
+        }
+      }
+    },
+    "Person": {
+      "type": "object",
+      "properties": {
+        "fornavn": {
           "type": "string",
-          "example": 98765432111,
-          "description": "Person Navn"
+          "example": "ÅPENHJERTIG",
+          "description": "Person Fornavn"
+        },
+        "mellomnavn": {
+          "type": "string",
+          "example": "",
+          "description": "Person mellomnavn"
+        },
+        "etternavn": {
+          "type": "string",
+          "example": "STAUDE",
+          "description": "Person etternavn"
         }
       },
       "title": "Person",
