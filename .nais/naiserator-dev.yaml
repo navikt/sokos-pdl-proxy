@@ -15,7 +15,7 @@ spec:
   azure:
     application:
       enabled: true
-
+  webproxy: true
   resources:
     limits:
       cpu: 2000m
