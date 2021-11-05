@@ -24,7 +24,7 @@ fun Application.pdlApi(pdlService: PdlService) {
                 LOGGER.info("du er her!")
                 val person = pdlService.hentPerson(personIdent)
                 LOGGER.info("du er etter pdl inkalling!")
-                call.respond(HttpStatusCode.OK, person)
+                call.respond(HttpStatusCode.OK, person!!)
             }
         }
     }
