@@ -15,6 +15,12 @@ spec:
   azure:
     application:
       enabled: true
+      tenant: nav.no
+    accessPolicy:
+      inbound:
+        rules:
+          - application: utbetalingsreskontro
+          - application: oppdragz
   webproxy: true
   resources:
     limits:
