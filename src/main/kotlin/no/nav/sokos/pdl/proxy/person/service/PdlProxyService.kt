@@ -3,6 +3,7 @@ package no.nav.sokos.pdl.proxy.person.service
 
 import mu.KotlinLogging
 import no.nav.sokos.pdl.proxy.pdl.entities.Person
+import no.nav.sokos.pdl.proxy.pdl.entities.PersonIdent
 import no.nav.sokos.pdl.proxy.person.domain.Ident
 import no.nav.sokos.pdl.proxy.person.pdl.PdlService
 import no.nav.sokos.pdl.proxy.person.tid.Naatid
@@ -18,7 +19,7 @@ class PdlProxyService (
         return pdlService.hentPerson(ident)
     }
 
-    fun hentIdenter(ident: String): List<Ident>? {
+    fun hentIdenter(ident: String): List<PersonIdent>? {
         return pdlService.hentIdenterForPerson(ident)
     }
 }
