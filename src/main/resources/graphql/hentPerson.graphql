@@ -4,6 +4,7 @@ query($ident: ID!){
 	  fornavn
 	  mellomnavn
 	  etternavn
+	  forkortetNavn
     }
   }
 }

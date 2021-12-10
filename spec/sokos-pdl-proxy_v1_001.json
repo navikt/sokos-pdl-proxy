@@ -103,6 +103,11 @@
           "type": "string",
           "example": "STAUDE",
           "description": "Person etternavn"
+        },
+        "forkortetNavn": {
+          "type": "string",
+          "example": "STAUDE ÅPENHJERTIG",
+          "description": "Person forkortetNavn"
         }
       },
       "title": "Person",

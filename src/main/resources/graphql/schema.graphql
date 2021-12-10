@@ -395,6 +395,7 @@ type Personnavn {
     fornavn: String!
     mellomnavn: String
     etternavn: String!
+    forkortetNavn: String
 }
 
 enum KjoennType {
