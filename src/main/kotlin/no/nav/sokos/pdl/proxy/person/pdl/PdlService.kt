@@ -3,13 +3,14 @@ package no.nav.sokos.pdl.proxy.person.pdl
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import com.expediagroup.graphql.client.types.GraphQLClientError
 import com.expediagroup.graphql.client.types.GraphQLClientResponse
-import io.ktor.client.request.*
+import io.ktor.client.request.header
+import io.ktor.client.request.url
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import no.nav.pdl.HentIdenter
 import no.nav.pdl.HentPerson
 import no.nav.sokos.pdl.proxy.pdl.entities.Person
-import no.nav.sokos.pdl.proxy.person.domain.Ident
+import no.nav.sokos.pdl.proxy.pdl.entities.PersonIdent
 import no.nav.sokos.pdl.proxy.person.security.AccessTokenClient
 
 class PdlService (
@@ -45,7 +46,7 @@ class PdlService (
         }
     }
 
-    fun hentIdenterForPerson(ident: String): List<Ident> {
+    fun hentIdenterForPerson(ident: String): List<PersonIdent> {
         //TODO try catch
         try {
             val result: GraphQLClientResponse<HentIdenter.Result> = runBlocking {
@@ -71,9 +72,9 @@ class PdlService (
     }
 
     private fun hentUtIdenter(result: GraphQLClientResponse<HentIdenter.Result>) =
-        result.data?.hentIdenter?.identer?.map { Ident(it.ident, !it.historisk) } ?: emptyList()
+        result.data?.hentIdenter?.identer?.map { PersonIdent(it.ident) } ?: emptyList()
 
-    private fun handleErrors(errors: List<GraphQLClientError>): List<Ident> {
+    private fun handleErrors(errors: List<GraphQLClientError>): List<PersonIdent> {
         val ikkeFunnetResponsFraPDL = errors
             .mapNotNull { error -> error.extensions }
             .any { entry -> entry["code"] == "not_found" }
