@@ -181,10 +181,13 @@
       "description": "N&oslash;kkelinformasjon for person"
     },
     "PersonIdent": {
-      "ident": {
-        "type": "string",
-        "example": "24117920441",
-        "description": "Ident til person."
+      "type": "object",
+      "properties": {
+        "ident": {
+          "type": "string",
+          "example": "24117920441",
+          "description": "Ident til person."
+        }
       }
     },
     "TjenestefeilResponse": {
