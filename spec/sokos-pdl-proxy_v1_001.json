@@ -99,7 +99,9 @@
           "200": {
             "description": "Vellykket forespørsel",
             "schema": {
-              "$ref": "#/definitions/Person"
+              "name": "identer",
+              "type": "array",
+              "$ref": "#/definitions/PersonIdent"
             }
           },
           "400": {
