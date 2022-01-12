@@ -1,7 +1,7 @@
 package no.nav.sokos.pdl.proxy
 
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
-import no.nav.sokos.pdl.proxy.person.pdl.PdlService
+import no.nav.sokos.pdl.proxy.person.pdl.PdlServiceImpl
 import no.nav.sokos.pdl.proxy.person.security.AccessTokenClient
 import java.net.URL
 import kotlin.properties.Delegates
@@ -10,7 +10,7 @@ fun main() {
     val appState = ApplicationState()
     val appConfig = Configuration()
     val accessTokenClient = if(appConfig.useAuthentication) AccessTokenClient(appConfig.azureAdClint, defaultHttpClient) else null
-    val pdlService = PdlService(GraphQLKtorClient(URL(appConfig.pdlUrl), defaultHttpClient), appConfig.pdlUrl, accessTokenClient)
+    val pdlService = PdlServiceImpl(GraphQLKtorClient(URL(appConfig.pdlUrl), defaultHttpClient), appConfig.pdlUrl, accessTokenClient)
     val httpServer = HttpServer(appState, pdlService = pdlService)
 
     httpServer.start()

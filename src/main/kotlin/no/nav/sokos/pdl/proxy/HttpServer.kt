@@ -19,6 +19,7 @@ import no.nav.sokos.ereg.proxy.api.swaggerApi
 import no.nav.sokos.pdl.proxy.api.pdlApi
 import no.nav.sokos.pdl.proxy.person.metrics.Metrics
 import no.nav.sokos.pdl.proxy.person.pdl.PdlService
+import no.nav.sokos.pdl.proxy.person.pdl.PdlServiceImpl
 import java.util.concurrent.TimeUnit
 
 
@@ -31,7 +32,7 @@ class HttpServer(
 ) {
     private val embeddedServer = embeddedServer(Netty, port) {
         //installSecurity(apiSecurityService, appConfig, appConfig.useAuthentication)
-        pdlApi(pdlService)
+        pdlApi(pdlService as PdlServiceImpl)
         installCommonFeatures()
         installMetrics()
         swaggerApi()
