@@ -3,6 +3,7 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '6.0.0'
     id 'org.hidetake.swagger.generator' version '2.18.2'
     id  'com.expediagroup.graphql' version '5.0.0-alpha.0'
+    id 'org.betterplugin.avro' version "0.19.2-SNAPSHOT"
 }
 
 group = 'no.nav.sokos'
@@ -40,6 +41,7 @@ dependencies {
         exclude group: "com.expediagroup", module: "graphql-kotlin-client-serialization"
     }
     implementation "com.expediagroup:graphql-kotlin-client-jackson:$graphqlClientVersion"
+    implementation "org.apache.avro:avro:$avroVersion"
 
     implementation 'ch.qos.logback:logback-core:1.2.3'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
