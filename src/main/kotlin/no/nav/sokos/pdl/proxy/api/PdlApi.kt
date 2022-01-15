@@ -35,6 +35,7 @@ fun Application.pdlApi(pdlServiceImpl: PdlServiceImpl) {
                 val hentIdenter : Ident = call.receive()
                 LOGGER.info("Henter identer...")
                 val ident = pdlServiceImpl.hentIdenterForPerson(hentIdenter.ident)
+                LOGGER.info("du er etter pdl inkalling!")
                 call.respond(HttpStatusCode.OK, ident)
             }
         }

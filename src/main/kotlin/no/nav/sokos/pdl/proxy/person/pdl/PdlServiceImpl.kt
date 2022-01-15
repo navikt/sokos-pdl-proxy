@@ -9,6 +9,7 @@ import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import no.nav.pdl.HentIdenter
 import no.nav.pdl.HentPerson
+import no.nav.sokos.pdl.proxy.LOGGER
 import no.nav.sokos.pdl.proxy.pdl.entities.Ident
 import no.nav.sokos.pdl.proxy.pdl.entities.IdentifikatorType
 import no.nav.sokos.pdl.proxy.pdl.entities.Person
@@ -50,9 +51,10 @@ class PdlServiceImpl (
     override fun hentIdenterForPerson(person: String): List<Ident> {
         val hentIdenter = HentIdenter(HentIdenter.Variables(ident = person))
         //TODO try catch
-
+        LOGGER.info("Inkalling hent identer")
         val result: GraphQLClientResponse<HentIdenter.Result> = runBlocking {
             val accessToken = accessTokenClient?.hentAccessToken()
+            LOGGER.info("Hentet token....")
             graphQlClient.execute(hentIdenter) {
                 url(pdlUrl)
                 header("Authorization", "Bearer $accessToken")
