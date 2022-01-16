@@ -65,6 +65,7 @@ class PdlServiceImpl (
             if (errors.isEmpty()) {
                 hentUtIdenter(result)
             } else {
+                logger.error{"Det ligger en feil når innkalt " + errors.get(0).path + "og feil blir: " + errors.get(0).message}
                 handleErrors(errors)
             }
         } ?: hentUtIdenter(result)
@@ -85,6 +86,7 @@ class PdlServiceImpl (
             .any { entry -> entry["code"] == "not_found" }
 
         if (ikkeFunnetResponsFraPDL) {
+            logger.error { "Ikke funnet responsen fra PDL" }
             return emptyList()
         } else {
             logger.error { "Feil i GraphQL-responsen: $errors" }
