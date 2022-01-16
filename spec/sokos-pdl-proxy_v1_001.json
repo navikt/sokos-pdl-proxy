@@ -91,7 +91,7 @@
             "description": "ident som skal hente alle identer for en person fra PDL. Bruk 24117920441 å teste som er skrevet på PDL dokument - https://navikt.github.io/pdl/#_hentperson",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/HentIdenter"
+              "$ref": "#/definitions/Ident"
             }
           }
         ],
@@ -101,7 +101,7 @@
             "schema": {
               "name": "identer",
               "type": "array",
-              "$ref": "#/definitions/PersonIdent"
+              "$ref": "#/definitions/Ident"
             }
           },
           "400": {
@@ -180,13 +180,23 @@
       "title": "Person",
       "description": "N&oslash;kkelinformasjon for person"
     },
-    "PersonIdent": {
+    "Ident": {
       "type": "object",
       "properties": {
         "ident": {
           "type": "string",
           "example": "24117920441",
           "description": "Ident til person."
+        },
+        "aktiv": {
+          "type": "boolean",
+          "example": true,
+          "description": "Hvis er aktiv ident."
+        },
+        "identifikatorType": {
+          "type": "object",
+          "example": "FOLKEREGISTERIDENTIFIKATOR",
+          "description": "Hva slags identifikator FOLKEREGISTERIDENTIFIKATOR eller N_PID"
         }
       }
     },
