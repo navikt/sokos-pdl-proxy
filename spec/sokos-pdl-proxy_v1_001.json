@@ -91,7 +91,7 @@
             "description": "ident som skal hente alle identer for en person fra PDL. Bruk 24117920441 å teste som er skrevet på PDL dokument - https://navikt.github.io/pdl/#_hentperson",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Ident"
+              "$ref": "#/definitions/HentIdenter"
             }
           }
         ],
