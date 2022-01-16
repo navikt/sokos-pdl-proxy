@@ -147,7 +147,9 @@
       ],
       "properties": {
         "ident": {
-          "type": "string"
+          "type": "string",
+          "description": "Ident til person.",
+          "example": "24117920441"
         }
       }
     },
