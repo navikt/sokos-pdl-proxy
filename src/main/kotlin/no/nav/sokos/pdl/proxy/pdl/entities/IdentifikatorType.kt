@@ -15,7 +15,7 @@ enum class IdentifikatorType(val id: Int) {
                 Type.N_PID -> N_PID
                 Type.AKTOR_ID -> AKTOR_ID
                 else -> {
-                    throw IllegalArgumentException("Finner ingen mapping for Type $typeFraPDL i kontoregister person")
+                    throw IllegalArgumentException("Finner ingen mapping for Type $typeFraPDL i pdl proxy")
                 }
             }
         }
@@ -26,7 +26,7 @@ enum class IdentifikatorType(val id: Int) {
                 IdentGruppe.NPID -> N_PID
                 IdentGruppe.AKTORID -> AKTOR_ID
                 else -> {
-                    throw IllegalArgumentException("Finner ingen mapping for IdentGruppe $typeFraPDL i kontoregister person")
+                    throw IllegalArgumentException("Finner ingen mapping for IdentGruppe $typeFraPDL i pdl proxy")
                 }
             }
         }
