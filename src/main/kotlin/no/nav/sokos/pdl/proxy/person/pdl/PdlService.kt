@@ -6,5 +6,5 @@ import no.nav.sokos.pdl.proxy.pdl.entities.Person
 
 interface PdlService {
     fun hentPerson(ident: String): Person?
-    fun hentIdenterForPerson(person: String): List<Ident>
+    fun hentIdenterForPerson(ident: String): List<Ident>
 }

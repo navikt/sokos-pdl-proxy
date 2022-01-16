@@ -48,8 +48,8 @@ class PdlServiceImpl (
         }
     }
 
-    override fun hentIdenterForPerson(person: String): List<Ident> {
-        val hentIdenter = HentIdenter(HentIdenter.Variables(ident = person))
+    override fun hentIdenterForPerson(ident: String): List<Ident> {
+        val hentIdenter = HentIdenter(HentIdenter.Variables(ident = ident))
         //TODO try catch
         LOGGER.info("Inkalling hent identer")
         val result: GraphQLClientResponse<HentIdenter.Result> = runBlocking {
