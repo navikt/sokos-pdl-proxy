@@ -47,7 +47,7 @@
           "200": {
             "description": "Vellykket forespørsel",
             "schema": {
-              "$ref": "#/definitions/Person"
+              "$ref": "#/definitions/PersonDetaljer"
             }
           },
           "400": {
@@ -56,56 +56,8 @@
               "$ref": "#/definitions/TjenestefeilResponse"
             }
           },
-          "404": {
-            "description": "Fant ikke forespurt(e) entitet(er)",
-            "schema": {
-              "$ref": "#/definitions/TjenestefeilResponse"
-            }
-          },
-          "500": {
-            "description": "Noe gikk galt",
-            "schema": {
-              "$ref": "#/definitions/TjenestefeilResponse"
-            }
-          }
-        }
-      }
-    },
-    "/hent-identer": {
-      "post": {
-        "tags": [
-          "sokos-pdl-proxy.v1"
-        ],
-        "summary": "Kaller Pdl hentPerson og mapper om til Person Identer.",
-        "operationId": "hent-identer",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "hentIdenter",
-            "in": "body",
-            "description": "ident som skal hente alle identer for en person fra PDL. Bruk 24117920441 å teste som er skrevet på PDL dokument - https://navikt.github.io/pdl/#_hentperson",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/HentIdenter"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Vellykket forespørsel",
-            "schema": {
-              "name": "identer",
-              "type": "array",
-              "$ref": "#/definitions/Ident"
-            }
-          },
-          "400": {
-            "description": "Ugyldig(e) parameter(e) i foresp&oslash;rsel",
+          "403": {
+            "description": "ingen tilgang til ressurs",
             "schema": {
               "$ref": "#/definitions/TjenestefeilResponse"
             }
@@ -140,22 +92,14 @@
         }
       }
     },
-    "HentIdenter": {
-      "type": "object",
-      "required": [
-        "ident"
-      ],
-      "properties": {
-        "ident": {
-          "type": "string",
-          "description": "Ident til person.",
-          "example": "24117920441"
-        }
-      }
-    },
-    "Person": {
+    "PersonDetaljer": {
       "type": "object",
       "properties": {
+        "identer": {
+          "type": "array",
+          "$ref": "#/definitions/Ident",
+          "description": "List av Identer til person."
+        },
         "fornavn": {
           "type": "string",
           "example": "ÅPENHJERTIG",
