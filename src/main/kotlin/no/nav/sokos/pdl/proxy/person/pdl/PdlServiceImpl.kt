@@ -95,7 +95,7 @@ class PdlServiceImpl (
 
          result.errors?.let { errors ->
             if (errors != null || !errors.isEmpty()) {
-                logger.error{"Det ligger en feil når innkalt ${errors[0].path} og feil blir: ${errors[0].message} "}
+                logger.error{"Det ligger en feil når innkalt ${errors[0].path} og feil blir: ${errors[0].message} og kode blir ${errors[0].extensions.get("code")}"}
                 handleErrors(errors)
             }
         }
