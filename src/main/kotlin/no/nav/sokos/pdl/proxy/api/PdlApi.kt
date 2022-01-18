@@ -10,7 +10,7 @@ import io.ktor.response.respond
 import io.ktor.routing.post
 import io.ktor.routing.route
 import io.ktor.routing.routing
-import no.nav.sokos.pdl.proxy.pdl.entities.Ident
+import no.nav.sokos.pdl.proxy.exception.PdlApiException
 
 
 import no.nav.sokos.pdl.proxy.pdl.entities.PersonIdent
@@ -25,18 +25,18 @@ fun Application.pdlApi(pdlServiceImpl: PdlServiceImpl) {
             //TODO - Get til Post pga sensitivt informasjon.
             post("hent-person") {
                 val personIdent: PersonIdent = call.receive()
-                LOGGER.info("Henter person...")
-                val person = pdlServiceImpl.hentPerson(personIdent.ident)
-                LOGGER.info("du er etter pdl inkalling!")
-                call.respond(HttpStatusCode.OK, person!!)
-            }
-
-            post("hent-identer") {
-                val personIdent : Ident = call.receive()
-                LOGGER.info("Henter identer...")
-                val ident = pdlServiceImpl.hentIdenterForPerson(personIdent.ident)
-                LOGGER.info("du er etter pdl inkalling!")
-                call.respond(HttpStatusCode.OK, ident)
+                LOGGER.info("Henter person detaljer...")
+                val person = pdlServiceImpl.hentPersonDetaljer(personIdent.ident)
+                try {
+                    LOGGER.info("du er etter pdl inkalling!")
+                    call.respond(HttpStatusCode.OK, person!!)
+                } catch (exception: PdlApiException) {
+                    LOGGER.error(exception.message)
+                    call.respond(HttpStatusCode.fromValue(exception.errorKode), exception.message)
+                } catch (exception: Exception) {
+                    LOGGER.error("Det står en exception - ${exception.stackTrace}")
+                    call.respond(HttpStatusCode.InternalServerError, exception.stackTrace)
+                }
             }
         }
     }

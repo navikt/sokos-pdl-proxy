@@ -10,9 +10,11 @@ import mu.KotlinLogging
 import no.nav.pdl.HentIdenter
 import no.nav.pdl.HentPerson
 import no.nav.sokos.pdl.proxy.LOGGER
+import no.nav.sokos.pdl.proxy.exception.PdlApiException
 import no.nav.sokos.pdl.proxy.pdl.entities.Ident
 import no.nav.sokos.pdl.proxy.pdl.entities.IdentifikatorType
 import no.nav.sokos.pdl.proxy.pdl.entities.Person
+import no.nav.sokos.pdl.proxy.pdl.entities.PersonDetaljer
 import no.nav.sokos.pdl.proxy.person.security.AccessTokenClient
 
 class PdlServiceImpl (
@@ -22,10 +24,32 @@ class PdlServiceImpl (
 ) : PdlService{
     private val logger = KotlinLogging.logger {}
 
-    override fun hentPerson(ident: String): Person? {
+    override fun hentPersonDetaljer(ident: String): PersonDetaljer? {
+        var personDetaljer : PersonDetaljer
+        var identer: List<Ident>
+        var person: Person?
 
-        try {
-            val result: GraphQLClientResponse<HentPerson.Result> =  runBlocking {
+
+        logger.info{"henter identer"}
+        identer = hentIdenterForPerson(ident)
+        logger.info{"henter person"}
+        person = hentPerson(ident)
+
+        val hasIdenter = !identer.isEmpty()
+
+        if (person != null && hasIdenter) {
+            personDetaljer = PersonDetaljer(identer, person.fornavn, person.mellomnavn, person.etternavn, person.forkortetNavn)
+
+            return personDetaljer
+        }
+
+        return null
+    }
+
+    fun hentPerson(ident: String): Person? {
+
+        return try {
+            val result: GraphQLClientResponse<HentPerson.Result> = runBlocking {
                 val accessToken = accessTokenClient?.hentAccessToken()
                 graphQlClient.execute(HentPerson(HentPerson.Variables(ident = ident))) {
                     url(pdlUrl)
@@ -33,22 +57,30 @@ class PdlServiceImpl (
                     header("Tema", "OKO")
                 }
             }
-            return if (result.errors?.isNotEmpty() == true) {
-                //TODO handle errors og ikke logge så kaste
-                logger.error { "Feil i GraphQL-responsen: ${result.errors}" }
-                throw Exception("feil med henting av identer")
-            } else
-                result.data?.hentPerson?.navn?.map {
-                    Person(it.fornavn, it.mellomnavn, it.etternavn, it.forkortetNavn)
-                }?.first()
+            result.errors?.let { errors ->
+                if (errors != null || !errors.isEmpty()) {
+                    logger.error { "Det ligger en feil når innkalt ${errors[0].path} og feil blir: ${errors[0].message} " }
+                    handleErrors(errors)
+                }
+            }
 
-        } catch (exception : Exception) {
-            logger.error(exception) {"Det har oppstått en feil ved henting av person" }
-            return null
+            result.data?.hentPerson?.navn?.map {
+                Person(it.fornavn, it.mellomnavn, it.etternavn, it.forkortetNavn)
+            }?.first()
+
+        } catch (exception: PdlApiException) {
+            logger.error(exception) { "Det har oppstått en feil ved henting fra pdl api - ${exception.message}" }
+
+            throw exception
+        } catch (exception: Exception) {
+            logger.error(exception) { "Det har oppstått en internfeil ved sokos-pdl-proxy - ${exception.stackTrace}" }
+
+            throw exception
         }
     }
 
-    override fun hentIdenterForPerson(ident: String): List<Ident> {
+    fun hentIdenterForPerson(ident: String): List<Ident> {
+        LOGGER.info("Inkalling hent identer")
         val hentIdenter = HentIdenter(HentIdenter.Variables(ident = ident))
         //TODO try catch
         LOGGER.info("Inkalling hent identer")
@@ -61,14 +93,14 @@ class PdlServiceImpl (
             }
         }
 
-        return result.errors?.let { errors ->
-            if (errors.isEmpty()) {
-                hentUtIdenter(result)
-            } else {
-                logger.error{"Det ligger en feil når innkalt " + errors.get(0).path + "og feil blir: " + errors.get(0).message}
+         result.errors?.let { errors ->
+            if (errors != null || !errors.isEmpty()) {
+                logger.error{"Det ligger en feil når innkalt ${errors[0].path} og feil blir: ${errors[0].message} "}
                 handleErrors(errors)
             }
-        } ?: hentUtIdenter(result)
+        }
+
+        return hentUtIdenter(result)
     }
 
     private fun hentUtIdenter(result: GraphQLClientResponse<HentIdenter.Result>) =
@@ -80,17 +112,29 @@ class PdlServiceImpl (
             )
         } ?: emptyList()
 
-    private fun handleErrors(errors: List<GraphQLClientError>): List<Ident> {
+    private fun handleErrors(errors: List<GraphQLClientError>) {
+        val errorMelding = errors
+            .map { error -> error.message }
+
         val ikkeFunnetResponsFraPDL = errors
             .mapNotNull { error -> error.extensions }
             .any { entry -> entry["code"] == "not_found" }
+        val ikkeTilgangFraPDL = errors
+            .mapNotNull { error -> error.extensions }
+            .any { entry -> entry["code"] == "forbidden" }
+        val badRequestTilPDL = errors
+            .mapNotNull { error -> error.extensions }
+            .any { entry -> entry["code"] == "bad_request" }
 
         if (ikkeFunnetResponsFraPDL) {
-            logger.error { "Ikke funnet responsen fra PDL" }
-            return emptyList()
-        } else {
-            logger.error { "Feil i GraphQL-responsen: $errors" }
-            throw Exception("feil med henting av identer")
+            logger.error { "${errorMelding}" }
+            throw PdlApiException(404, "${errorMelding}")
+        } else if (ikkeTilgangFraPDL) {
+            logger.error { "${errorMelding}" }
+            throw PdlApiException(403, "${errorMelding}")
+        } else if (badRequestTilPDL) {
+            logger.error { "${errorMelding}" }
+            throw PdlApiException(400, "${errorMelding}")
         }
     }
 }
