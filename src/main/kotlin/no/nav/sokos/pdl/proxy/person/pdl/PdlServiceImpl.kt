@@ -69,7 +69,7 @@ class PdlServiceImpl (
             }?.first()
 
         } catch (exception: PdlApiException) {
-            logger.error(exception) { "Det har oppstått en feil ved henting fra pdl api - ${exception.message}" }
+            logger.error(exception) { "Det har oppstått en feil ved henting av person fra pdl api - ${exception.message}" }
 
             throw exception
         } catch (exception: Exception) {
@@ -104,8 +104,8 @@ class PdlServiceImpl (
             logger.error { "hent identer throwing Pdl api exception" }
 
             throw exception
-        } catch (exception : PdlApiException) {
-            logger.error { "hent person throwing unhandled exception." }
+        } catch (exception : Exception) {
+            logger.error { "hent identer throwing unhandled exception." }
 
             throw exception
         }
@@ -150,7 +150,7 @@ class PdlServiceImpl (
             logger.error { "Dette er en bad request - ${errorMelding}" }
             throw PdlApiException(400, "${errorMelding}")
         } else {
-             logger.error { "Denne scenario er ikke behandlet." }
+            logger.error { "Denne scenario er ikke behandlet." }
             throw Exception("Ikke behandlet scenario.")
         }
     }
