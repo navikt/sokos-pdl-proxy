@@ -22,7 +22,6 @@ private val LOGGER = LoggerFactory.getLogger("no.nav.sokos.pdl.proxy.api.PdlApi"
 fun Application.pdlApi(pdlServiceImpl: PdlServiceImpl) {
     routing {
         route("") {
-            //TODO - Get til Post pga sensitivt informasjon.
             post("hent-person") {
                 val personIdent: PersonIdent = call.receive()
                 LOGGER.info("Henter person detaljer...")
@@ -31,7 +30,9 @@ fun Application.pdlApi(pdlServiceImpl: PdlServiceImpl) {
                     LOGGER.info("du er etter pdl inkalling!")
                     call.respond(HttpStatusCode.OK, person!!)
                 } catch (exception: PdlApiException) {
-                    LOGGER.error(exception.message)
+                    LOGGER.error("Error message på API er : ${exception.message}")
+                    LOGGER.error("Error kode på API er : ${exception.errorKode}")
+
                     call.respond(HttpStatusCode.fromValue(exception.errorKode), exception.message)
                 } catch (exception: Exception) {
                     LOGGER.error("Det står en exception - ${exception.stackTrace}")

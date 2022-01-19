@@ -132,14 +132,17 @@ class PdlServiceImpl (
             .any { entry -> entry["code"] == "bad_request" }
 
         if (ikkeFunnetResponsFraPDL) {
-            logger.error { "${errorMelding}" }
+            logger.error { "Ikke funnet error melding er - ${errorMelding}" }
             throw PdlApiException(404, "${errorMelding}")
         } else if (ikkeTilgangFraPDL) {
-            logger.error { "${errorMelding}" }
+            logger.error { "Ingent tilgang til å hente denne ressurs - ${errorMelding}" }
             throw PdlApiException(403, "${errorMelding}")
         } else if (badRequestTilPDL) {
-            logger.error { "${errorMelding}" }
+            logger.error { "Dette er en bad request - ${errorMelding}" }
             throw PdlApiException(400, "${errorMelding}")
+        } else {
+             logger.error { "Denne scenario er ikke behandlet." }
+            throw Exception("Ikke behandlet scenario.")
         }
     }
 }
