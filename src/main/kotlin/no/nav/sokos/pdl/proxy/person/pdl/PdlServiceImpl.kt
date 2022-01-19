@@ -42,9 +42,9 @@ class PdlServiceImpl (
 
                     return personDetaljer
                 }
-        } catch (exception : PdlApiException) {
+        } catch (pdlApiException : PdlApiException) {
             logger.error { "hent person detaljer kaster Pdl api exception" }
-            throw exception
+            throw pdlApiException
         } catch (exception: Exception) {
             logger.error { "hent person detaljer kaster ubehandlet exception" }
             throw exception
@@ -75,10 +75,10 @@ class PdlServiceImpl (
                 Person(it.fornavn, it.mellomnavn, it.etternavn, it.forkortetNavn)
             }?.first()
 
-        } catch (exception: PdlApiException) {
-            logger.error(exception) { "Det har oppstått en feil ved henting av person fra pdl api - ${exception.message}" }
+        } catch (pdlApiException: PdlApiException) {
+            logger.error(pdlApiException) { "Det har oppstått en feil ved henting av person fra pdl api - ${pdlApiException.message}" }
 
-            throw exception
+            throw pdlApiException
         } catch (exception: Exception) {
             logger.error(exception) { "Det har oppstått en internfeil ved sokos-pdl-proxy - ${exception.stackTrace}" }
 
@@ -107,10 +107,10 @@ class PdlServiceImpl (
                     handleErrors(errors)
                 }
             }
-        } catch (exception : PdlApiException) {
+        } catch (pdlApiException : PdlApiException) {
             logger.error { "det oppstå en feil med hent identer og kaster Pdl api exception" }
 
-            throw exception
+            throw pdlApiException
         } catch (exception : Exception) {
             logger.error { "det oppstå en feil med hent identer og kaster ubehandlet exception." }
 

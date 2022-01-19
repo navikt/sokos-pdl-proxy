@@ -23,17 +23,17 @@ fun Application.pdlApi(pdlServiceImpl: PdlServiceImpl) {
     routing {
         route("") {
             post("hent-person") {
-                val personIdent: PersonIdent = call.receive()
-                LOGGER.info("Henter person detaljer...")
-                val person = pdlServiceImpl.hentPersonDetaljer(personIdent.ident)
                 try {
+                    val personIdent: PersonIdent = call.receive()
+                    LOGGER.info("Henter person detaljer...")
+                    val person = pdlServiceImpl.hentPersonDetaljer(personIdent.ident)
                     LOGGER.info("du er etter pdl inkalling!")
                     call.respond(HttpStatusCode.OK, person!!)
-                } catch (exception: PdlApiException) {
-                    LOGGER.error("Error message på API er : ${exception.message}")
-                    LOGGER.error("Error kode på API er : ${exception.errorKode}")
+                } catch (pdlApiException: PdlApiException) {
+                    LOGGER.error("Error message på API er : ${pdlApiException.message}")
+                    LOGGER.error("Error kode på API er : ${pdlApiException.errorKode}")
 
-                    call.respond(HttpStatusCode.fromValue(exception.errorKode), exception.message)
+                    call.respond(HttpStatusCode.fromValue(pdlApiException.errorKode), pdlApiException.message)
                 } catch (exception: Exception) {
                     LOGGER.error("Det står en exception - ${exception.stackTrace}")
                     call.respond(HttpStatusCode.InternalServerError, exception.stackTrace)
