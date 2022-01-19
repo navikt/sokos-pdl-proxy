@@ -29,18 +29,25 @@ class PdlServiceImpl (
         var identer: List<Ident>
         var person: Person?
 
+        try {
+                logger.info{"henter identer"}
+                identer = hentIdenterForPerson(ident)
+                logger.info{"henter person"}
+                person = hentPerson(ident)
 
-        logger.info{"henter identer"}
-        identer = hentIdenterForPerson(ident)
-        logger.info{"henter person"}
-        person = hentPerson(ident)
+                val hasIdenter = !identer.isEmpty()
 
-        val hasIdenter = !identer.isEmpty()
+                if (person != null && hasIdenter) {
+                    personDetaljer = PersonDetaljer(identer, person.fornavn, person.mellomnavn, person.etternavn, person.forkortetNavn)
 
-        if (person != null && hasIdenter) {
-            personDetaljer = PersonDetaljer(identer, person.fornavn, person.mellomnavn, person.etternavn, person.forkortetNavn)
-
-            return personDetaljer
+                    return personDetaljer
+                }
+        } catch (exception : PdlApiException) {
+            logger.error { "hent person detaljer kaster Pdl api exception" }
+            throw exception
+        } catch (exception: Exception) {
+            logger.error { "hent person detaljer kaster ubehandlet exception" }
+            throw exception
         }
 
         return null
@@ -101,11 +108,11 @@ class PdlServiceImpl (
                 }
             }
         } catch (exception : PdlApiException) {
-            logger.error { "hent identer throwing Pdl api exception" }
+            logger.error { "det oppstå en feil med hent identer og kaster Pdl api exception" }
 
             throw exception
         } catch (exception : Exception) {
-            logger.error { "hent identer throwing unhandled exception." }
+            logger.error { "det oppstå en feil med hent identer og kaster ubehandlet exception." }
 
             throw exception
         }
