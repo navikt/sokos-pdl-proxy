@@ -92,13 +92,22 @@ class PdlServiceImpl (
                 header("Authorization", "Bearer $accessToken")
             }
         }
-
-         result.errors?.let { errors ->
-            if (errors != null || !errors.isEmpty()) {
-                logger.error{"Det ligger en feil når innkalt ${errors[0].path} og feil blir: ${errors[0].message}"}
-                logger.error { "Error code ${errors.mapNotNull {error -> error.extensions }[0].get("code")}. "}
-                handleErrors(errors)
+        try {
+            result.errors?.let { errors ->
+                if (errors != null || !errors.isEmpty()) {
+                    logger.error { "Det ligger en feil når innkalt ${errors[0].path} og feil blir: ${errors[0].message}" }
+                    logger.error { "Error code ${errors.mapNotNull { error -> error.extensions }[0].get("code")}. " }
+                    handleErrors(errors)
+                }
             }
+        } catch (exception : PdlApiException) {
+            logger.error { "hent identer throwing Pdl api exception" }
+
+            throw exception
+        } catch (exception : PdlApiException) {
+            logger.error { "hent person throwing unhandled exception." }
+
+            throw exception
         }
 
         return hentUtIdenter(result)
