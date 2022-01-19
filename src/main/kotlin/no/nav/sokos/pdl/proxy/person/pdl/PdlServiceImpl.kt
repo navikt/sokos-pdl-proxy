@@ -96,9 +96,7 @@ class PdlServiceImpl (
          result.errors?.let { errors ->
             if (errors != null || !errors.isEmpty()) {
                 logger.error{"Det ligger en feil når innkalt ${errors[0].path} og feil blir: ${errors[0].message}"}
-                logger.error { "Error code ${errors.mapNotNull {error -> error.extensions }[0]}. " +
-                        "${errors.mapNotNull {error -> error.extensions }[1]}, " +
-                        "${errors.mapNotNull {error -> error.extensions }[2]}"}
+                logger.error { "Error code ${errors.mapNotNull {error -> error.extensions }[0].get("code")}. "}
                 handleErrors(errors)
             }
         }
@@ -117,7 +115,7 @@ class PdlServiceImpl (
 
     private fun handleErrors(errors: List<GraphQLClientError>) {
         val errorCode = errors
-            .mapNotNull { error -> error.extensions }[2]
+            .mapNotNull { error -> error.extensions }[0]["code"]
         val errorMelding = errors
             .map { error -> error.message }
 
