@@ -96,6 +96,9 @@ class PdlServiceImpl (
          result.errors?.let { errors ->
             if (errors != null || !errors.isEmpty()) {
                 logger.error{"Det ligger en feil når innkalt ${errors[0].path} og feil blir: ${errors[0].message}"}
+                logger.error { "Error code ${errors.mapNotNull {error -> error.extensions }[0]}. " +
+                        "${errors.mapNotNull {error -> error.extensions }[1]}, " +
+                        "${errors.mapNotNull {error -> error.extensions }[2]}"}
                 handleErrors(errors)
             }
         }
@@ -118,7 +121,7 @@ class PdlServiceImpl (
         val errorMelding = errors
             .map { error -> error.message }
 
-        LOGGER.error("Error code er ${errorCode}")
+        logger.error("Error code er ${errorCode}")
 
         val ikkeFunnetResponsFraPDL = errors
             .mapNotNull { error -> error.extensions }
