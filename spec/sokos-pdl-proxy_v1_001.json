@@ -97,6 +97,7 @@
       "properties": {
         "identer": {
           "type": "array",
+          "maxItems": 10,
           "items": {
             "$ref": "#/definitions/Ident"
           },"description": "List av Identer til person."
@@ -139,7 +140,7 @@
           "description": "Hvis er aktiv ident."
         },
         "identifikatorType": {
-          "type": "object",
+          "type": "string",
           "example": "FOLKEREGISTERIDENTIFIKATOR",
           "description": "Hva slags identifikator FOLKEREGISTERIDENTIFIKATOR eller N_PID eller AKTOR_ID"
         }
