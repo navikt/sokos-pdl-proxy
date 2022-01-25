@@ -97,8 +97,9 @@
       "properties": {
         "identer": {
           "type": "array",
-          "$ref": "#/definitions/Ident",
-          "description": "List av Identer til person."
+          "items": {
+            "$ref": "#/definitions/Ident"
+          },"description": "List av Identer til person."
         },
         "fornavn": {
           "type": "string",
@@ -140,7 +141,7 @@
         "identifikatorType": {
           "type": "object",
           "example": "FOLKEREGISTERIDENTIFIKATOR",
-          "description": "Hva slags identifikator FOLKEREGISTERIDENTIFIKATOR eller N_PID"
+          "description": "Hva slags identifikator FOLKEREGISTERIDENTIFIKATOR eller N_PID eller AKTOR_ID"
         }
       }
     },
