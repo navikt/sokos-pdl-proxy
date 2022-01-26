@@ -14,7 +14,7 @@ schema {
 type Query {
     hentPerson(ident: ID!): Person
     hentPersonBolk(identer: [ID!]!): [HentPersonBolkResult!]!
-    hentIdenter(ident: ID!, grupper: [IdentGruppe!], historikk: Boolean = false): Identliste
+    hentIdenter(ident: ID!, grupper: [IdentGruppe!], historikk: Boolean = true): Identliste
     hentIdenterBolk(identer: [ID!]!, grupper: [IdentGruppe!], historikk: Boolean = false): [HentIdenterBolkResult!]!
     hentGeografiskTilknytning(ident: ID!): GeografiskTilknytning
     sokPerson(criteria:[Criterion], paging:Paging): PersonSearchResult
