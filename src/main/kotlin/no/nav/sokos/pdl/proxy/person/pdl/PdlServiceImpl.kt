@@ -70,6 +70,10 @@ class PdlServiceImpl (
                     handleErrors(errors)
                 }
             }
+            if (result.data?.hentPerson?.navn?.isEmpty() == true){
+                logger.error() { "Det har oppstått en feil ved henting av person fra pdl api - navn er empty" }
+                throw PdlApiException(404, "Det har oppstått en feil ved henting av person fra pdl api - navn er empty")
+            }
 
             result.data?.hentPerson?.navn?.map {
                 Person(it.fornavn, it.mellomnavn, it.etternavn, it.forkortetNavn)
