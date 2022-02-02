@@ -392,9 +392,9 @@ type OriginaltNavn {
 }
 
 type Personnavn {
-    fornavn: String!
+    fornavn: String
     mellomnavn: String
-    etternavn: String!
+    etternavn: String
     forkortetNavn: String
 }
 
