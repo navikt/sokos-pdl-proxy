@@ -71,14 +71,12 @@ class PdlServiceImpl (
                 }
             }
 
-            /*if (result.data?.hentPerson?.navn.isNullOrEmpty() == true){
+            if (result.data?.hentPerson?.navn.isNullOrEmpty() == true){
                 logger.warn() { "Det har oppstått en feil ved henting av person fra pdl api - navn er empty" }
-                result.data?.hentPerson?.navn?.map {
-                    null
-                }?.first()
-            }*/
+                return Person("", "", "", "")
+            }
 
-            result.data?.hentPerson?.navn?.map {
+            return result.data?.hentPerson?.navn?.map {
                 Person(it.fornavn, it.mellomnavn, it.etternavn, it.forkortetNavn)
             }?.first()
 
