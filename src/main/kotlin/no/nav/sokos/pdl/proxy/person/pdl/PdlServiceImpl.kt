@@ -74,7 +74,7 @@ class PdlServiceImpl (
             if (result.data?.hentPerson?.navn.isNullOrEmpty() == true){
                 logger.warn() { "Det har oppstått en feil ved henting av person fra pdl api - navn er empty" }
                 result.data?.hentPerson?.navn?.map {
-                    Person("", "", "", "")
+                    null
                 }?.first()
             }
 
