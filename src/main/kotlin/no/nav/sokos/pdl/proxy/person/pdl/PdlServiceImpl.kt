@@ -87,7 +87,7 @@ class PdlServiceImpl (
 
             throw pdlApiException
         } catch (exception: Exception) {
-            logger.error(exception) { "Det har oppstått en internfeil ved sokos-pdl-proxy - ${exception.stackTrace}" }
+            logger.error(exception) { "Det har oppstått en internfeil ved sokos-pdl-proxy - ${exception.message}" }
 
             throw exception
         }
