@@ -15,11 +15,12 @@ spec:
   azure:
     application:
       enabled: true
+      tenant: trygdeetaten.no
     accessPolicy:
-      outbound:
-        external:
-          - host: pdl-api.prod-fss-pub.nais.io
-          - host: kafka-schema-registry.nais-p.adeo.no
+      inbound:
+        rules:
+          - application: utbetalingsreskontro
+          - application: oppdragz
   resources:
     limits:
       cpu: 2000m
@@ -50,3 +51,5 @@ spec:
       value: https://pdl-api.prod-fss-pub.nais.io/graphql
     - name: USE_AUTHENTICATION
       value: "true"
+    - name: ALLOW_LIST_PDLPROXY
+      value: utbetalingsreskontro,oppdragz

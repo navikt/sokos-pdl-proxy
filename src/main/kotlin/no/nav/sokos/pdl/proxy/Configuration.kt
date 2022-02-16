@@ -16,7 +16,7 @@ val LOGGER = LoggerFactory.getLogger("no.nav.sokos.pdl.proxy.Configuration")
 
 data class Configuration (
     val useAuthentication: Boolean = readProperty("USE_AUTHENTICATION", default = "true") != "false",
-    //val azureAdServer: Configuration.AzureAdServer = Configuration.AzureAdServer(),
+    val azureAdServer: Configuration.AzureAdServer = Configuration.AzureAdServer(),
     val azureAdClint: Configuration.AzureAdClient = Configuration.AzureAdClient(),
     val appName: String = readProperty("NAIS_APP_NAME"),
     val pdlUrl: String = readProperty("PDL_URL"),
@@ -36,8 +36,7 @@ data class Configuration (
         val preAutorizedApps: List<PreAuthorizedApp> =
             readProperty("AZURE_APP_PRE_AUTHORIZED_APPS", "[]").let { jsonMapper.readValue(it) },
         val apiAllowLists: Map<Api, List<String>> = mapOf(
-            Api.KONTOREGISTER to readProperty("ALLOW_LIST_KONTOREG", "").split(","),
-            Api.FRONTEND to readProperty("ALLOW_LIST_OKONOMIPORTAL", "").split(","),
+            Api.PDLPROXY to readProperty("ALLOW_LIST_PDLPROXY", "").split(","),
         ),
     ) {
         val openIdConfiguration: AzureAdOpenIdConfiguration by lazy {
