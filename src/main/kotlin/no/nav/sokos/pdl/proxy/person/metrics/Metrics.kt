@@ -19,7 +19,7 @@ import io.micrometer.prometheus.PrometheusMeterRegistry
 import io.prometheus.client.Counter
 import io.prometheus.client.exporter.common.TextFormat
 
-private const val NAMESPACE = "sokos_kontooppslag_person"
+private const val NAMESPACE = "sokos_pdl_proxy"
 
 object Metrics {
     val prometheusRegistry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
