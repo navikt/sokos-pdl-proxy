@@ -20,7 +20,15 @@ spec:
       inbound:
         rules:
           - application: utbetalingsreskontro
+            cluster: dev-fss
+            namespace: okonomi
           - application: oppdragz
+            cluster: dev-fss
+            namespace: okonomi
+      outbound:
+        external:
+          - host: pdl-api.dev-fss-pub.nais.io
+
   webproxy: true
   resources:
     limits:
@@ -44,7 +52,7 @@ spec:
     enabled: true
     path: /metrics
   ingresses:
-    - https://sokos-pdl-proxy.dev.adeo.no
+    - https://sokos-pdl-proxy.dev.intern.nav.no
   env:
     - name: PDL_CLIENT_ID
       value: dev-fss.pdl.pdl-api
