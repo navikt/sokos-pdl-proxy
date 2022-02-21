@@ -38,7 +38,9 @@ fun Application.pdlApi(pdlServiceImpl: PdlServiceImpl/*,
 
                         call.respond(HttpStatusCode.fromValue(pdlApiException.errorKode), pdlApiException.message)
                     } catch (exception: Exception) {
-                        LOGGER.error("Det står en exception - ${exception.stackTrace}")
+                        LOGGER.error("Det står en exception - ${exception.stackTrace} ")
+                        LOGGER.error("Error message er : ${exception.message}")
+                        LOGGER.error("Error grun er : - ${exception.cause}")
                         call.respond(HttpStatusCode.InternalServerError, exception.stackTrace)
                     }
                 }
