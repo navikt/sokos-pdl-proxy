@@ -57,7 +57,7 @@ spec:
     - name: PDL_CLIENT_ID
       value: dev-fss.pdl.pdl-api
     - name: PDL_URL
-      value: https://pdl-api.nais.preprod.local/graphql
+      value: https://pdl-api.dev-fss-pub.nais.io/graphql
     - name: USE_AUTHENTICATION
       value: "true"
     - name : ALLOW_LIST_PDLPROXY
