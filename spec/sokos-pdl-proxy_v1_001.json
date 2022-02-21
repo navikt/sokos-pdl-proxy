@@ -9,7 +9,7 @@
       "email": "okonomi@nav.no"
     }
   },
-  "basePath": "",
+  "basePath": "/",
   "tags": [
     {
       "name": "pdl-proxy.v1"
@@ -83,6 +83,14 @@
       }
     }
   },
+  "securityDefinitions": {
+    "Bearer": {
+      "description": "OIDC-token (JWT via OAuth2.0).\n Følgende format må brukes i input-feltet \"Value\" under: <strong>\"Bearer {token}\"</strong>.\n Eksempel på verdi i input-felt: <strong>Bearer eYdmifml0ejugm</strong>",
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
   "definitions": {
     "HentPerson": {
       "type": "object",
@@ -105,7 +113,8 @@
           "maxItems": 10,
           "items": {
             "$ref": "#/definitions/Ident"
-          },"description": "List av Identer til person."
+          },
+          "description": "List av Identer til person."
         },
         "fornavn": {
           "type": "string",
