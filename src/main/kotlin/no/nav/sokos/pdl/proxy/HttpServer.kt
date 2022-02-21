@@ -13,10 +13,11 @@ import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics
 import io.micrometer.core.instrument.binder.system.ProcessorMetrics
 import io.micrometer.core.instrument.binder.system.UptimeMetrics
 import io.prometheus.client.exporter.common.TextFormat
+import no.nav.kontoregister.person.api.installSecurity
 import no.nav.sokos.ereg.proxy.api.installCommonFeatures
 import no.nav.sokos.ereg.proxy.api.naisApi
 import no.nav.sokos.ereg.proxy.api.swaggerApi
-import no.nav.sokos.pdl.proxy.api.installSecurity
+
 import no.nav.sokos.pdl.proxy.api.pdlApi
 import no.nav.sokos.pdl.proxy.person.metrics.Metrics
 import no.nav.sokos.pdl.proxy.person.pdl.PdlService

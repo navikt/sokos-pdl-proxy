@@ -10,6 +10,7 @@ import io.ktor.response.respond
 import io.ktor.routing.post
 import io.ktor.routing.route
 import io.ktor.routing.routing
+import no.nav.kontoregister.person.api.authenticate
 import no.nav.sokos.pdl.proxy.exception.PdlApiException
 
 
