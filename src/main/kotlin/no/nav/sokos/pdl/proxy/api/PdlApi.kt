@@ -20,10 +20,10 @@ import org.slf4j.LoggerFactory
 
 private val LOGGER = LoggerFactory.getLogger("no.nav.sokos.pdl.proxy.api.PdlApi")
 
-fun Application.pdlApi(pdlServiceImpl: PdlServiceImpl/*,
-                       useAuthentication: Boolean = true*/) {
+fun Application.pdlApi(pdlServiceImpl: PdlServiceImpl,
+                       useAuthentication: Boolean = true) {
     routing {
-        //authenticate(useAuthentication, Api.PDLPROXY.name) {
+        authenticate(useAuthentication, Api.PDLPROXY.name) {
             route("") {
                 post("hent-person") {
                     try {
@@ -45,7 +45,7 @@ fun Application.pdlApi(pdlServiceImpl: PdlServiceImpl/*,
                     }
                 }
             }
-        //}
+        }
     }
 }
 
