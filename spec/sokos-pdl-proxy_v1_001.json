@@ -74,7 +74,12 @@
               "$ref": "#/definitions/TjenestefeilResponse"
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     }
   },
