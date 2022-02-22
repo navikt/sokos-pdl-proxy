@@ -16,15 +16,15 @@ spec:
     application:
       enabled: true
       tenant: trygdeetaten.no
-    accessPolicy:
-      inbound:
-        rules:
-          - application: utbetalingsreskontro
-            cluster: dev-fss
-            namespace: okonomi
-          - application: oppdragz
-            cluster: dev-fss
-            namespace: okonomi
+  accessPolicy:
+    inbound:
+      rules:
+        - application: utbetalingsreskontro
+          cluster: dev-fss
+          namespace: okonomi
+        - application: oppdragz
+          cluster: dev-fss
+          namespace: okonomi
       outbound:
         external:
           - host: pdl-api.dev-fss-pub.nais.io
