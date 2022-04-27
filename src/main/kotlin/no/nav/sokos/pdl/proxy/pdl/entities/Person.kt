@@ -1,9 +1,10 @@
 package no.nav.sokos.pdl.proxy.pdl.entities
 
-import no.nav.pdl.hentperson.Bostedsadresse
+
 import no.nav.pdl.hentperson.Kontaktadresse
 import no.nav.pdl.hentperson.Oppholdsadresse
 import no.nav.pdl.hentperson.UtenlandskAdresse
+
 
 data class Person(
     val fornavn: String?,
