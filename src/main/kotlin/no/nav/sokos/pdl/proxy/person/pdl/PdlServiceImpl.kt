@@ -17,6 +17,7 @@ import no.nav.sokos.pdl.proxy.pdl.entities.Person
 import no.nav.sokos.pdl.proxy.pdl.entities.PersonDetaljer
 import no.nav.sokos.pdl.proxy.person.security.AccessTokenClient
 
+
 class PdlServiceImpl (
     private val graphQlClient: GraphQLKtorClient,
     private val pdlUrl: String,
@@ -59,8 +60,10 @@ class PdlServiceImpl (
 
         return null
     }
-    private fun hentPerson(ident: String): Person? {
-        try {
+
+    fun hentPerson(ident: String): Person? {
+
+        return try {
             val result: GraphQLClientResponse<HentPerson.Result> = runBlocking {
                 val accessToken = accessTokenClient?.hentAccessToken()
                 graphQlClient.execute(HentPerson(HentPerson.Variables(ident = ident))) {
