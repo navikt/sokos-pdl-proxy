@@ -1,10 +1,56 @@
 query($ident: ID!){
-  hentPerson(ident: $ident) {
-	navn(historikk: false) {
-	  fornavn
-	  mellomnavn
-	  etternavn
-	  forkortetNavn
-    }
-  }
+	hentPerson(ident: $ident) {
+		navn(historikk: false) {
+			fornavn
+			mellomnavn
+			etternavn
+			forkortetNavn
+		}
+		bostedsadresse {
+			angittFlyttedato,
+			gyldigFraOgMed,
+			gyldigTilOgMed,
+			coAdressenavn,
+			vegadresse {
+				husnummer,
+				husbokstav,
+				bruksenhetsnummer,
+				adressenavn,
+				kommunenummer,
+				bydelsnummer,
+				tilleggsnavn,
+				postnummer
+			},
+			matrikkeladresse{
+				bruksenhetsnummer,
+				tilleggsnavn,
+				postnummer,
+				kommunenummer
+			},
+			utenlandskAdresse{
+				adressenavnNummer,
+				bygningEtasjeLeilighet,
+				postboksNummerNavn,
+				postkode,
+				bySted,
+				regionDistriktOmraade,
+				landkode
+			},
+			ukjentBosted{
+				bostedskommune
+			}
+			metadata {
+				opplysningsId
+				master
+				endringer {
+					type
+					registrert
+					registrertAv
+					systemkilde
+					kilde
+				}
+				historisk
+			}
+		}
+	}
 }
