@@ -17,7 +17,6 @@ import no.nav.sokos.pdl.proxy.pdl.entities.Person
 import no.nav.sokos.pdl.proxy.pdl.entities.PersonDetaljer
 import no.nav.sokos.pdl.proxy.person.security.AccessTokenClient
 
-
 class PdlServiceImpl (
     private val graphQlClient: GraphQLKtorClient,
     private val pdlUrl: String,
@@ -80,12 +79,14 @@ class PdlServiceImpl (
 
             if (result.data?.hentPerson?.navn.isNullOrEmpty() == true){
                 logger.warn() { "Det har oppstått en feil ved henting av person fra pdl api - navn er empty" }
-                return Person("", "", "", "", null)
+                return Person("", "", "", "", null, null, null)
             }
 
             val bostedsadresse = result.data?.hentPerson?.bostedsadresse
+            val kontaktadresse = result.data?.hentPerson?.kontaktadresse
+            val oppholdsadresse = result.data?.hentPerson?.oppholdsadresse
             val person = result.data?.hentPerson?.navn?.map {
-                Person(it.fornavn, it.mellomnavn, it.etternavn, it.forkortetNavn, bostedsadresse)
+                Person(it.fornavn, it.mellomnavn, it.etternavn, it.forkortetNavn, bostedsadresse, kontaktadresse, oppholdsadresse)
             }?.first()
 
             return person
