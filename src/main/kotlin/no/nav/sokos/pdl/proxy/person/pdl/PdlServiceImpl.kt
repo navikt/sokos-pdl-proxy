@@ -17,7 +17,6 @@ import no.nav.sokos.pdl.proxy.pdl.entities.Person
 import no.nav.sokos.pdl.proxy.pdl.entities.PersonDetaljer
 import no.nav.sokos.pdl.proxy.person.security.AccessTokenClient
 
-
 class PdlServiceImpl (
     private val graphQlClient: GraphQLKtorClient,
     private val pdlUrl: String,
