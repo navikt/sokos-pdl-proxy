@@ -44,7 +44,9 @@ class PdlServiceImpl (
                         person.mellomnavn,
                         person.etternavn,
                         person.forkortetNavn,
-                        person.bostedsadresse?.first()
+                        person.bostedsadresse?.first(),
+                        person.kontaktadresse?.first(),
+                        person.oppholdsadresse?.first()
                     )
 
                     return personDetaljer
