@@ -147,22 +147,18 @@ class PdlServiceImpl (
         } ?: emptyList()
 
     private fun handleErrors(errors: List<GraphQLClientError>) {
+        logger.warn { "I handleErrors metode..." }
         val errorCode = errors
             .mapNotNull { error -> error.extensions }[0]["code"]
+        logger.warn { "Error code er: ${errorCode}" }
         val errorMelding = errors
             .map { error -> error.message }
 
         logger.error("Error code er ${errorCode}")
 
-        val ikkeFunnetResponsFraPDL = errors
-            .mapNotNull { error -> error.extensions }
-            .any { entry -> entry["code"]?.equals("not_found") == true }
-        val ikkeTilgangFraPDL = errors
-            .mapNotNull { error -> error.extensions }
-            .any { entry -> entry["code"]?.equals("forbidden") == true }
-        val badRequestTilPDL = errors
-            .mapNotNull { error -> error.extensions }
-            .any { entry -> entry["code"]?.equals("bad_request") == true }
+        val ikkeFunnetResponsFraPDL = errorCode?.equals("not_found") == true
+        val ikkeTilgangFraPDL = errorCode?.equals("forbidden") == true
+        val badRequestTilPDL = errorCode?.equals("bad_request") == true
 
         if (ikkeFunnetResponsFraPDL) {
             logger.error { "Ikke funnet error melding er - ${errorMelding}" }
