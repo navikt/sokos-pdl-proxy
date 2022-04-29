@@ -74,7 +74,7 @@ class PdlServiceImpl (
 
             result.errors?.let { errors ->
                 {
-                    logger.error { "Det ligger en feil når innkalt ${errors[0].path} og feil blir: ${errors[0].message} " }
+                    logger.error { "Det ligger en feil når innkalt ${errors[0].path} og feil blir: ${errors[0].message} og extention blir: ${errors[0].extensions?.get("code")}"}
                     handleErrors(errors)
                 }
             }
@@ -156,13 +156,13 @@ class PdlServiceImpl (
 
         val ikkeFunnetResponsFraPDL = errors
             .mapNotNull { error -> error.extensions }
-            .any { entry -> entry["code"] == "not_found" }
+            .any { entry -> entry["code"]?.equals("not_found") == true }
         val ikkeTilgangFraPDL = errors
             .mapNotNull { error -> error.extensions }
-            .any { entry -> entry["code"] == "forbidden" }
+            .any { entry -> entry["code"]?.equals("forbidden") == true }
         val badRequestTilPDL = errors
             .mapNotNull { error -> error.extensions }
-            .any { entry -> entry["code"] == "bad_request" }
+            .any { entry -> entry["code"]?.equals("bad_request") == true }
 
         if (ikkeFunnetResponsFraPDL) {
             logger.error { "Ikke funnet error melding er - ${errorMelding}" }
@@ -175,7 +175,7 @@ class PdlServiceImpl (
             throw PdlApiException(400, "${errorMelding}")
         } else {
             logger.error { "Denne scenario er ikke behandlet." }
-            throw Exception("Ikke behandlet scenario.")
+            throw Exception("Ubehandlet scenario.")
         }
     }
 }
