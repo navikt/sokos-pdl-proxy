@@ -161,7 +161,87 @@
         }
       }
     },
-    "TjenestefeilResponse": {
+    "Vegadresse": {
+      "type": "object",
+      "properties": {
+        "husnummer": {
+          "type": "string"
+        },
+        "husbokstav": {
+          "type": "string"
+        },
+        "bruksenhetsnummer": {
+          "type": "string"
+        },
+        "adressenavn": {
+          "type": "string"
+        },
+        "kommunenummer": {
+          "type": "string"
+        },
+        "bydelsnummer": {
+          "type": "string"
+        },
+        "tilleggsnavn": {
+          "type": "string"
+        },
+        "postnummer": {
+          "type": "string"
+        }
+      }
+    },
+    "Matrikkeladresse": {
+      "type": "object",
+      "properties": {
+        "bruksenhetsnummer": {
+          "type": "string"
+        },
+        "tilleggsnavn": {
+          "type": "string"
+        },
+        "postnummer": {
+          "type": "string"
+        },
+        "kommunenummer": {
+          "type": "string"
+        }
+      }
+    },
+    "UtenlandskAdresse": {
+      "type": "object",
+      "properties": {
+        "adressenavnNummer": {
+          "type": "string"
+        },
+        "bygningEtasjeLeilighet": {
+          "type": "string"
+        },
+        "postboksNummerNavn": {
+          "type": "string"
+        },
+        "postkode": {
+          "type": "string"
+        },
+        "bySted": {
+          "type": "string"
+        },
+        "regionDistriktOmraade": {
+          "type": "string"
+        },
+        "landkode": {
+          "type": "string"
+        }
+      }
+    },
+    "UkjentBosted": {
+      "type": "object",
+      "properties": {
+        "bostedskommune": {
+          "type": "string"
+        }
+      }
+    },
+      "TjenestefeilResponse": {
       "type": "object",
       "properties": {
         "melding": {
