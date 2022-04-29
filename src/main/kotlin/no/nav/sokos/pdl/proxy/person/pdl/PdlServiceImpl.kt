@@ -25,9 +25,9 @@ class PdlServiceImpl (
     private val logger = KotlinLogging.logger {}
 
     override fun hentPersonDetaljer(ident: String): PersonDetaljer? {
-        val personDetaljer : PersonDetaljer
-        val identer: List<Ident>
-        val person: Person?
+        var personDetaljer : PersonDetaljer
+        var identer: List<Ident>
+        var person: Person?
 
         try {
                 logger.info{"henter identer"}
@@ -38,16 +38,7 @@ class PdlServiceImpl (
                 val hasIdenter = !identer.isEmpty()
 
                 if (person != null && hasIdenter) {
-                    personDetaljer = PersonDetaljer(
-                        identer,
-                        person.fornavn,
-                        person.mellomnavn,
-                        person.etternavn,
-                        person.forkortetNavn,
-                        person.bostedsadresse?.first(),
-                        person.kontaktadresse?.first(),
-                        person.oppholdsadresse?.first()
-                    )
+                    personDetaljer = PersonDetaljer(identer, person.fornavn, person.mellomnavn, person.etternavn, person.forkortetNavn)
 
                     return personDetaljer
                 }
@@ -61,8 +52,10 @@ class PdlServiceImpl (
 
         return null
     }
-    private fun hentPerson(ident: String): Person? {
-        try {
+
+    fun hentPerson(ident: String): Person? {
+
+        return try {
             val result: GraphQLClientResponse<HentPerson.Result> = runBlocking {
                 val accessToken = accessTokenClient?.hentAccessToken()
                 graphQlClient.execute(HentPerson(HentPerson.Variables(ident = ident))) {
@@ -71,27 +64,22 @@ class PdlServiceImpl (
                     header("Tema", "OKO")
                 }
             }
-
             result.errors?.let { errors ->
-                {
-                    logger.error { "Det ligger en feil når innkalt ${errors[0].path} og feil blir: ${errors[0].message} og extention blir: ${errors[0].extensions?.get("code")}"}
+                if (errors != null || !errors.isEmpty()) {
+                    logger.error { "Det ligger en feil når innkalt ${errors[0].path} og feil blir: ${errors[0].message} " }
                     handleErrors(errors)
                 }
             }
 
             if (result.data?.hentPerson?.navn.isNullOrEmpty() == true){
                 logger.warn() { "Det har oppstått en feil ved henting av person fra pdl api - navn er empty" }
-                return Person("", "", "", "", null, null, null)
+                return Person("", "", "", "")
             }
 
-            val bostedsadresse = result.data?.hentPerson?.bostedsadresse
-            val kontaktadresse = result.data?.hentPerson?.kontaktadresse
-            val oppholdsadresse = result.data?.hentPerson?.oppholdsadresse
-            val person = result.data?.hentPerson?.navn?.map {
-                Person(it.fornavn, it.mellomnavn, it.etternavn, it.forkortetNavn, bostedsadresse, kontaktadresse, oppholdsadresse)
+            return result.data?.hentPerson?.navn?.map {
+                Person(it.fornavn, it.mellomnavn, it.etternavn, it.forkortetNavn)
             }?.first()
 
-            return person
         } catch (pdlApiException: PdlApiException) {
             logger.error(pdlApiException) { "Det har oppstått en feil ved henting av person fra pdl api - ${pdlApiException.message}" }
 
@@ -118,7 +106,7 @@ class PdlServiceImpl (
         }
         try {
             result.errors?.let { errors ->
-                {
+                if (errors != null || !errors.isEmpty()) {
                     logger.error { "Det ligger en feil når innkalt ${errors[0].path} og feil blir: ${errors[0].message}" }
                     logger.error { "Error code ${errors.mapNotNull { error -> error.extensions }[0].get("code")}. " }
                     handleErrors(errors)
@@ -147,18 +135,22 @@ class PdlServiceImpl (
         } ?: emptyList()
 
     private fun handleErrors(errors: List<GraphQLClientError>) {
-        logger.warn { "I handleErrors metode..." }
         val errorCode = errors
             .mapNotNull { error -> error.extensions }[0]["code"]
-        logger.warn { "Error code er: ${errorCode}" }
         val errorMelding = errors
             .map { error -> error.message }
 
         logger.error("Error code er ${errorCode}")
 
-        val ikkeFunnetResponsFraPDL = errorCode?.equals("not_found") == true
-        val ikkeTilgangFraPDL = errorCode?.equals("forbidden") == true
-        val badRequestTilPDL = errorCode?.equals("bad_request") == true
+        val ikkeFunnetResponsFraPDL = errors
+            .mapNotNull { error -> error.extensions }
+            .any { entry -> entry["code"] == "not_found" }
+        val ikkeTilgangFraPDL = errors
+            .mapNotNull { error -> error.extensions }
+            .any { entry -> entry["code"] == "forbidden" }
+        val badRequestTilPDL = errors
+            .mapNotNull { error -> error.extensions }
+            .any { entry -> entry["code"] == "bad_request" }
 
         if (ikkeFunnetResponsFraPDL) {
             logger.error { "Ikke funnet error melding er - ${errorMelding}" }
@@ -171,7 +163,7 @@ class PdlServiceImpl (
             throw PdlApiException(400, "${errorMelding}")
         } else {
             logger.error { "Denne scenario er ikke behandlet." }
-            throw Exception("Ubehandlet scenario.")
+            throw Exception("Ikke behandlet scenario.")
         }
     }
 }
