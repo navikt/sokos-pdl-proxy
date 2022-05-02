@@ -12,7 +12,7 @@
     </appender>
 
     <root level="INFO">
-        <appender-ref ref="stdout_json"/>
+        <appender-ref ref="${LOG_APPENDER:-stdout_json}"/>
     </root>
 
 </configuration>

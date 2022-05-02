@@ -35,7 +35,7 @@ class HttpServer(
 ) {
     private val embeddedServer = embeddedServer(Netty, port) {
         installSecurity(apiSecurityService, appConfig, appConfig.useAuthentication)
-        pdlApi(pdlService as PdlServiceImpl)
+        pdlApi(pdlService as PdlServiceImpl, appConfig.useAuthentication)
         installCommonFeatures()
         installMetrics()
         swaggerApi()

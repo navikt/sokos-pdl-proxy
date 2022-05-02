@@ -22,7 +22,6 @@ Under "Gradle properties" må "Gradle JVM" være satt til SDK 16.
 ### Properties
 Opprett en run configuration for Bootstrap.kt og angi properties nedenfor som environment-variable
 
-
 ```properties
 NAIS_APP_NAME=sokos-pdl-proxy;
 USE_AUTHENTICATION=false;
@@ -30,7 +29,8 @@ PDL_URL=http://0.0.0.0:9090/graphql;
 LOG_APPENDER=CONSOLE
 ```
 
-###docker-compose
+### PDL proxy
+Start [mockPdlServer](src/test/kotlin/devtools/mockPdlServer.kt)
 
 
 # Logging
