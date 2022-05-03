@@ -17,12 +17,13 @@ import no.nav.sokos.pdl.proxy.pdl.entities.Person
 import no.nav.sokos.pdl.proxy.pdl.entities.PersonDetaljer
 import no.nav.sokos.pdl.proxy.person.security.AccessTokenClient
 
+private val logger = KotlinLogging.logger {}
+
 class PdlServiceImpl (
     private val graphQlClient: GraphQLKtorClient,
     private val pdlUrl: String,
     private val accessTokenClient: AccessTokenClient?
 ) : PdlService{
-    private val logger = KotlinLogging.logger {}
 
     override fun hentPersonDetaljer(ident: String): PersonDetaljer? {
         var personDetaljer : PersonDetaljer
@@ -38,7 +39,16 @@ class PdlServiceImpl (
                 val hasIdenter = !identer.isEmpty()
 
                 if (person != null && hasIdenter) {
-                    personDetaljer = PersonDetaljer(identer, person.fornavn, person.mellomnavn, person.etternavn, person.forkortetNavn)
+                    personDetaljer = PersonDetaljer(
+                        identer,
+                        person.fornavn,
+                        person.mellomnavn,
+                        person.etternavn,
+                        person.forkortetNavn,
+                        null,
+                        null,
+                        null
+                    )
 
                     return personDetaljer
                 }
@@ -65,19 +75,21 @@ class PdlServiceImpl (
                 }
             }
             result.errors?.let { errors ->
-                if (errors != null || !errors.isEmpty()) {
-                    logger.error { "Det ligger en feil når innkalt ${errors[0].path} og feil blir: ${errors[0].message} " }
-                    handleErrors(errors)
-                }
+                logger.error { "Det ligger en feil når innkalt ${errors[0].path} og feil blir: ${errors[0].message} " }
+                handleErrors(errors)
             }
 
             if (result.data?.hentPerson?.navn.isNullOrEmpty() == true){
                 logger.warn() { "Det har oppstått en feil ved henting av person fra pdl api - navn er empty" }
-                return Person("", "", "", "")
+                return Person("", "", "", "", null, null, null)
             }
 
+            val bostedAdresse = result.data?.hentPerson?.bostedsadresse
+            val kontaktAdresse = result.data?.hentPerson?.kontaktadresse
+            val oppholdsAdresse = result.data?.hentPerson?.oppholdsadresse
+
             return result.data?.hentPerson?.navn?.map {
-                Person(it.fornavn, it.mellomnavn, it.etternavn, it.forkortetNavn)
+                Person(it.fornavn, it.mellomnavn, it.etternavn, it.forkortetNavn, bostedAdresse, kontaktAdresse, oppholdsAdresse)
             }?.first()
 
         } catch (pdlApiException: PdlApiException) {
@@ -106,11 +118,10 @@ class PdlServiceImpl (
         }
         try {
             result.errors?.let { errors ->
-                if (errors != null || !errors.isEmpty()) {
-                    logger.error { "Det ligger en feil når innkalt ${errors[0].path} og feil blir: ${errors[0].message}" }
-                    logger.error { "Error code ${errors.mapNotNull { error -> error.extensions }[0].get("code")}. " }
-                    handleErrors(errors)
-                }
+                logger.error { "Det ligger en feil når innkalt ${errors[0].path} og feil blir: ${errors[0].message}" }
+                logger.error { "Error code ${errors.mapNotNull { error -> error.extensions }[0].get("code")}. " }
+                handleErrors(errors)
+
             }
         } catch (pdlApiException : PdlApiException) {
             logger.error { "det oppstå en feil med hent identer og kaster Pdl api exception" }
