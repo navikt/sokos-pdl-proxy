@@ -136,6 +136,18 @@
           "type": "string",
           "example": "STAUDE ÅPENHJERTIG",
           "description": "Person forkortetNavn"
+        },
+        "bostedsadresse": {
+          "type": "object",
+          "$ref": "#/definitions/Bostedsadresse"
+        },
+        "kontaktadresse": {
+          "type": "object",
+          "$ref": "#/definitions/Kontaktadresse"
+        },
+        "oppholdsadresse": {
+          "type": "object",
+          "$ref": "#/definitions/Oppholdsadresse"
         }
       },
       "title": "Person",
