@@ -21,7 +21,7 @@ import kotlin.test.assertNotNull
 
 internal class PdlServiceImplTest {
     @Test
-    fun `Vellykket hent av person identer og navn med adresser fra Pdl`() {
+    fun `Vellykket hent av en persons identer, navn og adresser fra Pdl`() {
 
         val mockkGraphQlClient = GraphQLKtorClient(URL("http://0.0.0.0"),
             setupMockEngine(
