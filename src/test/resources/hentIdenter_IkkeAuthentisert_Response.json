@@ -1,0 +1,23 @@
+{
+  "errors": [
+    {
+      "message": "Ikke autentisert",
+      "locations": [
+        {
+          "line": 2,
+          "column": 2
+        }
+      ],
+      "path": [
+        "hentPerson"
+      ],
+      "extensions": {
+        "code": "unauthenticated",
+        "classification": "ExecutionAborted"
+      }
+    }
+  ],
+  "data": {
+    "hentPerson": null
+  }
+}
