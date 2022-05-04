@@ -161,6 +161,114 @@
         }
       }
     },
+    "Bostedsadresse": {
+      "type": "object",
+      "properties": {
+        "angittFlyttedato": {
+          "type": "string"
+        },
+        "gyldigFraOgMed": {
+          "type": "string"
+        },
+        "gyldigTilOgMed": {
+          "type": "string"
+        },
+        "coAdressenavn": {
+          "type": "string"
+        },
+        "vegadresse": {
+          "type": "object",
+          "$ref": "#/definitions/Vegadresse"
+        },
+        "matrikkeladresse": {
+          "type": "object",
+          "$ref": "#/definitions/Matrikkeladresse"
+        },
+        "utenlandskAdresse": {
+          "type": "object",
+          "$ref": "#/definitions/UtenlandskAdresse"
+        },
+        "ukjentBosted": {
+          "type": "object",
+          "$ref": "#/definitions/UkjentBosted"
+        },
+        "metadata": {
+          "type": "object",
+          "$ref": "#/definitions/Metadata"
+        }
+      }
+    },
+    "Oppholdsadresse": {
+      "type": "object",
+      "properties": {
+        "oppholdAnnetSted": {
+          "type": "string"
+        },
+        "coAdressenavn": {
+          "type": "string"
+        },
+        "gyldigFraOgMed": {
+          "type": "string"
+        },
+        "utenlandskAdresse": {
+          "type": "object",
+          "$ref": "#/definitions/UtenlandskAdresse"
+        },
+        "vegadresse": {
+          "type": "object",
+          "$ref": "#/definitions/Vegadresse"
+        },
+        "matrikkeladresse": {
+          "type": "object",
+          "$ref": "#/definitions/Matrikkeladresse"
+        },
+        "metadata": {
+          "type": "object",
+          "$ref": "#/definitions/Metadata"
+        }
+      }
+    },
+    "Kontaktadresse": {
+      "type": "object",
+      "properties": {
+        "gyldigFraOgMed": {
+          "type": "string"
+        },
+        "gyldigTilOgMed": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "coAdressenavn": {
+          "type": "string"
+        },
+        "postboksadresse": {
+          "type": "object",
+          "$ref": "#/definitions/Postboksadresse"
+        },
+        "vegadresse": {
+          "type": "object",
+          "$ref": "#/definitions/Vegadresse"
+        },
+        "postadresseIFrittFormat": {
+          "type": "object",
+          "$ref": "#/definitions/PostadresseIFrittFormat"
+        },
+        "utenlandskAdresse": {
+          "type": "object",
+          "$ref": "#/definitions/UtenlandskAdresse"
+        },
+        "utenlandskAdresseIFrittFormat": {
+          "type": "object",
+          "$ref": "#/definitions/UtenlandskAdresseIFrittFormat"
+        },
+        "metadata": {
+          "type": "object",
+          "$ref": "#/definitions/Metadata"
+        }
+      }
+    },
     "Vegadresse": {
       "type": "object",
       "properties": {
@@ -241,7 +349,101 @@
         }
       }
     },
-      "TjenestefeilResponse": {
+    "Postboksadresse": {
+      "type": "object",
+      "properties": {
+        "postbokseier": {
+          "type": "string"
+        },
+        "postboks": {
+          "type": "string"
+        },
+        "postnummer": {
+          "type": "string"
+        }
+      }
+    },
+    "PostadresseIFrittFormat": {
+      "type": "object",
+      "properties": {
+        "adresselinje1": {
+          "type": "string"
+        },
+        "adresselinje2": {
+          "type": "string"
+        },
+        "adresselinje3": {
+          "type": "string"
+        },
+        "postboks": {
+          "type": "string"
+        }
+      }
+    },
+    "UtenlandskAdresseIFrittFormat": {
+      "type": "object",
+      "properties": {
+        "adresselinje1": {
+          "type": "string"
+        },
+        "adresselinje2": {
+          "type": "string"
+        },
+        "adresselinje3": {
+          "type": "string"
+        },
+        "postkode": {
+          "type": "string"
+        },
+        "byEllerStedsnavn": {
+          "type": "string"
+        },
+        "landkode": {
+          "type": "string"
+        }
+      }
+    },
+    "Metadata": {
+      "type": "object",
+      "properties": {
+        "opplysningsId": {
+          "type": "string"
+        },
+        "master": {
+          "type": "string"
+        },
+        "endringer": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Endring"
+          }
+        },
+        "historisk": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Endring": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "registrert": {
+          "type": "string"
+        },
+        "registrertAv": {
+          "type": "string"
+        },
+        "systemkilde": {
+          "type": "string"
+        },
+        "kilde": {
+          "type": "string"
+        }
+      }
+    },
+    "TjenestefeilResponse": {
       "type": "object",
       "properties": {
         "melding": {
