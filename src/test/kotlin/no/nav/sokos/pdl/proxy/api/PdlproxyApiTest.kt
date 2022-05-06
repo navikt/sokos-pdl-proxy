@@ -22,15 +22,11 @@ internal class PdlproxyApiTest {
     fun `Solskinnshistorie - klient kaller tjeneste og ingenting skal feile`() {
         val port = enTilfleldigPort()
 
-        val mockkGraphQlClient = GraphQLKtorClient(
-            URL(pdlUrl),
-            setupMockEngine(
-                "hentIdenter_Success_Response.json",
-                "hentPerson_Success_Response.json",
-                HttpStatusCode.OK)
+        enTestserverMedResponsFraPDL(
+            port,
+            "hentIdenter_Success_Response.json",
+            "hentPerson_Success_Response.json"
         )
-        val pdlService = PdlService(mockkGraphQlClient, pdlUrl, accessTokenClient = null)
-        TestServer(port, pdlService)
 
         RestAssured.given()
             .filter(validationFilter)
@@ -44,19 +40,15 @@ internal class PdlproxyApiTest {
             .statusCode(200)
     }
 
-
     @Test
     fun `Finner ikke person ved søk etter identer i PDL`() {
-        val mockkGraphQlClient = GraphQLKtorClient(URL(pdlUrl),
-            setupMockEngine(
-                "hentIdenter_fant_ikke_person_response.json",
-                "hentPerson_FantIkkePerson_Response.json",
-                HttpStatusCode.OK)
-        )
-        val pdlService = PdlService(mockkGraphQlClient, pdlUrl, accessTokenClient = null)
-
         val port = enTilfleldigPort()
-        TestServer(port, pdlService)
+
+        enTestserverMedResponsFraPDL(
+            port,
+            "hentIdenter_fant_ikke_person_response.json",
+            "hentPerson_FantIkkePerson_Response.json"
+        )
 
         RestAssured
             .given()
@@ -72,6 +64,23 @@ internal class PdlproxyApiTest {
             .body(
                 containsString("Fant ikke person")
             )
+    }
+
+
+    private fun enTestserverMedResponsFraPDL(
+        port: Int,
+        hentIdenterResponsFilnavn: String,
+        hentPersonResponsFilnavn: String,
+    ) {
+        val mockkGraphQlClient = GraphQLKtorClient(
+            URL(pdlUrl),
+            setupMockEngine(
+                hentIdenterResponsFilnavn,
+                hentPersonResponsFilnavn,
+                HttpStatusCode.OK)
+        )
+        val pdlService = PdlService(mockkGraphQlClient, pdlUrl, accessTokenClient = null)
+        TestServer(port, pdlService)
     }
 
     private fun enTilfleldigPort() = Random.nextInt(32000, 42000)
