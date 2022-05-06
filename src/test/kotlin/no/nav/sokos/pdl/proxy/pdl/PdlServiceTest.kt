@@ -1,4 +1,4 @@
-package no.nav.sokos.pdl.proxy.person.pdl
+package no.nav.sokos.pdl.proxy.pdl
 
 import assertk.assertThat
 import assertk.assertions.containsExactlyInAnyOrder
@@ -15,10 +15,10 @@ import io.ktor.http.headersOf
 import java.net.URL
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
+import no.nav.sokos.pdl.proxy.api.model.Ident
+import no.nav.sokos.pdl.proxy.api.model.PersonDetaljer
 import no.nav.sokos.pdl.proxy.exception.PdlApiException
 import no.nav.sokos.pdl.proxy.jsonClientConfiguration
-import no.nav.sokos.pdl.proxy.pdl.entities.Ident
-import no.nav.sokos.pdl.proxy.pdl.entities.PersonDetaljer
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import resourceToString

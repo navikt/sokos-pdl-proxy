@@ -7,9 +7,9 @@ import io.restassured.RestAssured
 import io.restassured.http.Header
 import java.net.URL
 import no.nav.sokos.pdl.proxy.TestServer
-import no.nav.sokos.pdl.proxy.pdl.entities.PersonIdent
-import no.nav.sokos.pdl.proxy.person.pdl.PdlService
-import no.nav.sokos.pdl.proxy.person.pdl.setupMockEngine
+import no.nav.sokos.pdl.proxy.api.model.PersonIdent
+import no.nav.sokos.pdl.proxy.pdl.PdlService
+import no.nav.sokos.pdl.proxy.pdl.setupMockEngine
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 

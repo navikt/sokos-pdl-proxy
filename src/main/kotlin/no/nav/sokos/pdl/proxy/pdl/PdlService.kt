@@ -1,4 +1,4 @@
-package no.nav.sokos.pdl.proxy.person.pdl
+package no.nav.sokos.pdl.proxy.pdl
 
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import com.expediagroup.graphql.client.types.GraphQLClientError
@@ -10,12 +10,12 @@ import mu.KotlinLogging
 import no.nav.pdl.HentIdenter
 import no.nav.pdl.HentPerson
 import no.nav.sokos.pdl.proxy.LOGGER
+import no.nav.sokos.pdl.proxy.api.model.Ident
+import no.nav.sokos.pdl.proxy.api.model.IdentifikatorType
+import no.nav.sokos.pdl.proxy.api.model.Person
+import no.nav.sokos.pdl.proxy.api.model.PersonDetaljer
 import no.nav.sokos.pdl.proxy.exception.PdlApiException
-import no.nav.sokos.pdl.proxy.pdl.entities.Ident
-import no.nav.sokos.pdl.proxy.pdl.entities.IdentifikatorType
-import no.nav.sokos.pdl.proxy.pdl.entities.Person
-import no.nav.sokos.pdl.proxy.pdl.entities.PersonDetaljer
-import no.nav.sokos.pdl.proxy.person.security.AccessTokenClient
+import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
 
 private val logger = KotlinLogging.logger {}
 

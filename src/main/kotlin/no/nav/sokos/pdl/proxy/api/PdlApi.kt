@@ -11,12 +11,10 @@ import io.ktor.routing.post
 import io.ktor.routing.route
 import io.ktor.routing.routing
 import no.nav.kontoregister.person.api.authenticate
+import no.nav.sokos.pdl.proxy.api.model.PersonIdent
 import no.nav.sokos.pdl.proxy.exception.PdlApiException
-
-
-import no.nav.sokos.pdl.proxy.pdl.entities.PersonIdent
-import no.nav.sokos.pdl.proxy.person.pdl.PdlService
-import no.nav.sokos.pdl.proxy.person.security.Api
+import no.nav.sokos.pdl.proxy.pdl.PdlService
+import no.nav.sokos.pdl.proxy.pdl.security.Api
 import org.slf4j.LoggerFactory
 
 private val logger = LoggerFactory.getLogger("no.nav.sokos.pdl.proxy.api.PdlApi")

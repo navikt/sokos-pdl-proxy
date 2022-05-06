@@ -3,9 +3,9 @@ package no.nav.sokos.pdl.proxy
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import java.net.URL
 import kotlin.properties.Delegates
-import no.nav.sokos.pdl.proxy.person.pdl.PdlService
-import no.nav.sokos.pdl.proxy.person.security.AccessTokenClient
-import no.nav.sokos.pdl.proxy.person.security.ApiSecurityService
+import no.nav.sokos.pdl.proxy.pdl.PdlService
+import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
+import no.nav.sokos.pdl.proxy.pdl.security.ApiSecurityService
 
 fun main() {
     val appState = ApplicationState()

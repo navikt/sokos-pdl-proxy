@@ -4,20 +4,20 @@ import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.module.kotlin.readValue
-import io.ktor.client.request.*
-import kotlinx.coroutines.runBlocking
-import no.nav.sokos.pdl.proxy.person.security.Api
-import no.nav.sokos.pdl.proxy.person.security.PreAuthorizedApp
-import org.slf4j.LoggerFactory
+import io.ktor.client.request.get
 import java.net.URL
 import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.runBlocking
+import no.nav.sokos.pdl.proxy.pdl.security.Api
+import no.nav.sokos.pdl.proxy.pdl.security.PreAuthorizedApp
+import org.slf4j.LoggerFactory
 
 val LOGGER = LoggerFactory.getLogger("no.nav.sokos.pdl.proxy.Configuration")
 
 data class Configuration (
     val useAuthentication: Boolean = readProperty("USE_AUTHENTICATION", default = "true") != "false",
-    val azureAdServer: Configuration.AzureAdServer = Configuration.AzureAdServer(),
-    val azureAdClint: Configuration.AzureAdClient = Configuration.AzureAdClient(),
+    val azureAdServer: AzureAdServer = AzureAdServer(),
+    val azureAdClint: AzureAdClient = AzureAdClient(),
     val appName: String = readProperty("NAIS_APP_NAME"),
     val pdlUrl: String = readProperty("PDL_URL"),
 ) {

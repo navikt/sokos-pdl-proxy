@@ -1,4 +1,4 @@
-package no.nav.sokos.pdl.proxy.pdl.entities
+package no.nav.sokos.pdl.proxy.api.model
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 

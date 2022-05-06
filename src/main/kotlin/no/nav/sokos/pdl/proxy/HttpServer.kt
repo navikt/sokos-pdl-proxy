@@ -24,9 +24,9 @@ import no.nav.kontoregister.person.api.installSecurity
 import no.nav.sokos.ereg.proxy.api.naisApi
 import no.nav.sokos.ereg.proxy.api.swaggerApi
 import no.nav.sokos.pdl.proxy.api.pdlApi
-import no.nav.sokos.pdl.proxy.person.metrics.Metrics
-import no.nav.sokos.pdl.proxy.person.pdl.PdlService
-import no.nav.sokos.pdl.proxy.person.security.ApiSecurityService
+import no.nav.sokos.pdl.proxy.pdl.PdlService
+import no.nav.sokos.pdl.proxy.pdl.metrics.Metrics
+import no.nav.sokos.pdl.proxy.pdl.security.ApiSecurityService
 
 
 class HttpServer(
