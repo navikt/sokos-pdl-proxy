@@ -13,7 +13,7 @@ import no.nav.sokos.pdl.proxy.pdl.setupMockEngine
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
-internal class PdlApiKtTest {
+internal class PdlproxyApiTest {
     private val validationFilter = OpenApiValidationFilter("spec/sokos-pdl-proxy-v1-swagger2.json")
     private val pdlUrl = "http://0.0.0.0"
 
