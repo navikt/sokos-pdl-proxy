@@ -6,11 +6,12 @@ import io.ktor.http.HttpStatusCode
 import io.restassured.RestAssured
 import io.restassured.http.Header
 import java.net.URL
+import kotlin.random.Random
 import no.nav.sokos.pdl.proxy.TestServer
 import no.nav.sokos.pdl.proxy.api.model.PersonIdent
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 import no.nav.sokos.pdl.proxy.pdl.setupMockEngine
-import org.junit.jupiter.api.Disabled
+import org.hamcrest.CoreMatchers.containsString
 import org.junit.jupiter.api.Test
 
 internal class PdlproxyApiTest {
@@ -18,7 +19,9 @@ internal class PdlproxyApiTest {
     private val pdlUrl = "http://0.0.0.0"
 
     @Test
-    fun `Solskinnshistorie - klient kaller tjenest og ingenting skal feile`() {
+    fun `Solskinnshistorie - klient kaller tjeneste og ingenting skal feile`() {
+        val port = enTilfleldigPort()
+
         val mockkGraphQlClient = GraphQLKtorClient(
             URL(pdlUrl),
             setupMockEngine(
@@ -27,20 +30,21 @@ internal class PdlproxyApiTest {
                 HttpStatusCode.OK)
         )
         val pdlService = PdlService(mockkGraphQlClient, pdlUrl, accessTokenClient = null)
+        TestServer(port, pdlService)
 
-        val server: TestServer = TestServer(8080, pdlService)
-
-        val apiResponse = RestAssured.given()
+        RestAssured.given()
             .filter(validationFilter)
             .header(Header("Content-Type", "application/json"))
             .header(Header("Authorization", "Bearer dummytoken"))
-            .body(PersonIdent("12345678901").tilJson())
-            .port(8080)
+            .body(PersonIdent("ikke interessant").tilJson())
+            .port(port)
             .post("/hent-person")
-
+            .then()
+            .assertThat()
+            .statusCode(200)
     }
 
-    @Disabled
+
     @Test
     fun `Finner ikke person ved søk etter identer i PDL`() {
         val mockkGraphQlClient = GraphQLKtorClient(URL(pdlUrl),
@@ -51,21 +55,24 @@ internal class PdlproxyApiTest {
         )
         val pdlService = PdlService(mockkGraphQlClient, pdlUrl, accessTokenClient = null)
 
-        val server: TestServer = TestServer(8080, pdlService)
+        val port = enTilfleldigPort()
+        TestServer(port, pdlService)
 
-        val apiResponse = RestAssured.given()
+        RestAssured
+            .given()
             .filter(validationFilter)
             .header(Header("Content-Type", "application/json"))
             .header(Header("Authorization", "Bearer dummytoken"))
-            .body(PersonIdent("12345678901").tilJson())
-            //.port(8081)
+            .body(PersonIdent("ikke interessant").tilJson())
+            .port(port)
             .post("/hent-person")
-
-//        apiResponse
-//            .prettyPrint()
-//            .then()
-//            .statusCode(404)
-            //.body("feilmelding", containsString(feilmelding))
-
+            .then()
+            .assertThat()
+            .statusCode(404)
+            .body(
+                containsString("Fant ikke person")
+            )
     }
+
+    private fun enTilfleldigPort() = Random.nextInt(32000, 42000)
 }
