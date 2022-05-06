@@ -1,7 +1,6 @@
 package no.nav.sokos.pdl.proxy.api
 
 
-
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
@@ -12,6 +11,7 @@ import io.ktor.routing.route
 import io.ktor.routing.routing
 import no.nav.kontoregister.person.api.authenticate
 import no.nav.sokos.pdl.proxy.api.model.PersonIdent
+import no.nav.sokos.pdl.proxy.api.model.TjenestefeilResponse
 import no.nav.sokos.pdl.proxy.exception.PdlApiException
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 import no.nav.sokos.pdl.proxy.pdl.security.Api
@@ -39,7 +39,10 @@ object PdlproxyApi {
                             logger.error("Error message på API er : ${pdlApiException.message}")
                             logger.error("Error kode på API er : ${pdlApiException.errorKode}")
 
-                            call.respond(HttpStatusCode.fromValue(pdlApiException.errorKode), pdlApiException.message)
+                            call.respond(HttpStatusCode.fromValue(pdlApiException.errorKode),
+                                TjenestefeilResponse(pdlApiException.message))
+
+                            //call.respond()
                         } catch (exception: Exception) {
                             logger.error("Det står en exception - ${exception.stackTrace} ")
                             logger.error("Error message er : ${exception.message}")
