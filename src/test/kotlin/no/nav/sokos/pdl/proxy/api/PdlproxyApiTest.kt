@@ -19,13 +19,13 @@ internal class PdlproxyApiTest {
     private val pdlUrl = "http://0.0.0.0"
 
     @Test
-    fun `Solskinnshistorie - klient kaller tjeneste og ingenting skal feile`() {
+    fun `Solskinnshistorie - klient kaller tjeneste med suksess som validerer ok mot swagger-kontrakten`() {
         val port = enTilfleldigPort()
 
         enTestserverMedResponsFraPDL(
             port,
-            "hentIdenter_Success_Response.json",
-            "hentPerson_Success_Response.json"
+            "hentIdenter_success_response.json",
+            "hentPerson_success_response.json"
         )
 
         RestAssured.given()
@@ -41,17 +41,66 @@ internal class PdlproxyApiTest {
     }
 
     @Test
-    fun `Finner ikke person ved søk etter identer i PDL`() {
+    fun `Finner ikke data for hverken hentIdenter eller hentPerson, skal returnere 404 med feilmelding`() {
         val port = enTilfleldigPort()
 
         enTestserverMedResponsFraPDL(
             port,
             "hentIdenter_fant_ikke_person_response.json",
-            "hentPerson_FantIkkePerson_Response.json"
+            "hentPerson_fant_ikke_person_response.json"
         )
 
-        RestAssured
-            .given()
+        RestAssured.given()
+            .filter(validationFilter)
+            .header(Header("Content-Type", "application/json"))
+            .header(Header("Authorization", "Bearer dummytoken"))
+            .body(PersonIdent("ikke interessant").tilJson())
+            .port(port)
+            .post("/hent-person")
+            .then()
+            .assertThat()
+            .statusCode(404)
+            .body(
+                containsString("Fant ikke person")
+            )
+    }
+
+    @Test
+    fun `Finner ikke data for hentPerson, skal returnere 404 med feilmelding`() {
+        val port = enTilfleldigPort()
+
+        enTestserverMedResponsFraPDL(
+            port,
+            "hentIdenter_success_response.json",
+            "hentPerson_fant_ikke_person_response.json"
+        )
+
+        RestAssured.given()
+            .filter(validationFilter)
+            .header(Header("Content-Type", "application/json"))
+            .header(Header("Authorization", "Bearer dummytoken"))
+            .body(PersonIdent("ikke interessant").tilJson())
+            .port(port)
+            .post("/hent-person")
+            .then()
+            .assertThat()
+            .statusCode(404)
+            .body(
+                containsString("Fant ikke person")
+            )
+    }
+
+    @Test
+    fun `Finner ikke data for hentIdenter, skal returnere 404 med feilmelding`() {
+        val port = enTilfleldigPort()
+
+        enTestserverMedResponsFraPDL(
+            port,
+            "hentIdenter_fant_ikke_person_response.json",
+            "hentPerson_success_response.json"
+        )
+
+        RestAssured.given()
             .filter(validationFilter)
             .header(Header("Content-Type", "application/json"))
             .header(Header("Authorization", "Bearer dummytoken"))

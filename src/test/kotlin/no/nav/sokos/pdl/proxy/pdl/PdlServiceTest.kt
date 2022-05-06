@@ -30,8 +30,8 @@ internal class PdlServiceTest {
     fun `Vellykket hent av en persons identer, navn og adresser fra Pdl`() {
         val mockkGraphQlClient = GraphQLKtorClient(URL(pdlUrl),
             setupMockEngine(
-                "hentIdenter_Success_Response.json",
-                "hentPerson_Success_Response.json",
+                "hentIdenter_success_response.json",
+                "hentPerson_success_response.json",
                 HttpStatusCode.OK)
         )
         val pdlService = PdlService(mockkGraphQlClient, pdlUrl, accessTokenClient = null)
@@ -49,7 +49,7 @@ internal class PdlServiceTest {
         val mockkGraphQlClient = GraphQLKtorClient(URL(pdlUrl),
             setupMockEngine(
                 "hentIdenter_fant_ikke_person_response.json",
-                "hentPerson_FantIkkePerson_Response.json",
+                "hentPerson_fant_ikke_person_response.json",
                 HttpStatusCode.OK)
         )
         val pdlUrl = pdlUrl
@@ -67,8 +67,8 @@ internal class PdlServiceTest {
     fun `Ikke authentisert å hente person identer fra Pdl`() {
         val mockkGraphQlClient = GraphQLKtorClient(URL(pdlUrl),
             setupMockEngine(
-                "hentIdenter_IkkeAuthentisert_Response.json",
-                "hentPerson_IkkeAuthentisert_Response.json",
+                "hentIdenter_ikke_authentisert_response.json",
+                "hentPerson_ikke_authentisert_response.json",
                 HttpStatusCode.OK)
         )
         val pdlUrl = pdlUrl
