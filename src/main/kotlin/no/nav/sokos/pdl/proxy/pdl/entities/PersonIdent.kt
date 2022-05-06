@@ -1,5 +1,9 @@
 package no.nav.sokos.pdl.proxy.pdl.entities
 
-data class PersonIdent (
-    val ident : String
-    )
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+
+data class PersonIdent(
+    val ident: String,
+) {
+    fun tilJson(): String = jacksonObjectMapper().writeValueAsString(this)
+}

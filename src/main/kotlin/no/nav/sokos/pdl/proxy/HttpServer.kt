@@ -1,29 +1,32 @@
 package no.nav.sokos.pdl.proxy
 
-import io.ktor.application.*
-import io.ktor.http.*
-import io.ktor.metrics.micrometer.*
-import io.ktor.response.*
-import io.ktor.routing.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
+import installCommonFeatures
+import io.ktor.application.Application
+import io.ktor.application.call
+import io.ktor.application.install
+import io.ktor.http.ContentType
+import io.ktor.metrics.micrometer.MicrometerMetrics
+import io.ktor.response.respondText
+import io.ktor.routing.get
+import io.ktor.routing.route
+import io.ktor.routing.routing
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.engine.stop
+import io.ktor.server.netty.Netty
 import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics
 import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics
 import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics
 import io.micrometer.core.instrument.binder.system.ProcessorMetrics
 import io.micrometer.core.instrument.binder.system.UptimeMetrics
 import io.prometheus.client.exporter.common.TextFormat
+import java.util.concurrent.TimeUnit
 import no.nav.kontoregister.person.api.installSecurity
-import no.nav.sokos.ereg.proxy.api.installCommonFeatures
 import no.nav.sokos.ereg.proxy.api.naisApi
 import no.nav.sokos.ereg.proxy.api.swaggerApi
-
 import no.nav.sokos.pdl.proxy.api.pdlApi
 import no.nav.sokos.pdl.proxy.person.metrics.Metrics
 import no.nav.sokos.pdl.proxy.person.pdl.PdlService
-import no.nav.sokos.pdl.proxy.person.pdl.PdlServiceImpl
 import no.nav.sokos.pdl.proxy.person.security.ApiSecurityService
-import java.util.concurrent.TimeUnit
 
 
 class HttpServer(
@@ -35,7 +38,7 @@ class HttpServer(
 ) {
     private val embeddedServer = embeddedServer(Netty, port) {
         installSecurity(apiSecurityService, appConfig, appConfig.useAuthentication)
-        pdlApi(pdlService as PdlServiceImpl, appConfig.useAuthentication)
+        pdlApi(pdlService, appConfig.useAuthentication)
         installCommonFeatures()
         installMetrics()
         swaggerApi()

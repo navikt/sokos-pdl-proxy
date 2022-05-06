@@ -25,30 +25,23 @@ import resourceToString
 
 private const val pdlUrl = "http://0.0.0.0"
 
-internal class PdlServiceImplTest {
+internal class PdlServiceTest {
     @Test
     fun `Vellykket hent av en persons identer, navn og adresser fra Pdl`() {
-
         val mockkGraphQlClient = GraphQLKtorClient(URL(pdlUrl),
             setupMockEngine(
                 "hentIdenter_Success_Response.json",
                 "hentPerson_Success_Response.json",
                 HttpStatusCode.OK)
         )
-        val pdlUrl = pdlUrl
-        val pdlService = PdlServiceImpl(mockkGraphQlClient, pdlUrl, accessTokenClient = null)
+        val pdlService = PdlService(mockkGraphQlClient, pdlUrl, accessTokenClient = null)
 
         val personDetaljer: PersonDetaljer? = pdlService.hentPersonDetaljer("22334455667")
-
 
         assertThat(personDetaljer)
             .isNotNull()
             .transform { it.identer.map(Ident::ident) }
             .containsExactlyInAnyOrder("2804958208728", "24117920441")
-
-
-
-
     }
 
     @Test
@@ -60,7 +53,7 @@ internal class PdlServiceImplTest {
                 HttpStatusCode.OK)
         )
         val pdlUrl = pdlUrl
-        val pdlService = PdlServiceImpl(mockkGraphQlClient, pdlUrl, accessTokenClient = null)
+        val pdlService = PdlService(mockkGraphQlClient, pdlUrl, accessTokenClient = null)
         assertFailsWith<PdlApiException>(
             message = "Fant ikke person",
             block = {
@@ -79,7 +72,7 @@ internal class PdlServiceImplTest {
                 HttpStatusCode.OK)
         )
         val pdlUrl = pdlUrl
-        val pdlService = PdlServiceImpl(mockkGraphQlClient, pdlUrl, accessTokenClient = null)
+        val pdlService = PdlService(mockkGraphQlClient, pdlUrl, accessTokenClient = null)
 
         val personDetaljer: PersonDetaljer? = pdlService.hentPersonDetaljer("22334455667")
 
@@ -89,8 +82,7 @@ internal class PdlServiceImplTest {
 
 }
 
-
-private fun setupMockEngine(
+fun setupMockEngine(
     hentIdenterResponseFilNavn: String,
     hentPersonResponseFilNavn: String,
     statusCode: HttpStatusCode = HttpStatusCode.OK,
