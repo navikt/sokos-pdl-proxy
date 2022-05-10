@@ -1,7 +1,7 @@
 {
   "errors": [
     {
-      "message": "Ikke autentisert",
+      "message": "En annen feilmelding fra PDL",
       "locations": [
         {
           "line": 2,
@@ -12,7 +12,7 @@
         "hentPerson"
       ],
       "extensions": {
-        "code": "unauthenticated",
+        "code": "en_annen_feilkode",
         "classification": "ExecutionAborted"
       }
     }

@@ -44,9 +44,7 @@ object PdlproxyApi {
 
                             //call.respond()
                         } catch (exception: Exception) {
-                            logger.error("Det står en exception - ${exception.stackTrace} ")
-                            logger.error("Error message er : ${exception.message}")
-                            logger.error("Error grun er : - ${exception.cause}")
+                            logger.error("hent-person feilet: ${exception.message}", exception)
                             call.respond(HttpStatusCode.InternalServerError, exception.stackTrace)
                         }
                     }

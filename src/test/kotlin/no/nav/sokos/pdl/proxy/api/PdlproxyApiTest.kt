@@ -115,6 +115,54 @@ internal class PdlproxyApiTest {
             )
     }
 
+    @Test
+    fun `ikke autentisert, skal returnere 500 med feilmelding`() {
+        val port = enTilfleldigPort()
+
+        enTestserverMedResponsFraPDL(
+            port,
+            "hentIdenter_ikke_authentisert_response.json",
+            "hentPerson_success_response.json"
+        )
+
+        RestAssured.given()
+            .filter(validationFilter)
+            .header(Header("Content-Type", "application/json"))
+            .header(Header("Authorization", "Bearer dummytoken"))
+            .body(PersonIdent("ikke interessant").tilJson())
+            .port(port)
+            .post("/hent-person")
+            .then()
+            .assertThat()
+            .statusCode(500)
+            .body(
+                containsString("Ikke autentisert")
+            )
+
+    }
+
+    @Test
+    fun `Andre feilkoder fra PDL skal returnere 500 med en beskrivende feilmelding`() {
+        val port = enTilfleldigPort()
+
+        enTestserverMedResponsFraPDL(
+            port,
+            "hentIdenter_annen_feilmelding_response.json",
+            "hentPerson_success_response.json"
+        )
+
+        RestAssured.given()
+            .filter(validationFilter)
+            .header(Header("Content-Type", "application/json"))
+            .header(Header("Authorization", "Bearer dummytoken"))
+            .body(PersonIdent("ikke interessant").tilJson())
+            .port(port)
+            .post("/hent-person")
+            .then()
+            .assertThat()
+            .statusCode(500)
+            .body(containsString("En annen feilmelding fra PDL"))
+    }
 
     private fun enTestserverMedResponsFraPDL(
         port: Int,
@@ -129,6 +177,7 @@ internal class PdlproxyApiTest {
                 HttpStatusCode.OK)
         )
         val pdlService = PdlService(mockkGraphQlClient, pdlUrl, accessTokenClient = null)
+
         TestServer(port, pdlService)
     }
 

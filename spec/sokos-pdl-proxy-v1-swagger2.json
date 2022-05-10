@@ -51,18 +51,6 @@
               "$ref": "#/definitions/PersonDetaljer"
             }
           },
-          "400": {
-            "description": "Ugyldig(e) parameter(e) i foresp&oslash;rsel",
-            "schema": {
-              "$ref": "#/definitions/TjenestefeilResponse"
-            }
-          },
-          "403": {
-            "description": "ingen tilgang til ressurs",
-            "schema": {
-              "$ref": "#/definitions/TjenestefeilResponse"
-            }
-          },
           "404": {
             "description": "Fant ikke forespurt(e) entitet(er)",
             "schema": {

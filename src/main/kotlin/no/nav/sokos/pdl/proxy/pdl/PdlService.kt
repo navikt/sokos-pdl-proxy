@@ -64,7 +64,7 @@ class PdlService(
     }
 
     fun hentPerson(ident: String): Person? {
-
+        //TODO se på feilhåndteringen her
         return try {
             val result: GraphQLClientResponse<HentPerson.Result> = runBlocking {
                 val accessToken = accessTokenClient?.hentAccessToken()
@@ -151,36 +151,24 @@ class PdlService(
             )
         } ?: emptyList()
 
-    private fun handleErrors(errors: List<GraphQLClientError>) {
-        val errorCode = errors
-            .mapNotNull { error -> error.extensions }[0]["code"]
-        val errorMelding = errors
+    private fun handleErrors(pdlKlientFeil: List<GraphQLClientError>) {
+        val feilmeldingPrefiks = "Henting av data fra PDL feilet: "
+        val feilmeldingerFraPDL = pdlKlientFeil
             .map { error -> error.message }
 
-        logger.error("Error code er ${errorCode}")
+        val feilkoderFraPDL = pdlKlientFeil
+            .mapNotNull { error -> error.extensions }
+            .map { entry -> entry["code"].toString() }
 
-        val ikkeFunnetResponsFraPDL = errors
-            .mapNotNull { error -> error.extensions }
-            .any { entry -> entry["code"] == "not_found" }
-        val ikkeTilgangFraPDL = errors
-            .mapNotNull { error -> error.extensions }
-            .any { entry -> entry["code"] == "forbidden" }
-        val badRequestTilPDL = errors
-            .mapNotNull { error -> error.extensions }
-            .any { entry -> entry["code"] == "bad_request" }
-
-        if (ikkeFunnetResponsFraPDL) {
-            logger.error { "Ikke funnet error melding er - ${errorMelding}" }
-            throw PdlApiException(404, "${errorMelding}")
-        } else if (ikkeTilgangFraPDL) {
-            logger.error { "Ingent tilgang til å hente denne ressurs - ${errorMelding}" }
-            throw PdlApiException(403, "${errorMelding}")
-        } else if (badRequestTilPDL) {
-            logger.error { "Dette er en bad request - ${errorMelding}" }
-            throw PdlApiException(400, "${errorMelding}")
-        } else {
-            logger.error { "Denne scenario er ikke behandlet." }
-            throw Exception("Ikke behandlet scenario.")
+        when {
+            feilkoderFraPDL.contains("not_found") -> {
+                logger.error { feilmeldingPrefiks + feilmeldingerFraPDL }
+                throw PdlApiException(404, "${feilmeldingerFraPDL}")
+            }
+            else -> {
+                logger.error { feilmeldingPrefiks + feilmeldingerFraPDL }
+                throw PdlApiException(500, "$feilmeldingerFraPDL")
+            }
         }
     }
 }
