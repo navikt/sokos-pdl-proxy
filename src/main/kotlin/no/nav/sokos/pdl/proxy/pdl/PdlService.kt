@@ -9,10 +9,10 @@ import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import no.nav.pdl.HentIdenter
 import no.nav.pdl.HentPerson
+import no.nav.pdl.hentperson.Person
 import no.nav.sokos.pdl.proxy.LOGGER
 import no.nav.sokos.pdl.proxy.api.model.Ident
 import no.nav.sokos.pdl.proxy.api.model.IdentifikatorType
-import no.nav.sokos.pdl.proxy.api.model.Person
 import no.nav.sokos.pdl.proxy.api.model.PersonDetaljer
 import no.nav.sokos.pdl.proxy.exception.PdlApiException
 import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
@@ -39,16 +39,18 @@ class PdlService(
             val hasIdenter = !identer.isEmpty()
 
             if (person != null && hasIdenter) {
-                personDetaljer = PersonDetaljer(
-                    identer,
-                    person.fornavn,
-                    person.mellomnavn,
-                    person.etternavn,
-                    person.forkortetNavn,
-                    null,
-                    null,
-                    null
-                )
+                personDetaljer =
+                    PersonDetaljer(
+                        identer,
+                        //TODO pdl leverer liste med navn og adresser. Enten kan vi hente first() eller kan kontrakt endres til å bruke lister
+                        person.navn.firstOrNull()?.fornavn,
+                        person.navn.first().mellomnavn,
+                        person.navn.first().etternavn,
+                        person.navn.first().forkortetNavn,
+                        person.bostedsadresse.firstOrNull(),
+                        person.kontaktadresse.firstOrNull(),
+                        person.oppholdsadresse.firstOrNull(),
+                    )
 
                 return personDetaljer
             }
@@ -79,24 +81,7 @@ class PdlService(
                 handleErrors(errors)
             }
 
-            if (result.data?.hentPerson?.navn.isNullOrEmpty() == true) {
-                logger.warn() { "Det har oppstått en feil ved henting av person fra pdl api - navn er empty" }
-                return Person("", "", "", "", null, null, null)
-            }
-
-            val bostedAdresse = result.data?.hentPerson?.bostedsadresse
-            val kontaktAdresse = result.data?.hentPerson?.kontaktadresse
-            val oppholdsAdresse = result.data?.hentPerson?.oppholdsadresse
-
-            return result.data?.hentPerson?.navn?.map {
-                Person(it.fornavn,
-                    it.mellomnavn,
-                    it.etternavn,
-                    it.forkortetNavn,
-                    bostedAdresse,
-                    kontaktAdresse,
-                    oppholdsAdresse)
-            }?.first()
+            return result.data?.hentPerson
 
         } catch (pdlApiException: PdlApiException) {
             logger.error(pdlApiException) { "Det har oppstått en feil ved henting av person fra pdl api - ${pdlApiException.message}" }
