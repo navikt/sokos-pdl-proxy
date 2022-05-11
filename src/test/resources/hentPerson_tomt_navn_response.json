@@ -2,7 +2,9 @@
   "data": {
     "hentPerson": {
       "navn": [],
-      "bostedsadresse": []
+      "bostedsadresse": [],
+      "oppholdsadresse": [],
+      "kontaktadresse": []
     }
   }
 }

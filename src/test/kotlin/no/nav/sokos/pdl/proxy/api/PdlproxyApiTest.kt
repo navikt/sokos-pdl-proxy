@@ -41,6 +41,28 @@ internal class PdlproxyApiTest {
     }
 
     @Test
+    fun `Klient kaller begge tjenester med suksess, men ingen navn på person, skal også validerer ok mot swagger-kontrakten`() {
+        val port = enTilfleldigPort()
+
+        enTestserverMedResponsFraPDL(
+            port,
+            "hentIdenter_success_response.json",
+            "hentPerson_tomt_navn_response.json"
+        )
+
+        RestAssured.given()
+            .filter(validationFilter)
+            .header(Header("Content-Type", "application/json"))
+            .header(Header("Authorization", "Bearer dummytoken"))
+            .body(PersonIdent("ikke interessant").tilJson())
+            .port(port)
+            .post("/hent-person")
+            .then()
+            .assertThat()
+            .statusCode(200)
+    }
+
+    @Test
     fun `Finner ikke data for hverken hentIdenter eller hentPerson, skal returnere 404 med feilmelding`() {
         val port = enTilfleldigPort()
 
@@ -174,7 +196,8 @@ internal class PdlproxyApiTest {
             setupMockEngine(
                 hentIdenterResponsFilnavn,
                 hentPersonResponsFilnavn,
-                HttpStatusCode.OK)
+                HttpStatusCode.OK
+            )
         )
         val pdlService = PdlService(mockkGraphQlClient, pdlUrl, accessTokenClient = null)
 

@@ -44,9 +44,9 @@ class PdlService(
                         identer,
                         //TODO pdl leverer liste med navn og adresser. Enten kan vi hente first() eller kan kontrakt endres til å bruke lister
                         person.navn.firstOrNull()?.fornavn,
-                        person.navn.first().mellomnavn,
-                        person.navn.first().etternavn,
-                        person.navn.first().forkortetNavn,
+                        person.navn.firstOrNull()?.mellomnavn,
+                        person.navn.firstOrNull()?.etternavn,
+                        person.navn.firstOrNull()?.forkortetNavn,
                         person.bostedsadresse.firstOrNull(),
                         person.kontaktadresse.firstOrNull(),
                         person.oppholdsadresse.firstOrNull(),
@@ -66,32 +66,23 @@ class PdlService(
     }
 
     fun hentPerson(ident: String): Person? {
-        //TODO se på feilhåndteringen her
-        return try {
-            val result: GraphQLClientResponse<HentPerson.Result> = runBlocking {
-                val accessToken = accessTokenClient?.hentAccessToken()
-                graphQlClient.execute(HentPerson(HentPerson.Variables(ident = ident))) {
-                    url(pdlUrl)
-                    header("Authorization", "Bearer $accessToken")
-                    header("Tema", "OKO")
-                }
+        val result: GraphQLClientResponse<HentPerson.Result> = runBlocking {
+            val accessToken = accessTokenClient?.hentAccessToken()
+            graphQlClient.execute(HentPerson(HentPerson.Variables(ident = ident))) {
+                url(pdlUrl)
+                header("Authorization", "Bearer $accessToken")
+                header("Tema", "OKO")
             }
-            result.errors?.let { errors ->
-                logger.error { "Det ligger en feil når innkalt ${errors[0].path} og feil blir: ${errors[0].message} " }
-                handleErrors(errors)
-            }
-
-            return result.data?.hentPerson
-
-        } catch (pdlApiException: PdlApiException) {
-            logger.error(pdlApiException) { "Det har oppstått en feil ved henting av person fra pdl api - ${pdlApiException.message}" }
-
-            throw pdlApiException
-        } catch (exception: Exception) {
-            logger.error(exception) { "Det har oppstått en internfeil ved sokos-pdl-proxy - ${exception.message}" }
-
-            throw exception
         }
+
+        //TODO Secure logg
+        logger.info { "Fikk følgende fra PDL hentPerson: ${result.data?.hentPerson}" }
+
+        result.errors?.let { errors ->
+            handleErrors(errors)
+        }
+
+        return result.data?.hentPerson
     }
 
     fun hentIdenterForPerson(ident: String): List<Ident> {
@@ -137,7 +128,10 @@ class PdlService(
         } ?: emptyList()
 
     private fun handleErrors(pdlKlientFeil: List<GraphQLClientError>) {
-        val feilmeldingPrefiks = "Henting av data fra PDL feilet: "
+        val metoderSomGirFeil = pdlKlientFeil
+            .mapNotNull { error -> error.path }
+            .joinToString { s -> s.toString() }
+
         val feilmeldingerFraPDL = pdlKlientFeil
             .map { error -> error.message }
 
@@ -145,13 +139,15 @@ class PdlService(
             .mapNotNull { error -> error.extensions }
             .map { entry -> entry["code"].toString() }
 
+
+        logger.error { "Henting av data fra PDL feilet ved kall til $metoderSomGirFeil. Feilmeldinger er: $feilmeldingerFraPDL" }
         when {
             feilkoderFraPDL.contains("not_found") -> {
-                logger.error { feilmeldingPrefiks + feilmeldingerFraPDL }
+                //logger.error { feilmeldingPrefiks + feilmeldingerFraPDL }
                 throw PdlApiException(404, "${feilmeldingerFraPDL}")
             }
             else -> {
-                logger.error { feilmeldingPrefiks + feilmeldingerFraPDL }
+                //logger.error { feilmeldingPrefiks + feilmeldingerFraPDL }
                 throw PdlApiException(500, "$feilmeldingerFraPDL")
             }
         }
