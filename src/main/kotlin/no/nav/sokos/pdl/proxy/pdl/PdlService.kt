@@ -143,11 +143,9 @@ class PdlService(
         logger.error { "Henting av data fra PDL feilet ved kall til $metoderSomGirFeil. Feilmeldinger er: $feilmeldingerFraPDL" }
         when {
             feilkoderFraPDL.contains("not_found") -> {
-                //logger.error { feilmeldingPrefiks + feilmeldingerFraPDL }
                 throw PdlApiException(404, "${feilmeldingerFraPDL}")
             }
             else -> {
-                //logger.error { feilmeldingPrefiks + feilmeldingerFraPDL }
                 throw PdlApiException(500, "$feilmeldingerFraPDL")
             }
         }
