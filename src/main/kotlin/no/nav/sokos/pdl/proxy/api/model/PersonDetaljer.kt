@@ -3,6 +3,7 @@ package no.nav.sokos.pdl.proxy.api.model
 import no.nav.pdl.hentperson.Bostedsadresse
 import no.nav.pdl.hentperson.Kontaktadresse
 import no.nav.pdl.hentperson.Oppholdsadresse
+import no.nav.pdl.hentperson.Person
 
 data class PersonDetaljer(
     val identer: List<Ident>,
@@ -12,5 +13,20 @@ data class PersonDetaljer(
     val forkortetNavn: String?,
     val bostedsadresse: Bostedsadresse?,
     val kontaktadresse: Kontaktadresse?,
-    val oppholdsadresse: Oppholdsadresse?
-)
+    val oppholdsadresse: Oppholdsadresse?,
+) {
+    companion object {
+        fun fra(identer: List<Ident>, person: Person?) = PersonDetaljer(
+            identer,
+            person?.navn?.firstOrNull()?.fornavn,
+            person?.navn?.firstOrNull()?.mellomnavn,
+            person?.navn?.firstOrNull()?.etternavn,
+            person?.navn?.firstOrNull()?.forkortetNavn,
+            person?.bostedsadresse?.firstOrNull(),
+            person?.kontaktadresse?.firstOrNull(),
+            person?.oppholdsadresse?.firstOrNull(),
+        )
+    }
+}
+
+

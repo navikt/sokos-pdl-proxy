@@ -34,7 +34,7 @@ object PdlproxyApi {
                             logger.info("Henter person detaljer...")
                             val person = pdlService.hentPersonDetaljer(personIdent.ident)
                             logger.info("du er etter pdl inkalling!")
-                            call.respond(HttpStatusCode.OK, person!!)
+                            call.respond(HttpStatusCode.OK, person)
                         } catch (pdlApiException: PdlApiException) {
                             logger.error("Error message på API er : ${pdlApiException.message}")
                             logger.error("Error kode på API er : ${pdlApiException.errorKode}")
