@@ -65,8 +65,8 @@ internal class PdlServiceTest {
             .isFailure()
             .transform { it as PdlApiException }
             .all {
-                prop(PdlApiException::errorKode).isEqualTo(404)
-                prop(PdlApiException::message).contains("Fant ikke person")
+                prop(PdlApiException::feilkode).isEqualTo(404)
+                prop(PdlApiException::feilmelding).contains("Fant ikke person")
             }
     }
 
@@ -86,8 +86,8 @@ internal class PdlServiceTest {
             .isFailure()
             .transform { it as PdlApiException }
             .all {
-                prop(PdlApiException::errorKode).isEqualTo(500)
-                prop(PdlApiException::message).contains("Ikke autentisert")
+                prop(PdlApiException::feilkode).isEqualTo(500)
+                prop(PdlApiException::feilmelding).contains("Ikke autentisert")
             }
     }
 

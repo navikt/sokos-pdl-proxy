@@ -9,15 +9,15 @@ import io.ktor.response.respond
 import io.ktor.routing.post
 import io.ktor.routing.route
 import io.ktor.routing.routing
+import mu.KotlinLogging
 import no.nav.kontoregister.person.api.authenticate
 import no.nav.sokos.pdl.proxy.api.model.PersonIdent
 import no.nav.sokos.pdl.proxy.api.model.TjenestefeilResponse
 import no.nav.sokos.pdl.proxy.exception.PdlApiException
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 import no.nav.sokos.pdl.proxy.pdl.security.Api
-import org.slf4j.LoggerFactory
 
-private val logger = LoggerFactory.getLogger("no.nav.sokos.pdl.proxy.api.PdlApi")
+private val logger = KotlinLogging.logger {}
 
 object PdlproxyApi {
 
@@ -31,21 +31,21 @@ object PdlproxyApi {
                     post("hent-person") {
                         try {
                             val personIdent: PersonIdent = call.receive()
-                            logger.info("Henter person detaljer...")
                             val person = pdlService.hentPersonDetaljer(personIdent.ident)
-                            logger.info("du er etter pdl inkalling!")
+                            logger.info("Kall til hent-person gikk ok")
                             call.respond(HttpStatusCode.OK, person)
                         } catch (pdlApiException: PdlApiException) {
-                            logger.error("Error message på API er : ${pdlApiException.message}")
-                            logger.error("Error kode på API er : ${pdlApiException.errorKode}")
-
-                            call.respond(HttpStatusCode.fromValue(pdlApiException.errorKode),
-                                TjenestefeilResponse(pdlApiException.message))
-
-                            //call.respond()
-                        } catch (exception: Exception) {
-                            logger.error("hent-person feilet: ${exception.message}", exception)
-                            call.respond(HttpStatusCode.InternalServerError, exception.stackTrace)
+                            logger.info("Forbereder respons til klient etter feil: ${pdlApiException}")
+                            call.respond(
+                                HttpStatusCode.fromValue(pdlApiException.feilkode),
+                                TjenestefeilResponse(pdlApiException.feilmelding)
+                            )
+                        } catch (exception: Throwable) {
+                            logger.error("Teknisk feil: Feilmelding:${exception.message}", exception)
+                            call.respond(
+                                HttpStatusCode.InternalServerError,
+                                "En teknisk feil har oppstått. Ta kontakt med utviklerne"
+                            )
                         }
                     }
                 }
