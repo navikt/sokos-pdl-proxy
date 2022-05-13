@@ -15,7 +15,7 @@ repositories {
 
 final def logback_version = "1.3.0-alpha10"
 final def kotlin_version = '1.6.21'
-final def ktor_version = "1.6.3"
+final def ktor_version = "1.6.8"
 final def jackson_version = "2.9.8"
 final def junit_version = "5.7.0"
 final def mockk_version = "1.12.3"
