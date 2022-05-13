@@ -24,7 +24,7 @@ final def graphqlClientVersion = "5.0.0-alpha.3"
 final def kotlin_logging_version = "2.1.21"
 final def flyway_version = "8.5.10"
 final def logstash_version = "6.6"
-final def avroVersion = "1.10.2"
+final def avroVersion = "1.11.0"
 final def restAssuredVersion = "5.0.1"
 final def swaggerRequestValidatorVersion = "2.27.2"
 
