@@ -1,0 +1,23 @@
+{
+  "errors": [
+    {
+      "message": "En annen feilmelding fra PDL",
+      "locations": [
+        {
+          "line": 2,
+          "column": 2
+        }
+      ],
+      "path": [
+        "hentPerson"
+      ],
+      "extensions": {
+        "code": "en_annen_feilkode",
+        "classification": "ExecutionAborted"
+      }
+    }
+  ],
+  "data": {
+    "hentIdenter": null
+  }
+}

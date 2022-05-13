@@ -1,5 +1,6 @@
 package no.nav.sokos.pdl.proxy.exception
 
-class PdlApiException (val errorKode: Int,
-                       override val message: String): Exception(message) {
-}
+data class PdlApiException(
+    val feilkode: Int,
+    val feilmelding: String,
+) : Exception(feilmelding)

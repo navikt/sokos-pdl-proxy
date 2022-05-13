@@ -1,5 +1,3 @@
-package no.nav.sokos.ereg.proxy.api
-
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.SerializationFeature
@@ -12,7 +10,7 @@ import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.callIdMdc
 import io.ktor.jackson.jackson
-import java.util.UUID
+import java.util.*
 
 
 fun Application.installCommonFeatures() {

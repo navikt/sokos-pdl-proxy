@@ -1,4 +1,4 @@
-package no.nav.sokos.pdl.proxy.pdl.entities
+package no.nav.sokos.pdl.proxy.api.model
 
 data class Ident(
     val ident: String,

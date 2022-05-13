@@ -1,4 +1,4 @@
-package no.nav.sokos.pdl.proxy.pdl.entities
+package no.nav.sokos.pdl.proxy.api.model
 
 import no.nav.pdl.enums.IdentGruppe
 import no.nav.person.pdl.aktor.v1.Type

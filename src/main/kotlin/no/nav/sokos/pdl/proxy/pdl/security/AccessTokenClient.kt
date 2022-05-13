@@ -1,4 +1,4 @@
-package no.nav.sokos.pdl.proxy.person.security
+package no.nav.sokos.pdl.proxy.pdl.security
 
 import com.fasterxml.jackson.annotation.JsonAlias
 import io.ktor.client.HttpClient

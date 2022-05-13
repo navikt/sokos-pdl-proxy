@@ -1,4 +1,4 @@
-package no.nav.sokos.pdl.proxy.person.metrics
+package no.nav.sokos.pdl.proxy.pdl.metrics
 
 import io.ktor.application.Application
 import io.ktor.application.call

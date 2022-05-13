@@ -1,10 +1,154 @@
 query($ident: ID!){
-  hentPerson(ident: $ident) {
-	navn(historikk: false) {
-	  fornavn
-	  mellomnavn
-	  etternavn
-	  forkortetNavn
-    }
-  }
+	hentPerson(ident: $ident) {
+		navn(historikk: false) {
+			fornavn
+			mellomnavn
+			etternavn
+			forkortetNavn
+		}
+		bostedsadresse {
+			angittFlyttedato,
+			gyldigFraOgMed,
+			gyldigTilOgMed,
+			coAdressenavn,
+			vegadresse {
+				husnummer,
+				husbokstav,
+				bruksenhetsnummer,
+				adressenavn,
+				kommunenummer,
+				bydelsnummer,
+				tilleggsnavn,
+				postnummer
+			},
+			matrikkeladresse{
+				bruksenhetsnummer,
+				tilleggsnavn,
+				postnummer,
+				kommunenummer
+			},
+			utenlandskAdresse{
+				adressenavnNummer,
+				bygningEtasjeLeilighet,
+				postboksNummerNavn,
+				postkode,
+				bySted,
+				regionDistriktOmraade,
+				landkode
+			},
+			ukjentBosted{
+				bostedskommune
+			}
+			metadata {
+				opplysningsId
+				master
+				endringer {
+					type
+					registrert
+					registrertAv
+					systemkilde
+					kilde
+				}
+				historisk
+			}
+		}
+		oppholdsadresse {
+			oppholdAnnetSted
+			coAdressenavn
+			gyldigFraOgMed
+			utenlandskAdresse {
+				adressenavnNummer,
+				bygningEtasjeLeilighet,
+				postboksNummerNavn,
+				postkode,
+				bySted,
+				regionDistriktOmraade,
+				landkode
+			}
+			vegadresse {
+				husnummer,
+				husbokstav,
+				bruksenhetsnummer,
+				adressenavn,
+				kommunenummer,
+				bydelsnummer,
+				tilleggsnavn,
+				postnummer
+			}
+			matrikkeladresse {
+				bruksenhetsnummer,
+				tilleggsnavn,
+				postnummer,
+				kommunenummer
+			}
+			metadata {
+				opplysningsId
+				master
+				endringer {
+					type
+					registrert
+					registrertAv
+					systemkilde
+					kilde
+				}
+				historisk
+			}
+		}
+		kontaktadresse {
+			gyldigFraOgMed
+			gyldigTilOgMed
+			type
+			coAdressenavn
+			postboksadresse {
+				postbokseier
+				postboks
+				postnummer
+			}
+			vegadresse {
+				husnummer,
+				husbokstav,
+				bruksenhetsnummer,
+				adressenavn,
+				kommunenummer,
+				bydelsnummer,
+				tilleggsnavn,
+				postnummer
+			}
+			postadresseIFrittFormat {
+				adresselinje1
+				adresselinje2
+				adresselinje3
+				postnummer
+			}
+			utenlandskAdresse {
+				adressenavnNummer,
+				bygningEtasjeLeilighet,
+				postboksNummerNavn,
+				postkode,
+				bySted,
+				regionDistriktOmraade,
+				landkode
+			}
+			utenlandskAdresseIFrittFormat {
+				adresselinje1
+				adresselinje2
+				adresselinje3
+				postkode
+				byEllerStedsnavn
+				landkode
+			}
+			metadata {
+				opplysningsId
+				master
+				endringer {
+					type
+					registrert
+					registrertAv
+					systemkilde
+					kilde
+				}
+				historisk
+			}
+		}
+	}
 }

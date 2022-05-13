@@ -1,4 +1,4 @@
-package no.nav.sokos.pdl.proxy.person.security
+package no.nav.sokos.pdl.proxy.pdl.security
 
 class ApiSecurityService(
     private val apiAllowLists: Map<Api, List<String>>,

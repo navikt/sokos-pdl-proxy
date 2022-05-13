@@ -9,8 +9,8 @@ import io.ktor.auth.jwt.JWTPrincipal
 import io.ktor.auth.jwt.jwt
 import io.ktor.routing.Route
 import no.nav.sokos.pdl.proxy.Configuration
-import no.nav.sokos.pdl.proxy.person.security.Api
-import no.nav.sokos.pdl.proxy.person.security.ApiSecurityService
+import no.nav.sokos.pdl.proxy.pdl.security.Api
+import no.nav.sokos.pdl.proxy.pdl.security.ApiSecurityService
 import org.slf4j.LoggerFactory
 
 private val LOGGER = LoggerFactory.getLogger("no.nav.kontoregister.person.api")
