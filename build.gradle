@@ -2,7 +2,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.6.21'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'org.hidetake.swagger.generator' version '2.19.2'
-    id 'com.expediagroup.graphql' version '5.0.0-alpha.0'
+    id 'com.expediagroup.graphql' version '5.4.1'
     id 'org.betterplugin.avro' version "0.19.2-SNAPSHOT"
 }
 
@@ -107,7 +107,7 @@ swaggerSources {
 graphqlGenerateClient {
     packageName = "no.nav.pdl"
     schemaFile = file("$projectDir/src/main/resources/graphql/schema.graphql")
-    queryFileDirectory = "$projectDir/src/main/resources/graphql"
+    queryFileDirectory = file("$projectDir/src/main/resources/graphql")
 }
 
 build.dependsOn generateSwaggerUI
