@@ -49,6 +49,8 @@ private fun JWTAuthenticationProvider.Configuration.azureAuth(
                 LOGGER.info("Auth: Valid audience not found in claims")
                 "Auth: Valid audience not found in claims"
             }
+            //TODO Vi trenger ikke allow list for denne applikasjonen, siden den bare har ett api med ett rest-kall.
+            // (så enten har man tilgang eller ikke)
             if (api != null) {
                 val azp = credentials.payload.getClaim("azp").asString()
                 check(apiSecurityService.verifyAccessToApi(azp, api)) {
