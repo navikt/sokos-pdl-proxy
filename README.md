@@ -1,4 +1,4 @@
-***sokos-pdl-proxy***
+# sokos-pdl-proxy
 
 ## API-dokumentasjon
 Vi tilbyr følgende API-er:
