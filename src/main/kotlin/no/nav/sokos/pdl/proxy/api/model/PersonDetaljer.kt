@@ -12,8 +12,8 @@ data class PersonDetaljer(
     val etternavn: String?,
     val forkortetNavn: String?,
     val bostedsadresse: Bostedsadresse?,
-    val kontaktadresse: Kontaktadresse?,
-    val oppholdsadresse: Oppholdsadresse?,
+    val kontaktadresse: List<Kontaktadresse>,
+    val oppholdsadresse: List<Oppholdsadresse>,
 ) {
     companion object {
         fun fra(identer: List<Ident>, person: Person?) = PersonDetaljer(
@@ -23,8 +23,8 @@ data class PersonDetaljer(
             person?.navn?.firstOrNull()?.etternavn,
             person?.navn?.firstOrNull()?.forkortetNavn,
             person?.bostedsadresse?.firstOrNull(),
-            person?.kontaktadresse?.firstOrNull(),
-            person?.oppholdsadresse?.firstOrNull(),
+            person?.kontaktadresse.orEmpty(),
+            person?.oppholdsadresse.orEmpty(),
         )
     }
 }

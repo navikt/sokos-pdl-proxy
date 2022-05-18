@@ -10,6 +10,7 @@ import mu.KotlinLogging
 import no.nav.pdl.HentIdenter
 import no.nav.pdl.HentPerson
 import no.nav.pdl.hentperson.Person
+import no.nav.sokos.pdl.proxy.SECURE_LOGGER_NAME
 import no.nav.sokos.pdl.proxy.api.model.Ident
 import no.nav.sokos.pdl.proxy.api.model.IdentifikatorType
 import no.nav.sokos.pdl.proxy.api.model.PersonDetaljer
@@ -17,6 +18,7 @@ import no.nav.sokos.pdl.proxy.exception.PdlApiException
 import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
 
 private val logger = KotlinLogging.logger {}
+private val secureLogger = KotlinLogging.logger {SECURE_LOGGER_NAME}
 
 class PdlService(
     private val graphQlClient: GraphQLKtorClient,
@@ -41,8 +43,7 @@ class PdlService(
             }
         }
 
-        //TODO Secure logg
-        logger.info { "Fikk følgende fra PDL hentPerson: ${respons.data?.hentPerson}" }
+        secureLogger.info { "Fikk følgende fra PDL hentPerson: ${respons.data?.hentPerson}" }
 
         return respons.errors?.let { feilmeldingerFraPdl ->
             håndterFeil(feilmeldingerFraPdl)
@@ -57,8 +58,7 @@ class PdlService(
                 header("Authorization", "Bearer $accessToken")
             }
         }
-        //TODO Secure logg
-        logger.info { "Fikk følgende fra PDL hentIdenter: ${respons.data?.hentIdenter}" }
+        secureLogger.info { "Fikk følgende fra PDL hentIdenter: ${respons.data?.hentIdenter}" }
 
         return respons.errors?.let { feilmeldingerFraPdl ->
             håndterFeil(feilmeldingerFraPdl)
