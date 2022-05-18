@@ -1,5 +1,9 @@
 # sokos-pdl-proxy
 
+Hensikten med denne applikasjonen er å være bindeledd mellom stormaskin og PDL (Persondataløsningen).
+Stormaskin har ikke mulighet til å gjøre GraphQL rest-kall men ved hjelp av denne proxy har vi mulighet 
+til å hente et lite subset av persondata og identer.
+
 ## API-dokumentasjon
 Vi tilbyr følgende API-er:
 * NAV-API: Tilby en integrasjon for utbetalingsreskontro og oppdragz til å hente
