@@ -11,6 +11,10 @@
         </encoder>
     </appender>
 
+    <logger name="secureLogger" level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
     <root level="INFO">
         <appender-ref ref="${LOG_APPENDER:-stdout_json}"/>
     </root>

@@ -42,6 +42,11 @@
             "schema": {
               "$ref": "#/definitions/HentPerson"
             }
+          },
+          {
+            "name": "x-correlation-id",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
@@ -130,12 +135,20 @@
           "$ref": "#/definitions/Bostedsadresse"
         },
         "kontaktadresse": {
-          "type": "object",
-          "$ref": "#/definitions/Kontaktadresse"
+          "type": "array",
+          "maxItems": 3,
+          "items": {
+            "$ref": "#/definitions/Kontaktadresse"
+          },
+          "description": "For å avhjelpe begrensninger på stormaskin, settes en maks her som tilsvarer det som teoretisk kan komme fra PDL"
         },
         "oppholdsadresse": {
-          "type": "object",
-          "$ref": "#/definitions/Oppholdsadresse"
+          "type": "array",
+          "maxItems": 2,
+          "items": {
+            "$ref": "#/definitions/Oppholdsadresse"
+          },
+          "description": "For å avhjelpe begrensninger på stormaskin, settes en maks her som tilsvarer det som teoretisk kan komme fra PDL"
         }
       },
       "title": "Person",

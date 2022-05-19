@@ -12,6 +12,8 @@ spec:
     min: 2
     max: 6
     cpuThresholdPercentage: 25
+  secureLogs:
+    enabled: true
   azure:
     application:
       enabled: true
