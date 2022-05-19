@@ -11,16 +11,24 @@ import io.ktor.features.ContentNegotiation
 import io.ktor.features.callIdMdc
 import io.ktor.jackson.jackson
 import java.util.*
+import mu.KotlinLogging
+import org.slf4j.event.Level
 
+private val log = KotlinLogging.logger {}
+const val X_CORRELATION_ID = "x-correlation-id"
 
 fun Application.installCommonFeatures() {
     install(CallId) {
-        header("Nav-Call-Id")
+        header(X_CORRELATION_ID)
         generate { UUID.randomUUID().toString() }
         verify { it.isNotEmpty() }
     }
     install(CallLogging) {
-        callIdMdc("x-correlation-id")
+        logger = log
+        level = Level.INFO
+        callIdMdc(X_CORRELATION_ID)
+        //filter { call -> call.request.path().startsWith("/kontoregister") }
+        disableDefaultColors()
     }
     install(ContentNegotiation) {
         jackson {

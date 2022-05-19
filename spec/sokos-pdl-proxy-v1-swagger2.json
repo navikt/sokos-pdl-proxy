@@ -42,6 +42,11 @@
             "schema": {
               "$ref": "#/definitions/HentPerson"
             }
+          },
+          {
+            "name": "x-correlation-id",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {

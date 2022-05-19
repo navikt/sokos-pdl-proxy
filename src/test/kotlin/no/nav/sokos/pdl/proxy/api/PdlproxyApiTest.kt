@@ -243,6 +243,29 @@ internal class PdlproxyApiTest {
 
     }
 
+    @Test
+    fun `x-correlation-id fra request skal følge med tilbake i repons`() {
+        val port = enTilfleldigPort()
+
+        enTestserverMedResponsFraPDL(
+            port,
+            "hentIdenter_success_response.json",
+            "hentPerson_success_response.json"
+        )
+
+        RestAssured.given()
+            .filter(validationFilter)
+            .header(Header("Content-Type", "application/json"))
+            .header(Header("Authorization", "Bearer dummytoken"))
+            .header(Header("x-correlation-id", "enId123"))
+            .body(PersonIdent("ikke interessant").tilJson())
+            .port(port)
+            .post("/hent-person")
+            .then()
+            .assertThat()
+            .header("x-correlation-id", "enId123")
+    }
+
     private fun enTestserverMedResponsFraPDL(
         port: Int,
         hentIdenterResponsFilnavn: String,
