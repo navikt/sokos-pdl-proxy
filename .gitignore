@@ -7,3 +7,4 @@ build/
 *.iml
 *.ipr
 *.env
+.DS_Store
