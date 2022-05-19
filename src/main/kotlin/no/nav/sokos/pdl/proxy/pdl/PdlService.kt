@@ -46,8 +46,16 @@ class PdlService(
         secureLogger.info { "Fikk følgende fra PDL hentPerson: ${respons.data?.hentPerson}" }
 
         return respons.errors?.let { feilmeldingerFraPdl ->
-            håndterFeil(feilmeldingerFraPdl)
-        } ?: Result.success(respons.data?.hentPerson)
+            håndterFeilFraPdl(feilmeldingerFraPdl)
+        } ?: validerOgBehandleResultat(respons)
+    }
+
+    private fun validerOgBehandleResultat(respons: GraphQLClientResponse<HentPerson.Result>): Result<Person?> {
+        respons.data?.hentPerson?.let {
+        PersonFraPDLValidator.valider(it)
+        }
+
+        return Result.success(respons.data?.hentPerson)
     }
 
     private fun hentIdenterForPerson(ident: String): Result<List<Ident>> {
@@ -61,12 +69,12 @@ class PdlService(
         secureLogger.info { "Fikk følgende fra PDL hentIdenter: ${respons.data?.hentIdenter}" }
 
         return respons.errors?.let { feilmeldingerFraPdl ->
-            håndterFeil(feilmeldingerFraPdl)
+            håndterFeilFraPdl(feilmeldingerFraPdl)
         } ?: Result.success(hentUtIdenter(respons))
     }
 
     @Suppress("FunctionName")
-    private fun <T> håndterFeil(errors: List<GraphQLClientError>): Result<T> {
+    private fun <T> håndterFeilFraPdl(errors: List<GraphQLClientError>): Result<T> {
         val metoderSomGirFeil = errors
             .mapNotNull { error -> error.path }
             .joinToString { s -> s.toString() }

@@ -1,0 +1,58 @@
+{
+  "data": {
+    "hentPerson": {
+      "navn": [
+        {
+          "fornavn": "ÅPENHJERTIG",
+          "mellomnavn": null,
+          "etternavn": "STAUDE",
+          "forkortetNavn": "STAUDE ÅPENHJERTIG"
+        }
+      ],
+      "bostedsadresse": [],
+      "oppholdsadresse": [],
+      "kontaktadresse": [
+        {
+          "vegadresse": {
+            "adressenavn": "Adresse 1"
+          },
+          "metadata": {
+            "master": "Freg",
+            "endringer": [],
+            "historisk": false
+          }
+        },
+        {
+          "vegadresse": {
+            "adressenavn": "Adresse 2"
+          },
+          "metadata": {
+            "master": "Freg",
+            "endringer": [],
+            "historisk": false
+          }
+        },
+        {
+          "vegadresse": {
+            "adressenavn": "Adresse 3"
+          },
+          "metadata": {
+            "master": "Freg",
+            "endringer": [],
+            "historisk": false
+          }
+        },
+        {
+          "vegadresse": {
+            "adressenavn": "Adresse 4"
+          },
+          "metadata": {
+            "master": "Freg",
+            "endringer": [],
+            "historisk": false
+          }
+        }
+      ]
+    }
+  }
+}

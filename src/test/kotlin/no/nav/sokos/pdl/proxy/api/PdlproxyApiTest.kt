@@ -12,6 +12,7 @@ import no.nav.sokos.pdl.proxy.api.model.PersonIdent
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 import no.nav.sokos.pdl.proxy.pdl.setupMockEngine
 import org.hamcrest.CoreMatchers.containsString
+import org.hamcrest.CoreMatchers.containsStringIgnoringCase
 import org.junit.jupiter.api.Test
 
 internal class PdlproxyApiTest {
@@ -184,6 +185,62 @@ internal class PdlproxyApiTest {
             .assertThat()
             .statusCode(500)
             .body(containsString("En annen feilmelding fra PDL"))
+    }
+
+    @Test
+    internal fun `For å begrense datamengde til stormaskin så tillattes maks 3 stk kontaktadresser, og api skal gi feil dersom dette overstiges`() {
+        val port = enTilfleldigPort()
+
+        enTestserverMedResponsFraPDL(
+            port,
+            "hentIdenter_success_response.json",
+            "hentPerson_success_response_med_4_kontaktadresser.json"
+        )
+
+        RestAssured.given()
+            .filter(validationFilter)
+            .header(Header("Content-Type", "application/json"))
+            .header(Header("Authorization", "Bearer dummytoken"))
+            .body(PersonIdent("ikke interessant").tilJson())
+            .port(port)
+            .post("/hent-person")
+            .then()
+            .assertThat()
+            .statusCode(500)
+            .body(
+                containsStringIgnoringCase("For mange kontaktadresser"),
+                containsStringIgnoringCase("denne personen har 4"),
+                containsStringIgnoringCase("overstiger grensen på 3")
+            )
+
+    }
+
+    @Test
+    internal fun `For å begrense datamengde til stormaskin så tillattes maks 2 stk oppholdsadresse, og api skal gi feil dersom dette overstiges`() {
+        val port = enTilfleldigPort()
+
+        enTestserverMedResponsFraPDL(
+            port,
+            "hentIdenter_success_response.json",
+            "hentPerson_success_response_med_3_oppholdsadresser.json"
+        )
+
+        RestAssured.given()
+            .filter(validationFilter)
+            .header(Header("Content-Type", "application/json"))
+            .header(Header("Authorization", "Bearer dummytoken"))
+            .body(PersonIdent("ikke interessant").tilJson())
+            .port(port)
+            .post("/hent-person")
+            .then()
+            .assertThat()
+            .statusCode(500)
+            .body(
+                containsStringIgnoringCase("For mange oppholdsadresser"),
+                containsStringIgnoringCase("denne personen har 3"),
+                containsStringIgnoringCase("overstiger grensen på 2")
+            )
+
     }
 
     private fun enTestserverMedResponsFraPDL(
