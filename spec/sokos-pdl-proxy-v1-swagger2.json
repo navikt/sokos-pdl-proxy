@@ -25,7 +25,7 @@
         "tags": [
           "sokos-pdl-proxy.v1"
         ],
-        "summary": "Kaller Pdl hentPerson og mapper om til Person.",
+        "summary": "Henter identer og et subset av persondata fra PDL",
         "operationId": "hent-person",
         "consumes": [
           "application/json"
@@ -151,7 +151,7 @@
           "description": "For å avhjelpe begrensninger på stormaskin, settes en maks her som tilsvarer det som teoretisk kan komme fra PDL"
         }
       },
-      "title": "Person",
+      "title": "PersonDetaljer",
       "description": "N&oslash;kkelinformasjon for person"
     },
     "Ident": {
