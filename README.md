@@ -12,6 +12,7 @@ Vi tilbyr følgende API-er:
 ## Oppsett av utviklermaskin
 JDK16 må være installert.
 
+
 ## Bygging
 Fra kommandolinje
 ```
