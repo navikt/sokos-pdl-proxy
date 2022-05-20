@@ -64,6 +64,6 @@ class HttpServer(
             }
         }
     }
-    fun start() = embeddedServer.start()
+    fun start() = embeddedServer.start(wait = true)
     fun stop() = embeddedServer.stop(5, 5, TimeUnit.SECONDS)
 }
