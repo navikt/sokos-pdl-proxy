@@ -58,6 +58,7 @@ object Metrics {
         .register(prometheusRegistry.prometheusRegistry)
 }
 
+// TODO: Trenger vi denne kodesnutten? Ligger i HttpServer også. Metodene over er også grået ut, så kanskje vi må sjekke dem også?
 fun Application.installMetrics() {
     install(MicrometerMetrics) {
         registry = Metrics.prometheusRegistry
