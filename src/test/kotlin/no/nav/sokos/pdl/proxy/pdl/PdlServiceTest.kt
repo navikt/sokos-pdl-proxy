@@ -12,17 +12,15 @@ import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
-import io.ktor.client.features.json.JsonFeature
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.TextContent
 import io.ktor.http.headersOf
-import java.net.URL
 import no.nav.sokos.pdl.proxy.api.model.Ident
 import no.nav.sokos.pdl.proxy.exception.PdlApiException
-import no.nav.sokos.pdl.proxy.jsonClientConfiguration
 import org.junit.jupiter.api.Test
 import resourceToString
+import java.net.URL
 
 private const val pdlUrl = "http://0.0.0.0"
 
@@ -123,6 +121,6 @@ fun setupMockEngine(
         }
     }) {
         expectSuccess = false
-        install(JsonFeature, jsonClientConfiguration)
+        install(HttpClient())
     }
 }
