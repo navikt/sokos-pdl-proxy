@@ -16,11 +16,12 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.TextContent
 import io.ktor.http.headersOf
+import java.net.URL
+import no.nav.pdl.hentperson.PostadresseIFrittFormat
 import no.nav.sokos.pdl.proxy.api.model.Ident
 import no.nav.sokos.pdl.proxy.exception.PdlApiException
 import org.junit.jupiter.api.Test
 import resourceToString
-import java.net.URL
 
 private const val pdlUrl = "http://0.0.0.0"
 
@@ -43,8 +44,19 @@ internal class PdlServiceTest {
                 .hentPersonDetaljer("22334455667")
         )
             .isNotNull()
-            .transform { it.identer.map(Ident::ident) }
-            .containsExactlyInAnyOrder("2804958208728", "24117920441")
+            .all {
+                transform { it.identer.map(Ident::ident) }
+                    .containsExactlyInAnyOrder("2804958208728", "24117920441")
+                transform { it.kontaktadresse.first().postadresseIFrittFormat }
+                    .isNotNull()
+                    .all {
+                        prop(PostadresseIFrittFormat::adresselinje1).isEqualTo("adresse 1")
+                        prop(PostadresseIFrittFormat::adresselinje2).isEqualTo("adresse 2")
+                        prop(PostadresseIFrittFormat::adresselinje3).isEqualTo("adresse 3")
+                        prop(PostadresseIFrittFormat::postnummer).isEqualTo("4242")
+                    }
+
+            }
     }
 
     @Test

@@ -388,7 +388,7 @@
         "adresselinje3": {
           "type": "string"
         },
-        "postboks": {
+        "postnummer": {
           "type": "string"
         }
       }
