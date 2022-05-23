@@ -2,9 +2,11 @@ package no.nav.sokos.pdl.proxy.pdl.security
 
 import com.fasterxml.jackson.annotation.JsonAlias
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.request.accept
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.Parameters
@@ -50,14 +52,14 @@ class AccessTokenClient(
             client.post(aadAccessTokenUrl) {
                 accept(ContentType.Application.Json)
                 method = HttpMethod.Post
-                body = FormDataContent(Parameters.build {
+                 setBody(FormDataContent(Parameters.build {
                     append("tenant", azureAd.tenant)
                     append("client_id", azureAd.clientId)
                     append("scope", "api://${azureAd.pdlClientId}/.default")
                     append("client_secret", azureAd.clientSecret)
                     append("grant_type", "client_credentials")
-                })
-            }
+                }))
+            }.body()
         }
 }
 
