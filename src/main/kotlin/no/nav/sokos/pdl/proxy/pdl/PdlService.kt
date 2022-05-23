@@ -12,7 +12,7 @@ import no.nav.pdl.HentPerson
 import no.nav.pdl.hentperson.Person
 import no.nav.sokos.pdl.proxy.SECURE_LOGGER_NAME
 import no.nav.sokos.pdl.proxy.api.model.Ident
-import no.nav.sokos.pdl.proxy.api.model.IdentifikatorType.Companion.fra
+import no.nav.sokos.pdl.proxy.api.model.IdentifikatorType
 import no.nav.sokos.pdl.proxy.api.model.PersonDetaljer
 import no.nav.sokos.pdl.proxy.exception.PdlApiException
 import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
@@ -97,7 +97,7 @@ class PdlService(
             Ident(
                 ident = it.ident,
                 aktiv = !it.historisk,
-                identifikatorType = fra(it.gruppe)
+                identifikatorType = IdentifikatorType.fra(it.gruppe)
             )
         } ?: emptyList()
 

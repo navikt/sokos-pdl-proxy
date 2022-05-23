@@ -4,14 +4,13 @@ import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.module.kotlin.readValue
-import io.ktor.client.call.body
 import io.ktor.client.request.get
+import java.net.URL
+import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.runBlocking
 import no.nav.sokos.pdl.proxy.pdl.security.Api
 import no.nav.sokos.pdl.proxy.pdl.security.PreAuthorizedApp
 import org.slf4j.LoggerFactory
-import java.net.URL
-import java.util.concurrent.TimeUnit
 
 val LOGGER = LoggerFactory.getLogger("no.nav.sokos.pdl.proxy.Configuration")
 
@@ -41,7 +40,7 @@ data class Configuration (
         ),
     ) {
         val openIdConfiguration: AzureAdOpenIdConfiguration by lazy {
-            runBlocking { defaultHttpClient.get(authorityEndpoint).body() }
+            runBlocking { defaultHttpClient.get(authorityEndpoint) }
         }
         val jwkProvider: JwkProvider by lazy {
             JwkProviderBuilder(URL(openIdConfiguration.jwksUri))
@@ -72,7 +71,6 @@ data class Configuration (
         val authorizationEndpoint: String
     )
 }
-
 
 private fun readProperty(name: String, default: String? = null) =
     System.getenv(name)

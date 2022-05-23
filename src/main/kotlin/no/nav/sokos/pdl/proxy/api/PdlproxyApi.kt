@@ -1,16 +1,16 @@
 package no.nav.sokos.pdl.proxy.api
 
 
+import io.ktor.application.Application
+import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.application.Application
-import io.ktor.server.application.call
-import io.ktor.server.request.receive
-import io.ktor.server.response.respond
-import io.ktor.server.routing.post
-import io.ktor.server.routing.route
-import io.ktor.server.routing.routing
+import io.ktor.request.receive
+import io.ktor.response.respond
+import io.ktor.routing.post
+import io.ktor.routing.route
+import io.ktor.routing.routing
 import mu.KotlinLogging
-import no.nav.kontoregister.person.api.autentiser
+import no.nav.kontoregister.person.api.authenticate
 import no.nav.sokos.pdl.proxy.api.model.PersonIdent
 import no.nav.sokos.pdl.proxy.api.model.TjenestefeilResponse
 import no.nav.sokos.pdl.proxy.exception.PdlApiException
@@ -26,7 +26,7 @@ object PdlproxyApi {
         useAuthentication: Boolean = true,
     ) {
         routing {
-            autentiser(useAuthentication, Api.PDLPROXY.name) {
+            authenticate(useAuthentication, Api.PDLPROXY.name) {
                 route("/api/pdl-proxy/v1") {
                     post("hent-person") {
                         try {

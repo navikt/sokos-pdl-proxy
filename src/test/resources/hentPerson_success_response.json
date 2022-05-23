@@ -94,12 +94,7 @@
             "tilleggsnavn": null,
             "postnummer": "1358"
           },
-          "postadresseIFrittFormat": {
-            "adresselinje1": "adresse 1",
-            "adresselinje2": "adresse 2",
-            "adresselinje3": "adresse 3",
-            "postnummer": "4242"
-          },
+          "postadresseIFrittFormat": null,
           "utenlandskAdresse": null,
           "utenlandskAdresseIFrittFormat": null,
           "metadata": {

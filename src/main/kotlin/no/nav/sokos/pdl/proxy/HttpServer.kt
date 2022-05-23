@@ -1,18 +1,18 @@
 package no.nav.sokos.pdl.proxy
 
 import installCommonFeatures
+import io.ktor.application.Application
+import io.ktor.application.call
+import io.ktor.application.install
 import io.ktor.http.ContentType
-import io.ktor.server.application.Application
-import io.ktor.server.application.call
-import io.ktor.server.application.install
+import io.ktor.metrics.micrometer.MicrometerMetrics
+import io.ktor.response.respondText
+import io.ktor.routing.get
+import io.ktor.routing.route
+import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.engine.stop
-import io.ktor.server.metrics.micrometer.MicrometerMetrics
 import io.ktor.server.netty.Netty
-import io.ktor.server.response.respondText
-import io.ktor.server.routing.get
-import io.ktor.server.routing.route
-import io.ktor.server.routing.routing
 import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics
 import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics
 import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics
@@ -64,6 +64,6 @@ class HttpServer(
             }
         }
     }
-    fun start() = embeddedServer.start(wait = true)
+    fun start() = embeddedServer.start()
     fun stop() = embeddedServer.stop(5, 5, TimeUnit.SECONDS)
 }

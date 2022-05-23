@@ -1,14 +1,13 @@
 package no.nav.kontoregister.person.api
 
-import io.ktor.server.application.Application
-import io.ktor.server.application.install
-import io.ktor.server.auth.Authentication
-import io.ktor.server.auth.AuthenticationConfig
-import io.ktor.server.auth.authenticate
-import io.ktor.server.auth.jwt.JWTAuthenticationProvider
-import io.ktor.server.auth.jwt.JWTPrincipal
-import io.ktor.server.auth.jwt.jwt
-import io.ktor.server.routing.Route
+import io.ktor.application.Application
+import io.ktor.application.install
+import io.ktor.auth.Authentication
+import io.ktor.auth.authenticate
+import io.ktor.auth.jwt.JWTAuthenticationProvider
+import io.ktor.auth.jwt.JWTPrincipal
+import io.ktor.auth.jwt.jwt
+import io.ktor.routing.Route
 import no.nav.sokos.pdl.proxy.Configuration
 import no.nav.sokos.pdl.proxy.pdl.security.Api
 import no.nav.sokos.pdl.proxy.pdl.security.ApiSecurityService
@@ -30,10 +29,10 @@ fun Application.installSecurity(
     } else LOGGER.warn("Running WITHOUT authentication!")
 }
 
-fun AuthenticationConfig.apiJwt(apiSecurityService: ApiSecurityService, appConfig: Configuration) =
+fun Authentication.Configuration.apiJwt(apiSecurityService: ApiSecurityService, appConfig: Configuration) =
     Api.values().forEach { api -> jwt(api.name) { azureAuth(appConfig, apiSecurityService, api) } }
 
-private fun JWTAuthenticationProvider.Config.azureAuth(
+private fun JWTAuthenticationProvider.Configuration.azureAuth(
     appConfig: Configuration,
     apiSecurityService: ApiSecurityService,
     api: Api? = null,
@@ -67,6 +66,6 @@ private fun JWTAuthenticationProvider.Config.azureAuth(
     }
 }
 
-fun Route.autentiser(brukAutentisering: Boolean, authenticationProviderId: String? = null, block: Route.() -> Unit) {
-    if (brukAutentisering) authenticate(authenticationProviderId) { block() } else block()
+fun Route.authenticate(useAuthentication: Boolean, config: String? = null, block: Route.() -> Unit) {
+    if (useAuthentication) authenticate(config) { block() } else block()
 }

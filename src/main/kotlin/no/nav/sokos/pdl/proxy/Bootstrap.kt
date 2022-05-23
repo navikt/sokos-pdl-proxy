@@ -19,7 +19,7 @@ fun main() {
         appConfig.azureAdServer.preAutorizedApps)
     val httpServer = HttpServer(appState, appConfig, pdlService = pdlService, securityService)
 
-
+    httpServer.start()
 
     appState.running = true
 
@@ -27,7 +27,6 @@ fun main() {
         appState.running = false
         httpServer.stop()
     })
-    httpServer.start()
 }
 
 class ApplicationState(
