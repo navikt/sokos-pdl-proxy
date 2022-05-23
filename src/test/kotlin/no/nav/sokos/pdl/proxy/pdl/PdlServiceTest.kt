@@ -22,7 +22,6 @@ import no.nav.sokos.pdl.proxy.api.model.Ident
 import no.nav.sokos.pdl.proxy.exception.PdlApiException
 import org.junit.jupiter.api.Test
 import resourceToString
-import java.net.URL
 
 private const val pdlUrl = "http://0.0.0.0"
 
