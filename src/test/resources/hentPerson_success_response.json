@@ -49,6 +49,7 @@
           "oppholdAnnetSted": null,
           "coAdressenavn": null,
           "gyldigFraOgMed": "1979-11-24T00:00",
+          "gyldigTilOgMed": "2020-11-24T00:00",
           "utenlandskAdresse": null,
           "vegadresse": {
             "husnummer": "55",

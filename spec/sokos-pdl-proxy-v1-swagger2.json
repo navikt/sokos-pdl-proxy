@@ -223,6 +223,9 @@
         "gyldigFraOgMed": {
           "type": "string"
         },
+        "gyldigTilOgMed": {
+          "type": "string"
+        },
         "utenlandskAdresse": {
           "type": "object",
           "$ref": "#/definitions/UtenlandskAdresse"
