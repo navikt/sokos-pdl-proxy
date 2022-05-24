@@ -6,12 +6,14 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.ktor.serialization.jackson.jackson
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
+import io.ktor.server.plugins.callid.CallId
+import io.ktor.server.plugins.callid.callIdMdc
 import io.ktor.server.plugins.callloging.CallLogging
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.request.path
 import java.util.*
 import mu.KotlinLogging
 import org.slf4j.event.Level
-import io.ktor.server.plugins.callid.*
 
 private val log = KotlinLogging.logger {}
 const val X_CORRELATION_ID = "x-correlation-id"
@@ -26,7 +28,7 @@ fun Application.installCommonFeatures() {
         logger = log
         level = Level.INFO
         callIdMdc(X_CORRELATION_ID)
-        //filter { call -> call.request.path().startsWith("/kontoregister") }
+        filter { call -> call.request.path().startsWith("/api/pdl-proxy") }
         disableDefaultColors()
     }
     install(ContentNegotiation) {
