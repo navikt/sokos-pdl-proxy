@@ -1,0 +1,35 @@
+name: Deploy alerts
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/alerts.yaml'
+      - '.nais/alerterator_*.yaml'
+
+jobs:
+  apply-alerts-dev:
+    name: Apply alerts to dev
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: deploy alerts to dev
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/alerterator_dev.yaml
+
+#  apply-alerts-prod:
+#    name: Apply alerts to prod
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v3
+#      - name: deploy to prod
+#        uses: nais/deploy/actions/deploy@v1
+#        env:
+#          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+#          CLUSTER: prod-gcp
+#          RESOURCE: .nais/alerterator_prod.yaml
