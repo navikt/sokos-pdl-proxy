@@ -5,7 +5,9 @@ on:
     branches:
       - dev
       - master
-
+    paths-ignore:
+      - '.github/workflows/alerts.yaml'
+      - '.nais/alerterator_*.yaml'
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/sokos-pdl-proxy:${{ github.sha }}
 
