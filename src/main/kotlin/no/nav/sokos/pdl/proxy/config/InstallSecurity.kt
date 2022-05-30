@@ -9,7 +9,7 @@ import io.ktor.server.auth.jwt.JWTAuthenticationProvider
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
 import io.ktor.server.routing.Route
-import no.nav.sokos.pdl.proxy.Configuration
+import no.nav.sokos.pdl.proxy.config.ApplicationConfiguration
 import no.nav.sokos.pdl.proxy.pdl.security.Api
 import no.nav.sokos.pdl.proxy.pdl.security.ApiSecurityService
 import org.slf4j.LoggerFactory
@@ -18,39 +18,39 @@ private val LOGGER = LoggerFactory.getLogger("no.nav.kontoregister.person.api")
 
 fun Application.installSecurity(
     apiSecurityService: ApiSecurityService,
-    appConfig: Configuration,
+    applicationConfiguration: ApplicationConfiguration,
     useAuthentication: Boolean = true,
 ) {
     if (useAuthentication) {
         LOGGER.info("Running with authentication")
         install(Authentication) {
-            apiJwt(apiSecurityService, appConfig)
-            jwt { azureAuth(appConfig, apiSecurityService) }
+            apiJwt(apiSecurityService, applicationConfiguration)
+            jwt { azureAuth(applicationConfiguration, apiSecurityService) }
         }
     } else LOGGER.warn("Running WITHOUT authentication!")
 }
 
-fun AuthenticationConfig.apiJwt(apiSecurityService: ApiSecurityService, appConfig: Configuration) =
-    Api.values().forEach { api -> jwt(api.name) { azureAuth(appConfig, apiSecurityService, api) } }
+fun AuthenticationConfig.apiJwt(apiSecurityService: ApiSecurityService, applicationConfiguration: ApplicationConfiguration) =
+    Api.values().forEach { api -> jwt(api.name) { azureAuth(applicationConfiguration, apiSecurityService, api) } }
 
 fun Route.autentiser(brukAutentisering: Boolean, authenticationProviderId: String? = null, block: Route.() -> Unit) {
     if (brukAutentisering) authenticate(authenticationProviderId) { block() } else block()
 }
 
 private fun JWTAuthenticationProvider.Config.azureAuth(
-    appConfig: Configuration,
+    applicationConfiguration: ApplicationConfiguration,
     apiSecurityService: ApiSecurityService,
     api: Api? = null,
 ) {
-    verifier(appConfig.azureAdServer.jwkProvider, appConfig.azureAdServer.openIdConfiguration.issuer)
-    realm = appConfig.appName
+    verifier(applicationConfiguration.azureAdServer.jwkProvider, applicationConfiguration.azureAdServer.openIdConfiguration.issuer)
+    realm = applicationConfiguration.appName
     validate { credentials ->
         try {
             requireNotNull(credentials.payload.audience) {
                 LOGGER.info("Auth: Missing audience in token")
                 "Auth: Missing audience in token"
             }
-            require(credentials.payload.audience.contains(appConfig.azureAdServer.clientId)) {
+            require(credentials.payload.audience.contains(applicationConfiguration.azureAdServer.clientId)) {
                 LOGGER.info("Auth: Valid audience not found in claims")
                 "Auth: Valid audience not found in claims"
             }

@@ -1,4 +1,4 @@
-package no.nav.sokos.pdl.proxy
+package no.nav.sokos.pdl.proxy.config
 
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
@@ -12,10 +12,12 @@ import no.nav.sokos.pdl.proxy.pdl.security.PreAuthorizedApp
 import org.slf4j.LoggerFactory
 import java.net.URL
 import java.util.concurrent.TimeUnit
+import no.nav.sokos.pdl.proxy.httpClient
+import no.nav.sokos.pdl.proxy.jsonMapper
 
 val LOGGER = LoggerFactory.getLogger("no.nav.sokos.pdl.proxy.Configuration")
 
-data class Configuration (
+data class ApplicationConfiguration (
     val useAuthentication: Boolean = readProperty("USE_AUTHENTICATION", default = "true") != "false",
     val azureAdServer: AzureAdServer = AzureAdServer(),
     val azureAdClint: AzureAdClient = AzureAdClient(),
