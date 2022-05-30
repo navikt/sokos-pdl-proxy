@@ -23,12 +23,7 @@ spec:
       action: "Sjekk loggene til app {{ $labels.log_app }} i namespace {{ $labels.log_namespace }}, for å se hvorfor det er så mye feil"
     - alert: Høy andel HTTP serverfeil (5xx responser) på sokos-pdl-proxy
       severity: danger
-      expr: (100 * (sum by (backend) (rate(traefik_backend_requests_total{code=~"^5\\d\\d", backend=~"sokos-pdl-proxy*"}[3m])) / sum by (backend) (rate(traefik_backend_requests_total{backend=~"sokos-pdl-proxy*"}[3m])))) > 1
-      for: 3m
-      action: "Sjekk loggene for å se hvorfor {{ $labels.backend }} returnerer HTTP feilresponser"
-    - alert: Høy andel HTTP klientfeil (4xx responser) på sokos-pdl-proxy
-      severity: warning
-      expr: (100 * (sum by (backend) (rate(traefik_backend_requests_total{code=~"^4\\d\\d", backend=~"sokos-pdl-proxy*"}[3m])) / sum by (backend) (rate(traefik_backend_requests_total{backend=~"sokos-pdl-proxy*"}[3m])))) > 20
+      expr: (100 * sum by (ingress) (rate(nginx_ingress_controller_requests{ingress="sokos-pdl-proxy-gw-dev-intern-nav-no-8ccd1505", status=~"5\\d\\d"}[3m])) / sum by (ingress) (rate(nginx_ingress_controller_requests{ingress="sokos-pdl-proxy-gw-dev-intern-nav-no-8ccd1505"}[3m]))) > 1
       for: 3m
       action: "Sjekk loggene for å se hvorfor {{ $labels.backend }} returnerer HTTP feilresponser"
     - alert: Høy andel HTTP klientfeil take2 (4xx responser) på sokos-pdl-proxy

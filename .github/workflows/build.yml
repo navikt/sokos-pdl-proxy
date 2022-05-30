@@ -3,7 +3,6 @@ name: Build, push, and deploy til preprod
 on:
   push:
     branches:
-      - dev
       - master
     paths-ignore:
       - '.github/workflows/alerts.yaml'
