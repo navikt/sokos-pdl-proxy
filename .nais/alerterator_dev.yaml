@@ -25,10 +25,10 @@ spec:
       severity: danger
       expr: (100 * sum by (ingress) (rate(nginx_ingress_controller_requests{ingress="sokos-pdl-proxy-gw-dev-intern-nav-no-8ccd1505", status=~"5\\d\\d"}[3m])) / sum by (ingress) (rate(nginx_ingress_controller_requests{ingress="sokos-pdl-proxy-gw-dev-intern-nav-no-8ccd1505"}[3m]))) > 1
       for: 3m
-      action: "Sjekk loggene for å se hvorfor {{ $labels.backend }} returnerer HTTP feilresponser"
-    - alert: Høy andel HTTP klientfeil (4xx responser) på sokos-pdl-proxy
+      action: "Sjekk loggene for å se hvorfor {{ $labels.log_app }} returnerer HTTP feilresponser"
+    - alert: Høy andel HTTP klientfeil (4xx responser) på {{ $labels.log_app }}
       severity: warning
       expr: (100 * sum by (ingress) (rate(nginx_ingress_controller_requests{ingress="sokos-pdl-proxy-gw-dev-intern-nav-no-8ccd1505", status=~"4\\d\\d"}[3m])) / sum by (ingress) (rate(nginx_ingress_controller_requests{ingress="sokos-pdl-proxy-gw-dev-intern-nav-no-8ccd1505"}[3m]))) > 20
       for: 3m
-      action: "Sjekk loggene for å se hvorfor {{ $labels.backend }} returnerer HTTP feilresponser"
+      action: "Sjekk loggene for å se hvorfor {{ $labels.log_app }} returnerer HTTP feilresponser"
 
