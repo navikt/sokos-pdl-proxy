@@ -11,12 +11,12 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.Parameters
 import java.time.Instant
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import mu.KotlinLogging
 import no.nav.sokos.pdl.proxy.Configuration
+import no.nav.sokos.pdl.proxy.util.retry
 
 
 private val LOGGER = KotlinLogging.logger {}
@@ -31,7 +31,6 @@ class AccessTokenClient(
 
     @Volatile
     private var token: AccessToken = runBlocking { AccessToken(hentAccessTokenFraProvider()) }
-
     suspend fun hentAccessToken(): String {
         val omToMinutter = Instant.now().plusSeconds(120L)
         return mutex.withLock {
@@ -78,23 +77,4 @@ private data class AccessToken(
         accessToken = azureAccessToken.accessToken,
         expiresAt = Instant.now().plusSeconds(azureAccessToken.expiresIn)
     )
-}
-
-
-suspend fun <T> retry(
-    numOfRetries: Int = 5,
-    initialDelayMs: Long = 250,
-    block: suspend () -> T,
-): T {
-
-    var throwable: Exception? = null
-    for (n in 1..numOfRetries) {
-        try {
-            return block()
-        } catch (ex: Exception) {
-            throwable = ex
-            delay(initialDelayMs)
-        }
-    }
-    throw throwable!!
 }

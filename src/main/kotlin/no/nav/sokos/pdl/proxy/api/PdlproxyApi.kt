@@ -20,7 +20,6 @@ import no.nav.sokos.pdl.proxy.pdl.security.Api
 private val logger = KotlinLogging.logger {}
 
 object PdlproxyApi {
-
     fun Application.pdlproxyV1Api(
         pdlService: PdlService,
         useAuthentication: Boolean = true,
@@ -52,7 +51,6 @@ object PdlproxyApi {
             }
         }
     }
-
 }
 
 

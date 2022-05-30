@@ -12,14 +12,15 @@ const val SECURE_LOGGER_NAME = "secureLogger"
 fun main() {
     val appState = ApplicationState()
     val appConfig = Configuration()
-    val accessTokenClient = if(appConfig.useAuthentication) AccessTokenClient(appConfig.azureAdClint, defaultHttpClient) else null
-    val pdlService = PdlService(GraphQLKtorClient(URL(appConfig.pdlUrl), defaultHttpClient), appConfig.pdlUrl, accessTokenClient)
+    val accessTokenClient =
+        if (appConfig.useAuthentication) AccessTokenClient(appConfig.azureAdClint, httpClient) else null
+    val pdlService =
+        PdlService(GraphQLKtorClient(URL(appConfig.pdlUrl), httpClient), appConfig.pdlUrl, accessTokenClient)
     val securityService = ApiSecurityService(
         appConfig.azureAdServer.apiAllowLists,
-        appConfig.azureAdServer.preAutorizedApps)
+        appConfig.azureAdServer.preAutorizedApps
+    )
     val httpServer = HttpServer(appState, appConfig, pdlService = pdlService, securityService)
-
-
 
     appState.ready = true
 
@@ -34,11 +35,6 @@ class ApplicationState(
     alive: Boolean = true,
     ready: Boolean = false
 ) {
-    var alive: Boolean by Delegates.observable(alive) { _, _, newValue ->
-
-
-    }
-    var ready: Boolean by Delegates.observable(ready) { _, _, newValue ->
-
-    }
+    var alive: Boolean by Delegates.observable(alive) { _, _, newValue -> }
+    var ready: Boolean by Delegates.observable(ready) { _, _, newValue -> }
 }

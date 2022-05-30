@@ -18,7 +18,7 @@ fun ObjectMapper.customConfig() {
 
 val jsonMapper: ObjectMapper = jacksonObjectMapper().apply { customConfig() }
 
-val defaultHttpClient = HttpClient(Apache) {
+val httpClient = HttpClient(Apache) {
     expectSuccess = false
     install(ContentNegotiation) {
         jackson {

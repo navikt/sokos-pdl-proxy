@@ -41,7 +41,7 @@ data class Configuration (
         ),
     ) {
         val openIdConfiguration: AzureAdOpenIdConfiguration by lazy {
-            runBlocking { defaultHttpClient.get(authorityEndpoint).body() }
+            runBlocking { httpClient.get(authorityEndpoint).body() }
         }
         val jwkProvider: JwkProvider by lazy {
             JwkProviderBuilder(URL(openIdConfiguration.jwksUri))
@@ -50,16 +50,6 @@ data class Configuration (
                 .build()                              // fetched from external provider
         }
     }
-
-    /*data class DatabaseConfig(
-        val host: String = readProperty("NAIS_DATABASE_SOKOS_KONTOREGISTER_PERSON_DB_HOST"),
-        val port: String = readProperty("NAIS_DATABASE_SOKOS_KONTOREGISTER_PERSON_DB_PORT"),
-        val name: String = readProperty("NAIS_DATABASE_SOKOS_KONTOREGISTER_PERSON_DB_DATABASE"),
-        val username: String = readProperty("NAIS_DATABASE_SOKOS_KONTOREGISTER_PERSON_DB_USERNAME"),
-        val password: String = readProperty("NAIS_DATABASE_SOKOS_KONTOREGISTER_PERSON_DB_PASSWORD")
-    ) {
-        val jdbcUrl: String = "jdbc:postgresql://$host:$port/$name"
-    }*/
 
     data class AzureAdOpenIdConfiguration(
         @JsonProperty("jwks_uri")

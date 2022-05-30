@@ -1,23 +1,8 @@
 package no.nav.sokos.pdl.proxy.pdl.metrics
 
-import io.ktor.http.ContentType
-import io.ktor.server.application.Application
-import io.ktor.server.application.call
-import io.ktor.server.application.install
-import io.ktor.server.metrics.micrometer.MicrometerMetrics
-import io.ktor.server.response.respondText
-import io.ktor.server.routing.get
-import io.ktor.server.routing.route
-import io.ktor.server.routing.routing
-import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics
-import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics
-import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics
-import io.micrometer.core.instrument.binder.system.ProcessorMetrics
-import io.micrometer.core.instrument.binder.system.UptimeMetrics
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import io.prometheus.client.Counter
-import io.prometheus.client.exporter.common.TextFormat
 
 private const val NAMESPACE = "sokos_pdl_proxy"
 
@@ -56,25 +41,4 @@ object Metrics {
         .labelNames("errorCode", "sqlState")
         .help("Count database errors")
         .register(prometheusRegistry.prometheusRegistry)
-}
-
-// TODO: Trenger vi denne kodesnutten? Ligger i HttpServer også. Metodene over er også grået ut, så kanskje vi må sjekke dem også?
-fun Application.installMetrics() {
-    install(MicrometerMetrics) {
-        registry = Metrics.prometheusRegistry
-        meterBinders = listOf(
-            UptimeMetrics(),
-            JvmMemoryMetrics(),
-            JvmGcMetrics(),
-            JvmThreadMetrics(),
-            ProcessorMetrics()
-        )
-    }
-    routing {
-        route("metrics") {
-            get {
-                call.respondText(ContentType.parse(TextFormat.CONTENT_TYPE_004)) { Metrics.prometheusRegistry.scrape() }
-            }
-        }
-    }
 }

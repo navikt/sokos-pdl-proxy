@@ -33,6 +33,10 @@ fun Application.installSecurity(
 fun AuthenticationConfig.apiJwt(apiSecurityService: ApiSecurityService, appConfig: Configuration) =
     Api.values().forEach { api -> jwt(api.name) { azureAuth(appConfig, apiSecurityService, api) } }
 
+fun Route.autentiser(brukAutentisering: Boolean, authenticationProviderId: String? = null, block: Route.() -> Unit) {
+    if (brukAutentisering) authenticate(authenticationProviderId) { block() } else block()
+}
+
 private fun JWTAuthenticationProvider.Config.azureAuth(
     appConfig: Configuration,
     apiSecurityService: ApiSecurityService,
@@ -65,8 +69,4 @@ private fun JWTAuthenticationProvider.Config.azureAuth(
             null
         }
     }
-}
-
-fun Route.autentiser(brukAutentisering: Boolean, authenticationProviderId: String? = null, block: Route.() -> Unit) {
-    if (brukAutentisering) authenticate(authenticationProviderId) { block() } else block()
 }
