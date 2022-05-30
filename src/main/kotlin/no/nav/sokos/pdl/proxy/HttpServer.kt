@@ -42,7 +42,7 @@ class HttpServer(
         installCommonFeatures()
         installMetrics()
         swaggerApi()
-        naisApi({ appState.initialized }, { appState.running })
+        naisApi({ appState.alive }, { appState.ready })
     }
 
     fun Application.installMetrics() {

@@ -21,24 +21,24 @@ fun main() {
 
 
 
-    appState.running = true
+    appState.ready = true
 
     Runtime.getRuntime().addShutdownHook(Thread {
-        appState.running = false
+        appState.ready = false
         httpServer.stop()
     })
     httpServer.start()
 }
 
 class ApplicationState(
-    defaultInitialized: Boolean = true,
-    defaultRunning: Boolean = false
+    alive: Boolean = true,
+    ready: Boolean = false
 ) {
-    var initialized: Boolean by Delegates.observable(defaultInitialized) { _, _, newValue ->
+    var alive: Boolean by Delegates.observable(alive) { _, _, newValue ->
 
 
     }
-    var running: Boolean by Delegates.observable(defaultRunning) { _, _, newValue ->
+    var ready: Boolean by Delegates.observable(ready) { _, _, newValue ->
 
     }
 }
