@@ -15,7 +15,7 @@ import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.containsStringIgnoringCase
 import org.junit.jupiter.api.Test
 
-internal class PdlproxyApiTest {
+internal class PdlProxyApiTest {
     private val validationFilter = OpenApiValidationFilter("spec/sokos-pdl-proxy-v1-swagger2.json")
     private val pdlUrl = "http://0.0.0.0"
 
@@ -188,6 +188,29 @@ internal class PdlproxyApiTest {
     }
 
     @Test
+    fun `Teste når vi ikke får svar fra PDL, så skal det returneres 500 med en beskrivende feilmelding`() {
+        val port = enTilfleldigPort()
+
+        enTestserverMedResponsFraPDL(
+            port,
+            "hentIdenter_annen_feilmelding_response.json",
+            "hentPerson_success_response.json",
+            HttpStatusCode.NotFound
+        )
+
+        RestAssured.given()
+            .header(Header("Content-Type", "application/json"))
+            .header(Header("Authorization", "Bearer dummytoken"))
+            .body(PersonIdent("ikke interessant").tilJson())
+            .port(port)
+            .post("/hent-person")
+            .then()
+            .assertThat()
+            .statusCode(500)
+            .body(containsString("En teknisk feil har oppstått. Ta kontakt med utviklerne"))
+    }
+
+    @Test
     internal fun `For å begrense datamengde til stormaskin så tillattes maks 3 stk kontaktadresser, og api skal gi feil dersom dette overstiges`() {
         val port = enTilfleldigPort()
 
@@ -270,13 +293,14 @@ internal class PdlproxyApiTest {
         port: Int,
         hentIdenterResponsFilnavn: String,
         hentPersonResponsFilnavn: String,
+        httpStatusCode: HttpStatusCode = HttpStatusCode.OK
     ) {
         val mockkGraphQlClient = GraphQLKtorClient(
             URL(pdlUrl),
             setupMockEngine(
                 hentIdenterResponsFilnavn,
                 hentPersonResponsFilnavn,
-                HttpStatusCode.OK
+                httpStatusCode
             )
         )
         val pdlService = PdlService(mockkGraphQlClient, pdlUrl, accessTokenClient = null)

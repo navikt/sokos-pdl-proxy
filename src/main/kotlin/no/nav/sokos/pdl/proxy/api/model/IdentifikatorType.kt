@@ -9,6 +9,7 @@ enum class IdentifikatorType(val id: Int) {
     AKTOR_ID(3);
 
     companion object {
+        // TODO: Trenger vi denne? Blir ikke brukt noen steder?
         fun fra(typeFraPDL: Type): IdentifikatorType {
             return when (typeFraPDL) {
                 Type.FOLKEREGISTERIDENTIFIKATOR -> FOLKEREGISTERIDENTIFIKATOR
@@ -31,6 +32,7 @@ enum class IdentifikatorType(val id: Int) {
             }
         }
 
+        // TODO: Trenger vi denne? Blir ikke brukt noen steder?
         fun fraId(id: Int): IdentifikatorType {
             return values()
                 .first { it.id == id }

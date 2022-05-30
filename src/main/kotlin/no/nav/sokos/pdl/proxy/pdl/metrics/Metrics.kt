@@ -21,24 +21,16 @@ object Metrics {
         .help("app state ready changed to false")
         .register(prometheusRegistry.prometheusRegistry)
 
-    val eregCallCounter: Counter = Counter.build()
+    val pdlProxyApiCallCounter: Counter = Counter.build()
         .namespace(NAMESPACE)
-        .name("ereg_call_counter")
-        .labelNames("responseCode")
-        .help("Counts calls to ereg with response status code")
+        .name("api_pdl_proxy_call_counter")
+        .help("Antall kall til pdl proxy api")
         .register(prometheusRegistry.prometheusRegistry)
 
-    val eregValidationErrorCounter: Counter = Counter.build()
+    val pdlProxyApiCallExceptionCounter: Counter = Counter.build()
         .namespace(NAMESPACE)
-        .name("ereg_validation_error_counter")
-        .help("Counts validating errors in ereg response")
+        .name("api_pdl_proxy_call_exception_counter")
+        .help("Antall teknisk feil oppstått")
         .register(prometheusRegistry.prometheusRegistry)
 
-
-    val databaseFailureCounter: Counter = Counter.build()
-        .namespace(NAMESPACE)
-        .name("database_failure_counter")
-        .labelNames("errorCode", "sqlState")
-        .help("Count database errors")
-        .register(prometheusRegistry.prometheusRegistry)
 }

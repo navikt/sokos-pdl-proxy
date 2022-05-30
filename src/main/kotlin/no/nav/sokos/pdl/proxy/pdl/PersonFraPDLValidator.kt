@@ -35,5 +35,4 @@ object PersonFraPDLValidator {
                 feilmelding)
         }
     }
-
 }

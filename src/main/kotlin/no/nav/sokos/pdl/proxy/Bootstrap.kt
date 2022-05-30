@@ -5,6 +5,7 @@ import java.net.URL
 import kotlin.properties.Delegates
 import no.nav.sokos.pdl.proxy.config.ApplicationConfiguration
 import no.nav.sokos.pdl.proxy.pdl.PdlService
+import no.nav.sokos.pdl.proxy.pdl.metrics.Metrics
 import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
 import no.nav.sokos.pdl.proxy.pdl.security.ApiSecurityService
 
@@ -14,9 +15,16 @@ fun main() {
     val appState = ApplicationState()
     val applicationConfiguration = ApplicationConfiguration()
     val accessTokenClient =
-        if (applicationConfiguration.useAuthentication) AccessTokenClient(applicationConfiguration.azureAdClint, httpClient) else null
+        if (applicationConfiguration.useAuthentication) AccessTokenClient(
+            applicationConfiguration.azureAdClint,
+            httpClient
+        ) else null
     val pdlService =
-        PdlService(GraphQLKtorClient(URL(applicationConfiguration.pdlUrl), httpClient), applicationConfiguration.pdlUrl, accessTokenClient)
+        PdlService(
+            GraphQLKtorClient(URL(applicationConfiguration.pdlUrl), httpClient),
+            applicationConfiguration.pdlUrl,
+            accessTokenClient
+        )
     val securityService = ApiSecurityService(
         applicationConfiguration.azureAdServer.apiAllowLists,
         applicationConfiguration.azureAdServer.preAutorizedApps
@@ -36,6 +44,10 @@ class ApplicationState(
     alive: Boolean = true,
     ready: Boolean = false
 ) {
-    var alive: Boolean by Delegates.observable(alive) { _, _, _ -> }
-    var ready: Boolean by Delegates.observable(ready) { _, _, _ -> }
+    var alive: Boolean by Delegates.observable(alive) { _, _, newValue ->
+        if (!newValue) Metrics.appStateReadyFalse.inc()
+    }
+    var ready: Boolean by Delegates.observable(ready) { _, _, newValue ->
+        if (!newValue) Metrics.appStateRunningFalse.inc()
+    }
 }

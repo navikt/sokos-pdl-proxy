@@ -1,4 +1,4 @@
-package no.nav.kontoregister.person.api
+package no.nav.sokos.pdl.proxy.config
 
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
@@ -9,7 +9,6 @@ import io.ktor.server.auth.jwt.JWTAuthenticationProvider
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
 import io.ktor.server.routing.Route
-import no.nav.sokos.pdl.proxy.config.ApplicationConfiguration
 import no.nav.sokos.pdl.proxy.pdl.security.Api
 import no.nav.sokos.pdl.proxy.pdl.security.ApiSecurityService
 import org.slf4j.LoggerFactory

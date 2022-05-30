@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
 import no.nav.sokos.pdl.proxy.httpClient
 import no.nav.sokos.pdl.proxy.jsonMapper
 
-val LOGGER = LoggerFactory.getLogger("no.nav.sokos.pdl.proxy.Configuration")
+private val LOGGER = LoggerFactory.getLogger("no.nav.sokos.pdl.proxy.config.ApplicationConfiguration")
 
 data class ApplicationConfiguration (
     val useAuthentication: Boolean = readProperty("USE_AUTHENTICATION", default = "true") != "false",
@@ -64,7 +64,6 @@ data class ApplicationConfiguration (
         val authorizationEndpoint: String
     )
 }
-
 
 private fun readProperty(name: String, default: String? = null) =
     System.getenv(name)
