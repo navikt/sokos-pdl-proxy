@@ -8,7 +8,7 @@ import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics
 import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics
 import io.micrometer.core.instrument.binder.system.ProcessorMetrics
 import io.micrometer.core.instrument.binder.system.UptimeMetrics
-import no.nav.sokos.pdl.proxy.pdl.metrics.Metrics
+import no.nav.sokos.pdl.proxy.metrics.Metrics
 
 fun Application.installMetrics() {
     install(MicrometerMetrics) {

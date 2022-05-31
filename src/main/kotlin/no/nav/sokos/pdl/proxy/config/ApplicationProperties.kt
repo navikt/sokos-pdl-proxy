@@ -17,7 +17,7 @@ import no.nav.sokos.pdl.proxy.jsonMapper
 
 private val LOGGER = LoggerFactory.getLogger("no.nav.sokos.pdl.proxy.config.ApplicationConfiguration")
 
-data class ApplicationConfiguration (
+data class ApplicationProperties (
     val useAuthentication: Boolean = readProperty("USE_AUTHENTICATION", default = "true") != "false",
     val azureAdServer: AzureAdServer = AzureAdServer(),
     val azureAdClint: AzureAdClient = AzureAdClient(),

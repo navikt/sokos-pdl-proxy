@@ -1,16 +1,16 @@
 # sokos-pdl-proxy
 
-Hensikten med denne applikasjonen er å være bindeledd mellom stormaskin og PDL (Persondataløsningen).
+Applikasjonen er en bindeledd mellom stormaskin og PDL (Persondataløsningen).
 Stormaskin har ikke mulighet til å gjøre GraphQL rest-kall men ved hjelp av denne proxy har vi mulighet 
 til å hente et lite subset av persondata og identer.
 
 ## API-dokumentasjon
-Vi tilbyr følgende API-er:
-* NAV-API: Tilby en integrasjon for utbetalingsreskontro og oppdragz til å hente
-* person identer, fornavn, mellomnavn, familie navn og kort navn.
+Tilbyr følgende API-er:
+- Person identer, fornavn, mellomnavn, familie navn og kort navn.
 
 ## Oppsett av utviklermaskin
-JDK16 må være installert.
+- JDK17
+- Gradle
 
 ## Bygging
 Fra kommandolinje
@@ -18,13 +18,10 @@ Fra kommandolinje
 ./gradlew build
 ```
 
-## Oppsett for IntelliJ
-Under "Gradle properties" må "Gradle JVM" være satt til SDK 16.
-
 ## Lokal utvikling
 
 ### Properties
-Opprett en run configuration for Bootstrap.kt og angi properties nedenfor som environment-variable
+Opprett en run configuration for Bootstrap.kt og angi properties nedenfor som environment variabler
 
 ```properties
 NAIS_APP_NAME=sokos-pdl-proxy;
@@ -36,18 +33,20 @@ LOG_APPENDER=CONSOLE
 ### PDL proxy
 Start [mockPdlServer](src/test/kotlin/devtools/mockPdlServer.kt)
 
-
 # Logging
 
-Applikasjonen logger til logs.adeo.no
+Applikasjonen logger til [logs.adeo.no](logs.adeo.no)
 
 Filter for preproduksjon:
 
-* application:sokos-pdl-proxy AND envclass:q
+```
+application:sokos-pdl-proxy AND envclass:q`
+```
 
 Filter for produksjon:
-
-* application:sokos-pdl-proxy AND envclass:p
+```
+application:sokos-pdl-proxy AND envclass:p`
+```
 
 # Nyttig informasjon
 

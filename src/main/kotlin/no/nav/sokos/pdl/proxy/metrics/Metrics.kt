@@ -1,4 +1,4 @@
-package no.nav.sokos.pdl.proxy.pdl.metrics
+package no.nav.sokos.pdl.proxy.metrics
 
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry

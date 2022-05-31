@@ -15,15 +15,13 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import mu.KotlinLogging
-import no.nav.sokos.pdl.proxy.config.ApplicationConfiguration
+import no.nav.sokos.pdl.proxy.config.ApplicationProperties
 import no.nav.sokos.pdl.proxy.util.retry
-
 
 private val LOGGER = KotlinLogging.logger {}
 
-
 class AccessTokenClient(
-    private val azureAd: ApplicationConfiguration.AzureAdClient,
+    private val azureAd: ApplicationProperties.AzureAdClient,
     private val client: HttpClient,
     private val aadAccessTokenUrl: String = "https://login.microsoftonline.com/${azureAd.tenant}/oauth2/v2.0/token"
 ) {
@@ -51,7 +49,7 @@ class AccessTokenClient(
             client.post(aadAccessTokenUrl) {
                 accept(ContentType.Application.Json)
                 method = HttpMethod.Post
-                 setBody(FormDataContent(Parameters.build {
+                setBody(FormDataContent(Parameters.build {
                     append("tenant", azureAd.tenant)
                     append("client_id", azureAd.clientId)
                     append("scope", "api://${azureAd.pdlClientId}/.default")

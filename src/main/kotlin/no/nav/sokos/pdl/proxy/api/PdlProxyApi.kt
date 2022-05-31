@@ -15,7 +15,7 @@ import no.nav.sokos.pdl.proxy.api.model.PersonIdent
 import no.nav.sokos.pdl.proxy.api.model.TjenestefeilResponse
 import no.nav.sokos.pdl.proxy.exception.PdlApiException
 import no.nav.sokos.pdl.proxy.pdl.PdlService
-import no.nav.sokos.pdl.proxy.pdl.metrics.Metrics
+import no.nav.sokos.pdl.proxy.metrics.Metrics
 import no.nav.sokos.pdl.proxy.pdl.security.Api
 
 private val LOGGER = KotlinLogging.logger {}
@@ -35,7 +35,7 @@ fun Application.pdlProxyV1Api(
                         LOGGER.info("Kall til hent-person gikk ok")
                         call.respond(HttpStatusCode.OK, person)
                     } catch (pdlApiException: PdlApiException) {
-                        LOGGER.info("Forbereder respons til klient etter feil: ${pdlApiException}")
+                        LOGGER.info("Forbereder respons til klient etter feil: $pdlApiException")
                         call.respond(
                             HttpStatusCode.fromValue(pdlApiException.feilkode),
                             TjenestefeilResponse(pdlApiException.feilmelding)

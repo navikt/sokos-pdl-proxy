@@ -1,26 +1,13 @@
 package no.nav.sokos.pdl.proxy.api.model
 
 import no.nav.pdl.enums.IdentGruppe
-import no.nav.person.pdl.aktor.v1.Type
 
-enum class IdentifikatorType(val id: Int) {
-    FOLKEREGISTERIDENTIFIKATOR(1),
-    N_PID(2),
-    AKTOR_ID(3);
+enum class IdentifikatorType {
+    FOLKEREGISTERIDENTIFIKATOR,
+    N_PID,
+    AKTOR_ID;
 
     companion object {
-        // TODO: Trenger vi denne? Blir ikke brukt noen steder?
-        fun fra(typeFraPDL: Type): IdentifikatorType {
-            return when (typeFraPDL) {
-                Type.FOLKEREGISTERIDENTIFIKATOR -> FOLKEREGISTERIDENTIFIKATOR
-                Type.N_PID -> N_PID
-                Type.AKTOR_ID -> AKTOR_ID
-                else -> {
-                    throw IllegalArgumentException("Finner ingen mapping for Type $typeFraPDL i pdl proxy")
-                }
-            }
-        }
-
         fun fra(typeFraPDL: IdentGruppe): IdentifikatorType {
             return when (typeFraPDL) {
                 IdentGruppe.FOLKEREGISTERIDENT -> FOLKEREGISTERIDENTIFIKATOR
@@ -30,12 +17,6 @@ enum class IdentifikatorType(val id: Int) {
                     throw IllegalArgumentException("Finner ingen mapping for IdentGruppe $typeFraPDL i pdl proxy")
                 }
             }
-        }
-
-        // TODO: Trenger vi denne? Blir ikke brukt noen steder?
-        fun fraId(id: Int): IdentifikatorType {
-            return values()
-                .first { it.id == id }
         }
     }
 }
