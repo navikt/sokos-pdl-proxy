@@ -14,10 +14,11 @@ import no.nav.sokos.pdl.proxy.config.installMetrics
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 import no.nav.sokos.pdl.proxy.api.metricsApi
 import no.nav.sokos.pdl.proxy.pdl.security.ApiSecurityService
+import no.nav.sokos.pdl.proxy.util.HealthCheck
 
 
 class HttpServer(
-    appState: ApplicationState,
+    healthCheck: HealthCheck,
     applicationProperties: ApplicationProperties,
     pdlService: PdlService,
     apiSecurityService: ApiSecurityService,
@@ -30,7 +31,7 @@ class HttpServer(
         pdlProxyV1Api(pdlService, applicationProperties.useAuthentication)
         metricsApi()
         swaggerApi()
-        naisApi({ appState.alive }, { appState.ready })
+        naisApi({ healthCheck.alive }, { healthCheck.ready })
     }
 
     fun start() = embeddedServer.start(wait = true)

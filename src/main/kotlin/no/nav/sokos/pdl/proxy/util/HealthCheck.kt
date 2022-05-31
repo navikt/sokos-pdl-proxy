@@ -1,9 +1,9 @@
-package no.nav.sokos.pdl.proxy
+package no.nav.sokos.pdl.proxy.util
 
 import kotlin.properties.Delegates
 import no.nav.sokos.pdl.proxy.metrics.Metrics
 
-class ApplicationState(
+class HealthCheck(
     alive: Boolean = true, ready: Boolean = false
 ) {
     var alive: Boolean by Delegates.observable(alive) { _, _, newValue ->
