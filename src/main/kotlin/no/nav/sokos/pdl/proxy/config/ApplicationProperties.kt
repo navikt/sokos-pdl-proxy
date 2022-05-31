@@ -12,8 +12,6 @@ import no.nav.sokos.pdl.proxy.pdl.security.PreAuthorizedApp
 import org.slf4j.LoggerFactory
 import java.net.URL
 import java.util.concurrent.TimeUnit
-import no.nav.sokos.pdl.proxy.util.httpClient
-import no.nav.sokos.pdl.proxy.util.jsonMapper
 
 private val LOGGER = LoggerFactory.getLogger("no.nav.sokos.pdl.proxy.config.ApplicationConfiguration")
 
