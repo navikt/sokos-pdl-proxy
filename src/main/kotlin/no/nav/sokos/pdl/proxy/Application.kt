@@ -7,6 +7,7 @@ import no.nav.sokos.pdl.proxy.pdl.PdlService
 import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
 import no.nav.sokos.pdl.proxy.pdl.security.ApiSecurityService
 import no.nav.sokos.pdl.proxy.util.HealthCheck
+import no.nav.sokos.pdl.proxy.util.httpClient
 
 const val SECURE_LOGGER_NAME = "secureLogger"
 

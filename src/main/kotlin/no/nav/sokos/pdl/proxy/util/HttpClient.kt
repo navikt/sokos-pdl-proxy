@@ -1,4 +1,4 @@
-package no.nav.sokos.pdl.proxy
+package no.nav.sokos.pdl.proxy.util
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper

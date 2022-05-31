@@ -8,6 +8,7 @@ import io.restassured.config.ObjectMapperConfig
 import io.restassured.config.RestAssuredConfig
 import no.nav.sokos.pdl.proxy.api.pdlProxyV1Api
 import no.nav.sokos.pdl.proxy.pdl.PdlService
+import no.nav.sokos.pdl.proxy.util.jsonMapper
 
 class TestServer(
     private val port: Int = 1100,
