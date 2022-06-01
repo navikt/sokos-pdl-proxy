@@ -54,5 +54,6 @@ application:sokos-pdl-proxy AND envclass:p`
 api://dev-gcp.okonomi.sokos-pdl-proxy/.default
 
 ## Swagger URL
-https://sokos-pdl-proxy.dev.intern.nav.no/person-proxy/api/v1/docs/#/
 
+- [Dev-gcp miljø](https://sokos-pdl-proxy.dev.intern.nav.no/person-proxy/api/v1/docs/#/)
+- [Lokalt miljø](http://0.0.0.0:8080/person-proxy/api/v1/docs/)
