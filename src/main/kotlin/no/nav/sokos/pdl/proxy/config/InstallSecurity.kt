@@ -12,7 +12,6 @@ import io.ktor.server.routing.Route
 import mu.KotlinLogging
 import no.nav.sokos.pdl.proxy.pdl.security.Api
 import no.nav.sokos.pdl.proxy.pdl.security.ApiSecurityService
-import org.slf4j.LoggerFactory
 
 private val logger = KotlinLogging.logger {}
 
