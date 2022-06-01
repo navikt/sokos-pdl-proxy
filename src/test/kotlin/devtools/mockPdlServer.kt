@@ -21,7 +21,7 @@ fun main(){
                 }
             }
         }
-    }.start()
+    }.start(wait = true)
 }
 
 private val identer = """

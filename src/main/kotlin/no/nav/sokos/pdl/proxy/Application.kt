@@ -7,12 +7,12 @@ import no.nav.sokos.pdl.proxy.config.httpClient
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
 import no.nav.sokos.pdl.proxy.pdl.security.ApiSecurityService
-import no.nav.sokos.pdl.proxy.util.HealthCheck
+import no.nav.sokos.pdl.proxy.util.ApplicationState
 
 const val SECURE_LOGGER_NAME = "secureLogger"
 
 fun main() {
-    val healthCheck = HealthCheck()
+    val applicationState = ApplicationState()
     val applicationProperties = ApplicationProperties()
     val accessTokenClient =
         if (applicationProperties.useAuthentication) AccessTokenClient(
@@ -29,12 +29,12 @@ fun main() {
         applicationProperties.azureAdServer.apiAllowLists,
         applicationProperties.azureAdServer.preAutorizedApps
     )
-    val httpServer = HttpServer(healthCheck, applicationProperties, pdlService = pdlService, apiSecurityService)
+    val httpServer = HttpServer(applicationState, applicationProperties, pdlService = pdlService, apiSecurityService)
 
-    healthCheck.ready = true
+    applicationState.ready = true
 
     Runtime.getRuntime().addShutdownHook(Thread {
-        healthCheck.ready = false
+        applicationState.ready = false
         httpServer.stop()
     })
     httpServer.start()
