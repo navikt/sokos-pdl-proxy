@@ -43,7 +43,6 @@ class AccessTokenClient(
         }
     }
 
-    //TODO when jackson is unable to marshall it leaks all data
     private suspend fun hentAccessTokenFraProvider(): AzureAccessToken =
         retry {
             client.post(aadAccessTokenUrl) {

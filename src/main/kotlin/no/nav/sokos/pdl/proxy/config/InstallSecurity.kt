@@ -32,7 +32,6 @@ fun Application.installSecurity(
 fun AuthenticationConfig.apiJwt(apiSecurityService: ApiSecurityService, configuration: Configuration) =
     Api.values().forEach { api -> jwt(api.name) { azureAuth(configuration, apiSecurityService, api) } }
 
-// TODO: Er dette en service metode? Isåfall hører den kanskje ikke hjemme i denne security plugin seksjonen?
 fun Route.autentiser(brukAutentisering: Boolean, authenticationProviderId: String? = null, block: Route.() -> Unit) {
     if (brukAutentisering) authenticate(authenticationProviderId) { block() } else block()
 }
@@ -54,8 +53,6 @@ private fun JWTAuthenticationProvider.Config.azureAuth(
                 logger.info("Auth: Valid audience not found in claims")
                 "Auth: Valid audience not found in claims"
             }
-            //TODO Vi trenger ikke allow list for denne applikasjonen, siden den bare har ett api med ett rest-kall.
-            // (så enten har man tilgang eller ikke)
             if (api != null) {
                 val azp = credentials.payload.getClaim("azp").asString()
                 check(apiSecurityService.verifyAccessToApi(azp, api)) {
