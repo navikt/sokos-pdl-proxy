@@ -9,11 +9,12 @@ import io.ktor.server.auth.jwt.JWTAuthenticationProvider
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
 import io.ktor.server.routing.Route
+import mu.KotlinLogging
 import no.nav.sokos.pdl.proxy.pdl.security.Api
 import no.nav.sokos.pdl.proxy.pdl.security.ApiSecurityService
 import org.slf4j.LoggerFactory
 
-private val logger = LoggerFactory.getLogger("no.nav.kontoregister.person.api")
+private val logger = KotlinLogging.logger {}
 
 fun Application.installSecurity(
     apiSecurityService: ApiSecurityService,

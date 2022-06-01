@@ -9,13 +9,13 @@ import io.ktor.client.request.get
 import kotlinx.coroutines.runBlocking
 import no.nav.sokos.pdl.proxy.pdl.security.Api
 import no.nav.sokos.pdl.proxy.pdl.security.PreAuthorizedApp
-import org.slf4j.LoggerFactory
 import java.net.URL
 import java.util.concurrent.TimeUnit
+import mu.KotlinLogging
 
-private val logger = LoggerFactory.getLogger("no.nav.sokos.pdl.proxy.config.ApplicationConfiguration")
+private val logger = KotlinLogging.logger {}
 
-data class Configuration (
+data class Configuration(
     val useAuthentication: Boolean = readProperty("USE_AUTHENTICATION", default = "true") != "false",
     val azureAdServer: AzureAdServer = AzureAdServer(),
     val azureAdClint: AzureAdClient = AzureAdClient(),
@@ -46,7 +46,11 @@ data class Configuration (
         val jwkProvider: JwkProvider by lazy {
             JwkProviderBuilder(URL(openIdConfiguration.jwksUri))
                 .cached(10, 24, TimeUnit.HOURS)       // cache up to 10 JWKs for 24 hours
-                .rateLimited(10, 1, TimeUnit.MINUTES) // if not cached, only allow max 10 different keys per minute to be
+                .rateLimited(
+                    10,
+                    1,
+                    TimeUnit.MINUTES
+                ) // if not cached, only allow max 10 different keys per minute to be
                 .build()                              // fetched from external provider
         }
     }
