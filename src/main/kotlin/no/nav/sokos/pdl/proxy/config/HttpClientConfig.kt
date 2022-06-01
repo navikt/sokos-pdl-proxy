@@ -1,4 +1,4 @@
-package no.nav.sokos.pdl.proxy
+package no.nav.sokos.pdl.proxy.config
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -18,7 +18,7 @@ fun ObjectMapper.customConfig() {
 
 val jsonMapper: ObjectMapper = jacksonObjectMapper().apply { customConfig() }
 
-val defaultHttpClient = HttpClient(Apache) {
+val httpClient = HttpClient(Apache) {
     expectSuccess = false
     install(ContentNegotiation) {
         jackson {

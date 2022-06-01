@@ -11,16 +11,14 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.Parameters
 import java.time.Instant
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import mu.KotlinLogging
-import no.nav.sokos.pdl.proxy.Configuration
+import no.nav.sokos.pdl.proxy.config.Configuration
+import no.nav.sokos.pdl.proxy.util.retry
 
-
-private val LOGGER = KotlinLogging.logger {}
-
+private val logger = KotlinLogging.logger {}
 
 class AccessTokenClient(
     private val azureAd: Configuration.AzureAdClient,
@@ -31,13 +29,12 @@ class AccessTokenClient(
 
     @Volatile
     private var token: AccessToken = runBlocking { AccessToken(hentAccessTokenFraProvider()) }
-
     suspend fun hentAccessToken(): String {
         val omToMinutter = Instant.now().plusSeconds(120L)
         return mutex.withLock {
             when {
                 token.expiresAt.isBefore(omToMinutter) -> {
-                    LOGGER.info("henter ny token")
+                    logger.info("henter ny token")
                     token = AccessToken(hentAccessTokenFraProvider())
                     token.accessToken
                 }
@@ -46,13 +43,12 @@ class AccessTokenClient(
         }
     }
 
-    //TODO when jackson is unable to marshall it leaks all data
     private suspend fun hentAccessTokenFraProvider(): AzureAccessToken =
         retry {
             client.post(aadAccessTokenUrl) {
                 accept(ContentType.Application.Json)
                 method = HttpMethod.Post
-                 setBody(FormDataContent(Parameters.build {
+                setBody(FormDataContent(Parameters.build {
                     append("tenant", azureAd.tenant)
                     append("client_id", azureAd.clientId)
                     append("scope", "api://${azureAd.pdlClientId}/.default")
@@ -78,23 +74,4 @@ private data class AccessToken(
         accessToken = azureAccessToken.accessToken,
         expiresAt = Instant.now().plusSeconds(azureAccessToken.expiresIn)
     )
-}
-
-
-suspend fun <T> retry(
-    numOfRetries: Int = 5,
-    initialDelayMs: Long = 250,
-    block: suspend () -> T,
-): T {
-
-    var throwable: Exception? = null
-    for (n in 1..numOfRetries) {
-        try {
-            return block()
-        } catch (ex: Exception) {
-            throwable = ex
-            delay(initialDelayMs)
-        }
-    }
-    throw throwable!!
 }

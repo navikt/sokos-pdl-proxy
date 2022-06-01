@@ -1,4 +1,4 @@
-package no.nav.sokos.ereg.proxy.api
+package no.nav.sokos.pdl.proxy.api
 
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application

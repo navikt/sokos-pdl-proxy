@@ -112,21 +112,21 @@ internal class PdlServiceTest {
 }
 
 fun setupMockEngine(
-    hentIdenterResponseFilNavn: String,
-    hentPersonResponseFilNavn: String,
+    hentIdenterResponseFilNavn: String?,
+    hentPersonResponseFilNavn: String?,
     statusCode: HttpStatusCode = HttpStatusCode.OK,
 ): HttpClient {
     return HttpClient(MockEngine { request ->
         val body = request.body as TextContent
         if (body.text.contains("hentIdenter")) {
             respond(
-                content = resourceToString(hentIdenterResponseFilNavn),
+                content = hentIdenterResponseFilNavn?.let { resourceToString(it)}.orEmpty(),
                 headers = headersOf("Content-Type", ContentType.Application.Json.toString()),
                 status = statusCode
             )
         } else {
             respond(
-                content = resourceToString(hentPersonResponseFilNavn),
+                content = hentPersonResponseFilNavn?.let {  resourceToString(it)}.orEmpty(),
                 headers = headersOf("Content-Type", ContentType.Application.Json.toString()),
                 status = statusCode
             )
