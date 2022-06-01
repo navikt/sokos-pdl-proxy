@@ -193,8 +193,8 @@ internal class PdlProxyApiTest {
 
         enTestserverMedResponsFraPDL(
             port,
-            "hentIdenter_annen_feilmelding_response.json",
-            "hentPerson_success_response.json",
+            null,
+            null,
             HttpStatusCode.NotFound
         )
 
@@ -291,8 +291,8 @@ internal class PdlProxyApiTest {
 
     private fun enTestserverMedResponsFraPDL(
         port: Int,
-        hentIdenterResponsFilnavn: String,
-        hentPersonResponsFilnavn: String,
+        hentIdenterResponsFilnavn: String?,
+        hentPersonResponsFilnavn: String?,
         httpStatusCode: HttpStatusCode = HttpStatusCode.OK
     ) {
         val mockkGraphQlClient = GraphQLKtorClient(
