@@ -98,7 +98,7 @@ compileTestKotlin {
 shadowJar {
     archiveBaseName.set("app")
     manifest {
-        attributes "Main-Class": "no.nav.sokos.pdl.proxy.ApplicationKt"
+        attributes "Main-Class": "no.nav.sokos.pdl.proxy.BootstrapKt"
     }
     dependsOn(generateSwaggerUI)
 }
