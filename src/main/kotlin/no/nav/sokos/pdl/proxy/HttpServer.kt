@@ -9,7 +9,7 @@ import no.nav.sokos.pdl.proxy.config.installSecurity
 import no.nav.sokos.pdl.proxy.api.naisApi
 import no.nav.sokos.pdl.proxy.api.swaggerApi
 import no.nav.sokos.pdl.proxy.api.pdlProxyV1Api
-import no.nav.sokos.pdl.proxy.config.ApplicationProperties
+import no.nav.sokos.pdl.proxy.config.Configuration
 import no.nav.sokos.pdl.proxy.config.installMetrics
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 import no.nav.sokos.pdl.proxy.api.metricsApi
@@ -19,16 +19,16 @@ import no.nav.sokos.pdl.proxy.util.ApplicationState
 
 class HttpServer(
     applicationState: ApplicationState,
-    applicationProperties: ApplicationProperties,
+    configuration: Configuration,
     pdlService: PdlService,
     apiSecurityService: ApiSecurityService,
     port: Int = 8080,
 ) {
     private val embeddedServer = embeddedServer(Netty, port) {
-        installSecurity(apiSecurityService, applicationProperties, applicationProperties.useAuthentication)
+        installSecurity(apiSecurityService, configuration, configuration.useAuthentication)
         installCommonFeatures()
         installMetrics()
-        pdlProxyV1Api(pdlService, applicationProperties.useAuthentication)
+        pdlProxyV1Api(pdlService, configuration.useAuthentication)
         metricsApi()
         swaggerApi()
         naisApi({ applicationState.alive }, { applicationState.ready })

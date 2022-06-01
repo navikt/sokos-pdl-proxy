@@ -15,13 +15,13 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import mu.KotlinLogging
-import no.nav.sokos.pdl.proxy.config.ApplicationProperties
+import no.nav.sokos.pdl.proxy.config.Configuration
 import no.nav.sokos.pdl.proxy.util.retry
 
 private val LOGGER = KotlinLogging.logger {}
 
 class AccessTokenClient(
-    private val azureAd: ApplicationProperties.AzureAdClient,
+    private val azureAd: Configuration.AzureAdClient,
     private val client: HttpClient,
     private val aadAccessTokenUrl: String = "https://login.microsoftonline.com/${azureAd.tenant}/oauth2/v2.0/token"
 ) {

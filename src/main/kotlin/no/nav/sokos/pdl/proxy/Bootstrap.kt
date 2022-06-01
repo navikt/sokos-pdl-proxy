@@ -2,7 +2,7 @@ package no.nav.sokos.pdl.proxy
 
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import java.net.URL
-import no.nav.sokos.pdl.proxy.config.ApplicationProperties
+import no.nav.sokos.pdl.proxy.config.Configuration
 import no.nav.sokos.pdl.proxy.config.httpClient
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
@@ -13,23 +13,23 @@ const val SECURE_LOGGER_NAME = "secureLogger"
 
 fun main() {
     val applicationState = ApplicationState()
-    val applicationProperties = ApplicationProperties()
+    val configuration = Configuration()
     val accessTokenClient =
-        if (applicationProperties.useAuthentication) AccessTokenClient(
-            applicationProperties.azureAdClint,
+        if (configuration.useAuthentication) AccessTokenClient(
+            configuration.azureAdClint,
             httpClient
         ) else null
     val pdlService =
         PdlService(
-            GraphQLKtorClient(URL(applicationProperties.pdlUrl), httpClient),
-            applicationProperties.pdlUrl,
+            GraphQLKtorClient(URL(configuration.pdlUrl), httpClient),
+            configuration.pdlUrl,
             accessTokenClient
         )
     val apiSecurityService = ApiSecurityService(
-        applicationProperties.azureAdServer.apiAllowLists,
-        applicationProperties.azureAdServer.preAutorizedApps
+        configuration.azureAdServer.apiAllowLists,
+        configuration.azureAdServer.preAutorizedApps
     )
-    val httpServer = HttpServer(applicationState, applicationProperties, pdlService = pdlService, apiSecurityService)
+    val httpServer = HttpServer(applicationState, configuration, pdlService = pdlService, apiSecurityService)
 
     applicationState.ready = true
 

@@ -17,20 +17,20 @@ private val LOGGER = LoggerFactory.getLogger("no.nav.kontoregister.person.api")
 
 fun Application.installSecurity(
     apiSecurityService: ApiSecurityService,
-    applicationProperties: ApplicationProperties,
+    configuration: Configuration,
     useAuthentication: Boolean = true,
 ) {
     if (useAuthentication) {
         LOGGER.info("Running with authentication")
         install(Authentication) {
-            apiJwt(apiSecurityService, applicationProperties)
-            jwt { azureAuth(applicationProperties, apiSecurityService) }
+            apiJwt(apiSecurityService, configuration)
+            jwt { azureAuth(configuration, apiSecurityService) }
         }
     } else LOGGER.warn("Running WITHOUT authentication!")
 }
 
-fun AuthenticationConfig.apiJwt(apiSecurityService: ApiSecurityService, applicationProperties: ApplicationProperties) =
-    Api.values().forEach { api -> jwt(api.name) { azureAuth(applicationProperties, apiSecurityService, api) } }
+fun AuthenticationConfig.apiJwt(apiSecurityService: ApiSecurityService, configuration: Configuration) =
+    Api.values().forEach { api -> jwt(api.name) { azureAuth(configuration, apiSecurityService, api) } }
 
 // TODO: Er dette en service metode? Isåfall hører den kanskje ikke hjemme i denne security plugin seksjonen?
 fun Route.autentiser(brukAutentisering: Boolean, authenticationProviderId: String? = null, block: Route.() -> Unit) {
@@ -38,19 +38,19 @@ fun Route.autentiser(brukAutentisering: Boolean, authenticationProviderId: Strin
 }
 
 private fun JWTAuthenticationProvider.Config.azureAuth(
-    applicationProperties: ApplicationProperties,
+    configuration: Configuration,
     apiSecurityService: ApiSecurityService,
     api: Api? = null,
 ) {
-    verifier(applicationProperties.azureAdServer.jwkProvider, applicationProperties.azureAdServer.openIdConfiguration.issuer)
-    realm = applicationProperties.appName
+    verifier(configuration.azureAdServer.jwkProvider, configuration.azureAdServer.openIdConfiguration.issuer)
+    realm = configuration.appName
     validate { credentials ->
         try {
             requireNotNull(credentials.payload.audience) {
                 LOGGER.info("Auth: Missing audience in token")
                 "Auth: Missing audience in token"
             }
-            require(credentials.payload.audience.contains(applicationProperties.azureAdServer.clientId)) {
+            require(credentials.payload.audience.contains(configuration.azureAdServer.clientId)) {
                 LOGGER.info("Auth: Valid audience not found in claims")
                 "Auth: Valid audience not found in claims"
             }

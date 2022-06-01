@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
 
 private val LOGGER = LoggerFactory.getLogger("no.nav.sokos.pdl.proxy.config.ApplicationConfiguration")
 
-data class ApplicationProperties (
+data class Configuration (
     val useAuthentication: Boolean = readProperty("USE_AUTHENTICATION", default = "true") != "false",
     val azureAdServer: AzureAdServer = AzureAdServer(),
     val azureAdClint: AzureAdClient = AzureAdClient(),
