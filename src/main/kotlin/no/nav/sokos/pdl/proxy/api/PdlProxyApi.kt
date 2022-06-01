@@ -18,7 +18,7 @@ import no.nav.sokos.pdl.proxy.pdl.PdlService
 import no.nav.sokos.pdl.proxy.metrics.Metrics
 import no.nav.sokos.pdl.proxy.pdl.security.Api
 
-private val LOGGER = KotlinLogging.logger {}
+private val logger = KotlinLogging.logger {}
 
 fun Application.pdlProxyV1Api(
     pdlService: PdlService,
@@ -32,17 +32,17 @@ fun Application.pdlProxyV1Api(
                     try {
                         val personIdent: PersonIdent = call.receive()
                         val person = pdlService.hentPersonDetaljer(personIdent.ident)
-                        LOGGER.info("Kall til hent-person gikk ok")
+                        logger.info("Kall til hent-person gikk ok")
                         call.respond(HttpStatusCode.OK, person)
                     } catch (pdlApiException: PdlApiException) {
-                        LOGGER.info("Forbereder respons til klient etter feil: $pdlApiException")
+                        logger.info("Forbereder respons til klient etter feil: $pdlApiException")
                         call.respond(
                             HttpStatusCode.fromValue(pdlApiException.feilkode),
                             TjenestefeilResponse(pdlApiException.feilmelding)
                         )
                     } catch (exception: Throwable) {
                         Metrics.pdlProxyApiCallExceptionCounter.inc()
-                        LOGGER.error("Teknisk feil: Feilmelding:${exception.message}", exception)
+                        logger.error("Teknisk feil: Feilmelding:${exception.message}", exception)
                         call.respond(
                             HttpStatusCode.InternalServerError,
                             "En teknisk feil har oppstått. Ta kontakt med utviklerne"

@@ -17,7 +17,7 @@ import java.util.*
 import mu.KotlinLogging
 import org.slf4j.event.Level
 
-private val LOGGER = KotlinLogging.logger {}
+private val logger = KotlinLogging.logger {}
 const val X_CORRELATION_ID = "x-correlation-id"
 
 fun Application.installCommonFeatures() {
@@ -27,7 +27,7 @@ fun Application.installCommonFeatures() {
         verify { it.isNotEmpty() }
     }
     install(CallLogging) {
-        logger = LOGGER
+        logger = no.nav.sokos.pdl.proxy.config.logger
         level = Level.INFO
         callIdMdc(X_CORRELATION_ID)
         filter { call -> call.request.path().startsWith("/api/pdl-proxy") }

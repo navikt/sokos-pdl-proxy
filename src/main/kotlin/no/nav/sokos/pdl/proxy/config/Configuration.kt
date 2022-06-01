@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory
 import java.net.URL
 import java.util.concurrent.TimeUnit
 
-private val LOGGER = LoggerFactory.getLogger("no.nav.sokos.pdl.proxy.config.ApplicationConfiguration")
+private val logger = LoggerFactory.getLogger("no.nav.sokos.pdl.proxy.config.ApplicationConfiguration")
 
 data class Configuration (
     val useAuthentication: Boolean = readProperty("USE_AUTHENTICATION", default = "true") != "false",
@@ -66,5 +66,5 @@ data class Configuration (
 private fun readProperty(name: String, default: String? = null) =
     System.getenv(name)
         ?: System.getProperty(name)
-        ?: default.takeIf { it != null }?.also { LOGGER.info("Bruker default verdi for property $name") }
+        ?: default.takeIf { it != null }?.also { logger.info("Bruker default verdi for property $name") }
         ?: throw RuntimeException("Mandatory property '$name' was not found")

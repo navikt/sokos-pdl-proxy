@@ -18,7 +18,7 @@ import mu.KotlinLogging
 import no.nav.sokos.pdl.proxy.config.Configuration
 import no.nav.sokos.pdl.proxy.util.retry
 
-private val LOGGER = KotlinLogging.logger {}
+private val logger = KotlinLogging.logger {}
 
 class AccessTokenClient(
     private val azureAd: Configuration.AzureAdClient,
@@ -34,7 +34,7 @@ class AccessTokenClient(
         return mutex.withLock {
             when {
                 token.expiresAt.isBefore(omToMinutter) -> {
-                    LOGGER.info("henter ny token")
+                    logger.info("henter ny token")
                     token = AccessToken(hentAccessTokenFraProvider())
                     token.accessToken
                 }

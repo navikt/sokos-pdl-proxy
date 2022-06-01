@@ -13,7 +13,7 @@ import no.nav.sokos.pdl.proxy.pdl.security.Api
 import no.nav.sokos.pdl.proxy.pdl.security.ApiSecurityService
 import org.slf4j.LoggerFactory
 
-private val LOGGER = LoggerFactory.getLogger("no.nav.kontoregister.person.api")
+private val logger = LoggerFactory.getLogger("no.nav.kontoregister.person.api")
 
 fun Application.installSecurity(
     apiSecurityService: ApiSecurityService,
@@ -21,12 +21,12 @@ fun Application.installSecurity(
     useAuthentication: Boolean = true,
 ) {
     if (useAuthentication) {
-        LOGGER.info("Running with authentication")
+        logger.info("Running with authentication")
         install(Authentication) {
             apiJwt(apiSecurityService, configuration)
             jwt { azureAuth(configuration, apiSecurityService) }
         }
-    } else LOGGER.warn("Running WITHOUT authentication!")
+    } else logger.warn("Running WITHOUT authentication!")
 }
 
 fun AuthenticationConfig.apiJwt(apiSecurityService: ApiSecurityService, configuration: Configuration) =
@@ -47,11 +47,11 @@ private fun JWTAuthenticationProvider.Config.azureAuth(
     validate { credentials ->
         try {
             requireNotNull(credentials.payload.audience) {
-                LOGGER.info("Auth: Missing audience in token")
+                logger.info("Auth: Missing audience in token")
                 "Auth: Missing audience in token"
             }
             require(credentials.payload.audience.contains(configuration.azureAdServer.clientId)) {
-                LOGGER.info("Auth: Valid audience not found in claims")
+                logger.info("Auth: Valid audience not found in claims")
                 "Auth: Valid audience not found in claims"
             }
             //TODO Vi trenger ikke allow list for denne applikasjonen, siden den bare har ett api med ett rest-kall.
@@ -60,7 +60,7 @@ private fun JWTAuthenticationProvider.Config.azureAuth(
                 val azp = credentials.payload.getClaim("azp").asString()
                 check(apiSecurityService.verifyAccessToApi(azp, api)) {
                     val client = apiSecurityService.getPreAuthorizedApp(azp)
-                    LOGGER.warn("${client?.appName} har forsøkt å nå $api API. Tilgang nektet")
+                    logger.warn("${client?.appName} har forsøkt å nå $api API. Tilgang nektet")
                     "Auth: Client does not have access to API"
                 }
             }
