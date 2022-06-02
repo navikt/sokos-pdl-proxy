@@ -31,6 +31,7 @@ class AccessTokenClient(
     private var token: AccessToken = runBlocking { AccessToken(hentAccessTokenFraProvider()) }
     suspend fun hentAccessToken(): String {
         val omToMinutter = Instant.now().plusSeconds(120L)
+        logger.info("prøver å hente nytt token")
         return mutex.withLock {
             when {
                 token.expiresAt.isBefore(omToMinutter) -> {
