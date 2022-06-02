@@ -3,10 +3,10 @@ package no.nav.sokos.pdl.proxy.api.model
 import no.nav.pdl.enums.IdentGruppe
 import no.nav.person.pdl.aktor.v1.Type
 
-enum class IdentifikatorType {
-    FOLKEREGISTERIDENTIFIKATOR,
-    N_PID,
-    AKTOR_ID;
+enum class IdentifikatorType(val id: Int) {
+    FOLKEREGISTERIDENTIFIKATOR(1),
+    N_PID(2),
+    AKTOR_ID(3);
 
     companion object {
         fun fra(typeFraPDL: Type): IdentifikatorType {
@@ -29,6 +29,11 @@ enum class IdentifikatorType {
                     throw IllegalArgumentException("Finner ingen mapping for IdentGruppe $typeFraPDL i pdl proxy")
                 }
             }
+        }
+
+        fun fraId(id: Int): IdentifikatorType {
+            return values()
+                .first { it.id == id }
         }
     }
 }

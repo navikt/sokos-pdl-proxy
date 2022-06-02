@@ -93,14 +93,16 @@ class PdlService(
         return Result.failure(PdlApiException(httpFeilkode, "$feilmeldingerFraPDL"))
     }
 
-    private fun hentUtIdenter(result: GraphQLClientResponse<HentIdenter.Result>) =
-        result.data?.hentIdenter?.identer?.map {
+    private fun hentUtIdenter(result: GraphQLClientResponse<HentIdenter.Result>): List<Ident> {
+        logger.info { "Prøver å konvertere identer." }
+        return result.data?.hentIdenter?.identer?.map {
             Ident(
                 ident = it.ident,
                 aktiv = !it.historisk,
                 identifikatorType = fra(it.gruppe)
             )
         } ?: emptyList()
+    }
 
 }
 
