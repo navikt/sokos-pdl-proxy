@@ -15,7 +15,7 @@ Tilbyr følgende API-er:
 ## Bygging
 Fra kommandolinje
 ```
-./gradlew build
+./gradlew clean build
 ```
 
 ## Lokal utvikling
@@ -40,18 +40,34 @@ Applikasjonen logger til [logs.adeo.no](logs.adeo.no)
 Filter for preproduksjon:
 
 ```
-application:sokos-pdl-proxy AND envclass:q`
+application:sokos-pdl-proxy AND envclass:q
 ```
 
 Filter for produksjon:
 ```
-application:sokos-pdl-proxy AND envclass:p`
+application:sokos-pdl-proxy AND envclass:p
 ```
 
 # Nyttig informasjon
 
-## Scope
-api://dev-gcp.okonomi.sokos-pdl-proxy/.default
+
+## Hent av token for PDL
+Vi trenger følgende:
+### Tenant-Id
+Her i NAV er tenantId betyr hvilket miljø område skal vi hente token til - Dev(domain er  trygdeetaten.no) eller Prod(domain er nav.no).
+Kan finnes mer detaljer på https://confluence.adeo.no/display/~G156196/Azure#Azure-Prod
+### URL
+https://login.microsoftonline.com/<miljø-tenant-id: dev eller prod>/oauth2/v2.0/token
+### grant_type
+client_credentials
+### client_id
+finnes på https://vault.adeo.no
+### client_secret
+finnes på https://vault.adeo.no 
+### Content-Type
+application/x-www-form-urlencoded
+### Scope (PDL er ikke på GCP så brukes dev-fss)
+api://dev-fss.pdl.pdl-api/.default
 
 ## Swagger URL
 
