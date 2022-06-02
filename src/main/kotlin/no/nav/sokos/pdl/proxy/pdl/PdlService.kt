@@ -18,7 +18,7 @@ import no.nav.sokos.pdl.proxy.exception.PdlApiException
 import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
 
 private val logger = KotlinLogging.logger {}
-private val secureLogger = KotlinLogging.logger {SECURE_LOGGER_NAME}
+private val secureLogger = KotlinLogging.logger(SECURE_LOGGER_NAME)
 
 class PdlService(
     private val graphQlClient: GraphQLKtorClient,
