@@ -69,6 +69,13 @@ application/x-www-form-urlencoded
 ### Scope (PDL er ikke på GCP så brukes dev-fss)
 api://dev-fss.pdl.pdl-api/.default
 
+## Slik kan man logge seg på pod med bash
+```
+kubectl config use-context dev-gcp
+POD=$(kubectl get pods -nokonomi | grep sokos-pdl-proxy | grep Running | awk '{ print $1; }' | sed -n 1p )
+kubectl -nokonomi exec --stdin --tty $POD --container sokos-pdl-proxy  -- /bin/bash
+```
+
 ## Swagger URL
 
 - [Dev-gcp miljø](https://sokos-pdl-proxy.dev.intern.nav.no/person-proxy/api/v1/docs/#/)
