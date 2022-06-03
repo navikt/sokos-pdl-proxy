@@ -75,14 +75,7 @@ Vi trenger følgende:
 * `AZURE_CLIENT_ID_SOKOS-PDL-PROXY` -> Hente fra pod
 * `$AZURE_APP_TENANT_ID` -> Hente fra pod
 
-### Logge inn på en pod
-
-`POD=$(kubectl get pods -nokonomi | grep sokos-pdl-proxy | grep -v mq-adapter | grep Running | awk '{ print $1; }' | sed -n 1p )
-kubectl -nokonomi exec --stdin --tty $POD --container sokos-pdl-proxy  -- /bin/bash`
-
----
-
-## Slik kan man logge seg på pod med bash
+### Slik kan man logge seg på pod med bash
 ```
 kubectl config use-context dev-gcp
 POD=$(kubectl get pods -nokonomi | grep sokos-pdl-proxy | grep Running | awk '{ print $1; }' | sed -n 1p )
