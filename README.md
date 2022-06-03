@@ -6,17 +6,23 @@ til å hente et lite subset av persondata og identer.
 
 ## API-dokumentasjon
 Tilbyr følgende API-er:
-- Person identer, fornavn, mellomnavn, familie navn og kort navn.
+* Person identer, fornavn, mellomnavn, familie navn og kort navn.
+
+---
 
 ## Oppsett av utviklermaskin
-- JDK17
-- Gradle
+* JDK17
+* Gradle
+
+---
 
 ## Bygging
 Fra kommandolinje
 ```
 ./gradlew clean build
 ```
+
+---
 
 ## Lokal utvikling
 
@@ -33,41 +39,48 @@ LOG_APPENDER=CONSOLE
 ### PDL proxy
 Start [mockPdlServer](src/test/kotlin/devtools/mockPdlServer.kt)
 
+---
+
 # Logging
 
-Applikasjonen logger til [logs.adeo.no](logs.adeo.no)
+Vi logger til logs.adeo.no.
 
-Filter for preproduksjon:
+For å se på logger må man logge seg på logs.adeo.no og velge NAV logs.
 
-```
-application:sokos-pdl-proxy AND envclass:q
-```
+Feilmeldinger og infomeldinger som ikke innheholder sensitive data logges til indeksen `logstash-apps`, mens meldinger som inneholder sensitive data logges til indeksen `tjenestekall`.
 
-Filter for produksjon:
-```
-application:sokos-pdl-proxy AND envclass:p
-```
+### Filter for Produksjon
+
+* application:sokos-pdl-proxy AND envclass:p
+
+### Filter for Dev
+
+* application:sokos-pdl-proxy AND envclass:q
+
+---
 
 # Nyttig informasjon
 
 
-## Hent av token for PDL
+## Hvordan skaffe token i preprod
+
+`curl` kommando for å hente JWT-token:
+```
+curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "client_id={{AZURE_CLIENT_ID_UR}}&scope=api://{{AZURE_CLIENT_ID_SOKOS-PDL-PROXY}}/.default&client_secret={{AZURE_CLIENT_SECRET_UR}}&grant_type=client_credentials" "https://login.microsoftonline.com/$AZURE_APP_TENANT_ID/oauth2/v2.0/token"
+```
+
 Vi trenger følgende:
-### Tenant-Id
-Her i NAV er tenantId betyr hvilket miljø område skal vi hente token til - Dev(domain er  trygdeetaten.no) eller Prod(domain er nav.no).
-Kan finnes mer detaljer på https://confluence.adeo.no/display/~G156196/Azure#Azure-Prod
-### URL
-https://login.microsoftonline.com/<miljø-tenant-id: dev eller prod>/oauth2/v2.0/token
-### grant_type
-client_credentials
-### client_id
-finnes på https://vault.adeo.no
-### client_secret
-finnes på https://vault.adeo.no 
-### Content-Type
-application/x-www-form-urlencoded
-### Scope (PDL er ikke på GCP så brukes dev-fss)
-api://dev-fss.pdl.pdl-api/.default
+* `AZURE_CLIENT_ID-<konsument-system>` -> Finner i vault under `secrets/azuread/show/dev/creds/<system>` 
+* `AZURE_CLIENT_SECRET-<kosument-system>` -> Finner i vault under `secrets/azuread/show/dev/creds/<system>`
+* `AZURE_CLIENT_ID_SOKOS-PDL-PROXY` -> Hente fra pod
+* `$AZURE_APP_TENANT_ID` -> Hente fra pod
+
+### Logge inn på en pod
+
+`POD=$(kubectl get pods -nokonomi | grep sokos-pdl-proxy | grep -v mq-adapter | grep Running | awk '{ print $1; }' | sed -n 1p )
+kubectl -nokonomi exec --stdin --tty $POD --container sokos-pdl-proxy  -- /bin/bash`
+
+---
 
 ## Slik kan man logge seg på pod med bash
 ```
