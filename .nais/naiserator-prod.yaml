@@ -9,18 +9,27 @@ spec:
   image: {{image}}
   port: 8080
   replicas:
-    min: 4
+    min: 2
     max: 6
     cpuThresholdPercentage: 25
+  secureLogs:
+    enabled: true
   azure:
     application:
       enabled: true
-      tenant: trygdeetaten.no
-    accessPolicy:
-      inbound:
-        rules:
-          - application: utbetalingsreskontro
-          - application: oppdragz
+  accessPolicy:
+    inbound:
+      rules:
+        - application: utbetalingsreskontro
+          cluster: prod-fss
+          namespace: okonomi
+        - application: oppdragz
+          cluster: prod-fss
+          namespace: okonomi
+      outbound:
+        external:
+          - host: pdl-api.prod-fss-pub.nais.io
+
   resources:
     limits:
       cpu: 2000m
@@ -43,7 +52,7 @@ spec:
     enabled: true
     path: /metrics
   ingresses:
-    - https://sokos-pdl-proxy.nais.adeo.no
+    - https://sokos-pdl-proxy.intern.nav.no
   env:
     - name: PDL_CLIENT_ID
       value: prod-fss.pdl.pdl-api
@@ -51,5 +60,5 @@ spec:
       value: https://pdl-api.prod-fss-pub.nais.io/graphql
     - name: USE_AUTHENTICATION
       value: "true"
-    - name: ALLOW_LIST_PDLPROXY
+    - name : ALLOW_LIST_PDLPROXY
       value: utbetalingsreskontro,oppdragz
