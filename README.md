@@ -66,14 +66,14 @@ Feilmeldinger og infomeldinger som ikke innheholder sensitive data logges til in
 
 `curl` kommando for å hente JWT-token:
 ```
-curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "client_id={{AZURE_CLIENT_ID_UR}}&scope=api://{{AZURE_CLIENT_ID_SOKOS-PDL-PROXY}}/.default&client_secret={{AZURE_CLIENT_SECRET_UR}}&grant_type=client_credentials" "https://login.microsoftonline.com/$AZURE_APP_TENANT_ID/oauth2/v2.0/token"
+curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "client_id={{AZURE_CLIENT_ID_UR}}&scope=api://{{AZURE_APP_CLIENT_ID}}/.default&client_secret={{AZURE_CLIENT_SECRET_UR}}&grant_type=client_credentials" "https://login.microsoftonline.com/$AZURE_APP_TENANT_ID/oauth2/v2.0/token"
 ```
 
 Vi trenger følgende:
 * `AZURE_CLIENT_ID-<konsument-system>` -> Finner i vault under `secrets/azuread/show/dev/creds/<system>` 
 * `AZURE_CLIENT_SECRET-<kosument-system>` -> Finner i vault under `secrets/azuread/show/dev/creds/<system>`
-* `AZURE_CLIENT_ID_SOKOS-PDL-PROXY` -> Hente fra pod
-* `$AZURE_APP_TENANT_ID` -> Hente fra pod
+* `AZURE_APP_CLIENT_ID` -> Hente fra pod
+* `AZURE_APP_TENANT_ID` -> Hente fra pod
 
 ### Slik kan man logge seg på pod med bash
 ```
