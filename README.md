@@ -84,5 +84,6 @@ kubectl -nokonomi exec --stdin --tty $POD --container sokos-pdl-proxy  -- /bin/b
 
 ## Swagger URL
 
-- [Dev-gcp miljø](https://sokos-pdl-proxy.dev.intern.nav.no/person-proxy/api/v1/docs/#/)
-- [Lokalt miljø](http://0.0.0.0:8080/person-proxy/api/v1/docs/)
+- [Prod-gcp](https://sokos-pdl-proxy.intern.nav.no/person-proxy/api/v1/docs/#/)
+- [Dev-gcp](https://sokos-pdl-proxy.dev.intern.nav.no/person-proxy/api/v1/docs/#/)
+- [Lokalt](http://0.0.0.0:8080/person-proxy/api/v1/docs/)
