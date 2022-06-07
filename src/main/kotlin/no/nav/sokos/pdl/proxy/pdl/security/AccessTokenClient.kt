@@ -7,6 +7,7 @@ import io.ktor.client.request.accept
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.Parameters
@@ -45,7 +46,7 @@ class AccessTokenClient(
 
     private suspend fun hentAccessTokenFraProvider(): AzureAccessToken =
         retry {
-            client.post(aadAccessTokenUrl) {
+            val response: HttpResponse = client.post(aadAccessTokenUrl) {
                 accept(ContentType.Application.Json)
                 method = HttpMethod.Post
                 setBody(FormDataContent(Parameters.build {
@@ -55,7 +56,9 @@ class AccessTokenClient(
                     append("client_secret", azureAd.clientSecret)
                     append("grant_type", "client_credentials")
                 }))
-            }.body()
+            }
+            logger.info {  "Statuskode fra accesstokenProvider: ${response.status}"}
+            response.body()
         }
 }
 
