@@ -52,7 +52,7 @@ class PdlService(
 
     private fun validerOgBehandleResultat(respons: GraphQLClientResponse<HentPerson.Result>): Result<Person?> {
         respons.data?.hentPerson?.let {
-        PersonFraPDLValidator.valider(it)
+            PersonFraPDLValidator.valider(it)
         }
 
         return Result.success(respons.data?.hentPerson)
@@ -83,11 +83,16 @@ class PdlService(
         val feilkoderFraPDL = errors
             .mapNotNull { error -> error.extensions }
             .map { entry -> entry["code"].toString() }
-        logger.error { "Henting av data fra PDL feilet ved kall til $metoderSomGirFeil. Feilmeldinger er: $feilmeldingerFraPDL" }
 
         val httpFeilkode = when {
-            feilkoderFraPDL.contains("not_found") -> 404
-            else -> 500
+            feilkoderFraPDL.contains("not_found") -> {
+                logger.info { "Fant ikke person i PDL ved kall til $metoderSomGirFeil." }
+                404
+            }
+            else -> {
+                logger.error { "Henting av data fra PDL feilet ved kall til $metoderSomGirFeil. Feilmeldinger er: $feilmeldingerFraPDL" }
+                500
+            }
         }
         return Result.failure(PdlApiException(httpFeilkode, "$feilmeldingerFraPDL"))
     }
