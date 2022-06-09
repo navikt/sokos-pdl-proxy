@@ -10,12 +10,11 @@ import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
 import mu.KotlinLogging
-import no.nav.sokos.pdl.proxy.config.autentiser
 import no.nav.sokos.pdl.proxy.api.model.PersonIdent
 import no.nav.sokos.pdl.proxy.api.model.TjenestefeilResponse
+import no.nav.sokos.pdl.proxy.config.autentiser
 import no.nav.sokos.pdl.proxy.exception.PdlApiException
 import no.nav.sokos.pdl.proxy.pdl.PdlService
-import no.nav.sokos.pdl.proxy.metrics.Metrics
 import no.nav.sokos.pdl.proxy.pdl.security.Api
 
 private val logger = KotlinLogging.logger {}
@@ -28,7 +27,6 @@ fun Application.pdlProxyV1Api(
         autentiser(useAuthentication, Api.PDLPROXY.name) {
             route("/api/pdl-proxy/v1") {
                 post("hent-person") {
-                    Metrics.pdlProxyApiCallCounter.inc()
                     try {
                         val personIdent: PersonIdent = call.receive()
                         val person = pdlService.hentPersonDetaljer(personIdent.ident)
@@ -41,7 +39,6 @@ fun Application.pdlProxyV1Api(
                             TjenestefeilResponse(pdlApiException.feilmelding)
                         )
                     } catch (exception: Throwable) {
-                        Metrics.pdlProxyApiCallExceptionCounter.inc()
                         logger.error("Teknisk feil: Feilmelding:${exception.message}", exception)
                         call.respond(
                             HttpStatusCode.InternalServerError,

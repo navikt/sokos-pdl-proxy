@@ -21,16 +21,4 @@ object Metrics {
         .help("app state ready changed to false")
         .register(prometheusRegistry.prometheusRegistry)
 
-    val pdlProxyApiCallCounter: Counter = Counter.build()
-        .namespace(NAMESPACE)
-        .name("api_pdl_proxy_call_counter")
-        .help("Antall kall til pdl proxy api")
-        .register(prometheusRegistry.prometheusRegistry)
-
-    val pdlProxyApiCallExceptionCounter: Counter = Counter.build()
-        .namespace(NAMESPACE)
-        .name("api_pdl_proxy_call_exception_counter")
-        .help("Antall teknisk feil oppstått")
-        .register(prometheusRegistry.prometheusRegistry)
-
 }
