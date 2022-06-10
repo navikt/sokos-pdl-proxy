@@ -12,15 +12,20 @@ import io.ktor.server.plugins.callid.CallId
 import io.ktor.server.plugins.callid.callIdMdc
 import io.ktor.server.plugins.callloging.CallLogging
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.request.path
 import java.util.*
 import mu.KotlinLogging
+import no.nav.sokos.pdl.proxy.api.exceptionHandler
 import org.slf4j.event.Level
 
 private val logger = KotlinLogging.logger {}
 const val X_CORRELATION_ID = "x-correlation-id"
 
 fun Application.installCommonFeatures() {
+    install(StatusPages) {
+        exceptionHandler()
+    }
     install(CallId) {
         header(X_CORRELATION_ID)
         generate { UUID.randomUUID().toString() }
