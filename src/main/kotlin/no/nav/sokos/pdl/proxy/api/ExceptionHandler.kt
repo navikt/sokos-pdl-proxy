@@ -7,7 +7,6 @@ import io.ktor.server.response.respond
 import mu.KotlinLogging
 import no.nav.sokos.pdl.proxy.api.model.TjenestefeilResponse
 import no.nav.sokos.pdl.proxy.exception.PdlApiException
-import no.nav.sokos.pdl.proxy.metrics.Metrics
 
 private val logger = KotlinLogging.logger { }
 
@@ -20,7 +19,6 @@ fun StatusPagesConfig.exceptionHandler() {
     }
 
     exception<Throwable> { call, throwable ->
-        Metrics.pdlProxyApiCallExceptionCounter.inc()
         call.logErrorOgResponder(throwable) { "En teknisk feil har oppstått. Ta kontakt med utviklerne" }
     }
 }

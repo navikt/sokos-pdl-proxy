@@ -12,7 +12,6 @@ import io.ktor.server.routing.routing
 import mu.KotlinLogging
 import no.nav.sokos.pdl.proxy.api.model.PersonIdent
 import no.nav.sokos.pdl.proxy.config.autentiser
-import no.nav.sokos.pdl.proxy.metrics.Metrics
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 import no.nav.sokos.pdl.proxy.pdl.security.Api
 
@@ -26,7 +25,6 @@ fun Application.pdlProxyV1Api(
         autentiser(useAuthentication, Api.PDLPROXY.name) {
             route("/api/pdl-proxy/v1") {
                 post("hent-person") {
-                    Metrics.pdlProxyApiCallCounter.inc()
                     val personIdent: PersonIdent = call.receive()
                     val person = pdlService.hentPersonDetaljer(personIdent.ident)
                     logger.info("Kall til hent-person gikk ok")
