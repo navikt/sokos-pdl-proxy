@@ -27,7 +27,7 @@ final def flyway_version = '8.5.11'
 final def logstash_version = '7.1.1'
 final def avroVersion = '1.11.0'
 final def restAssuredVersion = '5.1.0'
-final def swaggerRequestValidatorVersion = '2.27.3'
+final def swaggerRequestValidatorVersion = '2.28.2'
 final def rhino_version = '1.7.14'
 
 
