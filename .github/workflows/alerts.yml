@@ -9,7 +9,6 @@ on:
       - 'Dockerfile'
       - 'CODEOWNERS'
       - '.gitignore'
-      - '.dockerignore'
       - '.github/workflows/build-and-push-docker-image.yaml'
       - '.github/workflows/snyk.yaml'
 jobs:

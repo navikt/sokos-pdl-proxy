@@ -9,11 +9,10 @@ on:
       - 'LICENCE'
       - 'CODEOWNERS'
       - '.gitignore'
-      - '.dockerignore'
       - '.github/workflows/alerts.yaml'
       - '.github/workflows/snyk.yaml'
       - '.nais/alerterator-dev.yaml'
-      - '.nais/alerterator-prodg.yaml'
+      - '.nais/alerterator-prod.yaml'
 env:
   IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
   GITHUB_USERNAME: x-access-token
