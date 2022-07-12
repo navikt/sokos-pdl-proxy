@@ -1,0 +1,61 @@
+name: Deploy alarmer
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '**.md'
+      - 'LICENCE'
+      - 'Dockerfile'
+      - 'CODEOWNERS'
+      - '.gitignore'
+      - '.dockerignore'
+      - '.github/workflows/build-and-push-docker-image.yaml'
+      - '.github/workflows/snyk.yaml'
+jobs:
+  deploy-alerts-dev:
+    name: Deploy alarmer til dev
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sjekker ut kode
+        uses: actions/checkout@v3
+      - name: Deploy til dev
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/alerterator-dev.yaml
+
+#  deploy-alerts-prod:
+#    name: Deploy alarmer til prod
+#    needs: deploy-alerts-dev
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Sjekker ut kode
+#        uses: actions/checkout@v3
+#      - name: Deploy til prod
+#        uses: nais/deploy/actions/deploy@v1
+#        env:
+#          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+#          CLUSTER: prod-gcp
+#          RESOURCE: .nais/alerterator-prod.yaml
+
+  reportFailure:
+    name: Slack notifikasjon bygg feiler
+    needs: [ deploy-alerts-dev, deploy-alerts-prod ]
+    if: ${{ failure() }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Sender notifikasjon til Slack
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_CHANNEL: po-utbetaling-workflow
+          SLACK_COLOR: '#ff0000'
+          SLACK_ICON: https://user-images.githubusercontent.com/29889280/178134303-4556873f-b2d6-46a0-b5af-a587b0fabb96.png
+          SLACK_TITLE: ${{ github.repository }}
+          SLACK_MESSAGE: 'Deploy alarmer feilet! :ghost:'
+          SLACK_USERNAME: workflowBot
+          MSG_MINIMAL: actions url,commit
+          SLACK_FOOTER: 'po-utbetaling'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
