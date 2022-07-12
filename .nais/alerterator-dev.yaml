@@ -8,7 +8,7 @@ metadata:
 spec:
   receivers:
     slack:
-      channel: #okonomi-alerts-dev
+      channel: '#okonomi-alerts-dev'
       prependText: "<!here> | sokos-pdl-proxy | "
   alerts:
     - alert: Applikasjon nede
