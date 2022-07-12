@@ -38,7 +38,7 @@ jobs:
 
   reportFailure:
     name: Slack notifikasjon bygg feiler
-    needs: [ deploy-dev-gcp, deploy-prod-gcp ]
+    needs: [ deploy-dev-gcp ]
     if: ${{ failure() }}
     runs-on: ubuntu-latest
     steps:

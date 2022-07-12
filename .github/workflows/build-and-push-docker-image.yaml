@@ -13,7 +13,7 @@ on:
       - '.github/workflows/alerts.yaml'
       - '.github/workflows/snyk.yaml'
       - '.nais/alerterator-dev.yaml'
-      - '.nais/alerterator-prod.yaml'
+      - '.nais/alerterator-prodg.yaml'
 env:
   IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
   GITHUB_USERNAME: x-access-token

@@ -42,7 +42,7 @@ jobs:
 
   reportFailure:
     name: Slack notifikasjon bygg feiler
-    needs: [ deploy-alerts-dev, deploy-alerts-prod ]
+    needs: [ deploy-alerts-dev ]
     if: ${{ failure() }}
     runs-on: ubuntu-latest
     steps:
