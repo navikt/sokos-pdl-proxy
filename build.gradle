@@ -8,7 +8,6 @@ plugins {
 }
 
 group = 'no.nav.sokos'
-version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -96,7 +95,7 @@ compileTestKotlin {
 }
 
 shadowJar {
-    archiveBaseName.set("app")
+    archiveFileName.set("app.jar")
     manifest {
         attributes "Main-Class": "no.nav.sokos.pdl.proxy.BootstrapKt"
     }
