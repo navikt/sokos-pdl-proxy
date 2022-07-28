@@ -9,7 +9,7 @@ spec:
   receivers:
     slack:
       channel: "#okonomi-alerts-dev"
-      prependText: "<!here> | sokos-pdl-proxy | "
+      prependText: "sokos-pdl-proxy | "
   alerts:
     - alert: Applikasjon nede
       severity: danger
