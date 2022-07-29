@@ -39,14 +39,14 @@ jobs:
           password: ${{ env.GITHUB_TOKEN }}
       - name: Checkout repository
         uses: actions/checkout@v1
-      - run: docker pull ${{ env.LATEST_IMAGE }}
+      - run: docker pull ${{ env.IMAGE_LATEST }}
       - name: Scan Docker image for vulnerabilities
         continue-on-error: false
         uses: snyk/actions/docker@master
         env:
           SNYK_TOKEN: ${{ env.SNYK_TOKEN }}
         with:
-          image: ${{ env.LATEST_IMAGE }}
+          image: ${{ env.IMAGE_LATEST }}
           args: --file=Dockerfile --severity-threshold=high
 
   reportFailure:
