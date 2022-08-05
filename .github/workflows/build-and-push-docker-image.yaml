@@ -11,8 +11,7 @@ on:
       - '.gitignore'
       - '.github/workflows/alerts.yaml'
       - '.github/workflows/snyk.yaml'
-      - '.nais/alerterator-dev.yaml'
-      - '.nais/alerterator-prod.yaml'
+      - '.nais/alerterator.yaml'
 env:
   IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
   LATEST_IMAGE: ghcr.io/${{ github.repository }}:latest
