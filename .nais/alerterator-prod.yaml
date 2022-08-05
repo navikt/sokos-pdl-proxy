@@ -1,10 +1,10 @@
 apiVersion: "nais.io/v1"
 kind: "Alert"
 metadata:
-  name: {{app}}
-  namespace: {{namespace}}
+  name: sokos-pdl-proxy
+  namespace: okonomi
   labels:
-    team: {{team}}
+    team: okonomi
 spec:
   receivers:
     slack:
