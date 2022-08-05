@@ -38,7 +38,7 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
-          RESOURCE: .nais/alerterator-prod.yaml
+          RESOURCE: .nais/alerterator.yaml
           VARS: .nais/prod-gcp.json
 
   reportFailure:
