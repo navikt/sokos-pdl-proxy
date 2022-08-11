@@ -47,7 +47,7 @@ dependencies {
     implementation "io.ktor:ktor-server-metrics-micrometer:$ktor_version"
     implementation "io.ktor:ktor-server-auth-jwt:$ktor_version"
     implementation "io.micrometer:micrometer-registry-prometheus:$prometheus_version"
-    implementation 'io.prometheus:simpleclient_hotspot:0.15.0'
+    implementation 'io.prometheus:simpleclient_hotspot:0.16.0'
     implementation "org.flywaydb:flyway-core:$flyway_version"
     implementation "ch.qos.logback:logback-core:$logback_version"
     implementation "ch.qos.logback:logback-classic:$logback_version"
