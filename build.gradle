@@ -2,7 +2,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.7.10'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'org.hidetake.swagger.generator' version '2.19.2'
-    id 'com.expediagroup.graphql' version '5.4.1'
+    id 'com.expediagroup.graphql' version '6.1.0'
     id 'org.betterplugin.avro' version "0.19.2-SNAPSHOT"
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.21'
 }
