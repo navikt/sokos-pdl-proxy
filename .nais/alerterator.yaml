@@ -1,15 +1,15 @@
 apiVersion: "nais.io/v1"
 kind: "Alert"
 metadata:
-  name: sokos-pdl-proxy
-  namespace: okonomi
+  name: {{app}}
+  namespace: {{namespace}}
   labels:
-    team: okonomi
+    team: {{team}}
 spec:
   receivers:
     slack:
-      channel: "#okonomi-alerts-dev"
-      prependText: "sokos-pdl-proxy | "
+      channel: "{{slack-channel}}"
+      prependText: "{{slack-notify-type}}"
   alerts:
     - alert: Applikasjon nede
       severity: danger
