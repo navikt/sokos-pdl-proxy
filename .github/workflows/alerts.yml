@@ -26,6 +26,20 @@ jobs:
           RESOURCE: .nais/alerterator.yaml
           VARS: .nais/dev-gcp.json
 
+  deploy-alerts-q1:
+    name: Deploy alarmer til q1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sjekker ut kode
+        uses: actions/checkout@v3
+      - name: Deploy til q1
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/alerterator.yaml
+          VARS: .nais/q1-gcp.json
+
   deploy-alerts-prod:
     name: Deploy alarmer til prod
     needs: deploy-alerts-dev
