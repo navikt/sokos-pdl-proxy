@@ -54,9 +54,7 @@ spec:
     path: /metrics
   ingresses:
     - https://sokos-pdl-proxy-q1.dev.intern.nav.no
-    - https://sokos-pdl-proxy-q1.intern.nav.no
     - https://sokos-pdl-proxy-q1.dev-gcp-pub.nais.io
-    - https://sokos-pdl-proxy-q1.dev.adeo.no
   env:
     - name: PDL_CLIENT_ID
       value: dev-fss.pdl.pdl-api-q1
