@@ -23,8 +23,8 @@ jobs:
           CLUSTER: dev-gcp
           RESOURCE: .nais/naiserator-dev.yaml
 
-  deploy-q1-gcp:
-    name: Deploy til q1-gcp
+  deploy-q1-fss:
+    name: Deploy til q1-fss
     if: github.event.workflow_run.conclusion == 'success' && (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master')
     runs-on: ubuntu-latest
     steps:
@@ -32,12 +32,12 @@ jobs:
       - uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-gcp
+          CLUSTER: dev-fss
           RESOURCE: .nais/naiserator-q1.yaml
 
   deploy-prod-gcp:
     name: Deploy til prod-gcp
-    needs: [deploy-dev-gcp, deploy-q1-gcp]
+    needs: [deploy-dev-gcp, deploy-q1-fss]
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:

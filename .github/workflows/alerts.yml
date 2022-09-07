@@ -36,13 +36,13 @@ jobs:
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-gcp
+          CLUSTER: dev-fss
           RESOURCE: .nais/alerterator.yaml
-          VARS: .nais/q1-gcp.json
+          VARS: .nais/q1-fss.json
 
   deploy-alerts-prod:
     name: Deploy alarmer til prod
-    needs: deploy-alerts-dev
+    needs: [deploy-alerts-dev, deploy-alerts-q1]
     runs-on: ubuntu-latest
     steps:
       - name: Sjekker ut kode
