@@ -11,6 +11,9 @@ import io.ktor.server.routing.routing
 fun Application.naisApi(alive: () -> Boolean, ready: () -> Boolean) {
     routing {
         route("internal") {
+            get("started") {
+                call.respondText("Started")
+            }
             get("is_alive") {
                 when (alive()) {
                     true -> call.respondText { "Application is alive" }
