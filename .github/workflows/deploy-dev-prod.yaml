@@ -23,8 +23,8 @@ jobs:
           CLUSTER: dev-gcp
           RESOURCE: .nais/naiserator-dev.yaml
 
-  deploy-q1-fss:
-    name: Deploy til q1-fss
+  deploy-dev-fss-q1:
+    name: Deploy til dev-fss q1
     if: github.event.workflow_run.conclusion == 'success' && (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master')
     runs-on: ubuntu-latest
     steps:
@@ -37,7 +37,7 @@ jobs:
 
   deploy-prod-gcp:
     name: Deploy til prod-gcp
-    needs: [deploy-dev-gcp, deploy-q1-fss]
+    needs: [deploy-dev-gcp, deploy-dev-fss-q1]
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
@@ -50,7 +50,7 @@ jobs:
 
   reportFailure:
     name: Slack notifikasjon bygg feiler
-    needs: [ deploy-dev-gcp, deploy-prod-gcp ]
+    needs: [ deploy-dev-gcp,   deploy-dev-fss-q1, deploy-prod-gcp ]
     if: ${{ failure() }}
     runs-on: ubuntu-latest
     steps:
