@@ -9,8 +9,8 @@ spec:
   image: {{image}}
   port: 8080
   replicas:
-    min: 2
-    max: 6
+    min: 1
+    max: 2
     cpuThresholdPercentage: 25
   secureLogs:
     enabled: true
@@ -38,6 +38,12 @@ spec:
     requests:
       cpu: 500m
       memory: 1Gi
+  startup:
+    failureThreshold: 40
+    initialDelay: 10
+    path: /internal/started
+    periodSeconds: 5
+    timeout: 1
   liveness:
     path: /internal/is_alive
     initialDelay: 5
@@ -53,7 +59,7 @@ spec:
     enabled: true
     path: /metrics
   ingresses:
-    - https://sokos-pdl-proxy-q1.intern.nav.no
+    - https://sokos-pdl-proxy-q1.dev.intern.nav.no
   env:
     - name: PDL_CLIENT_ID
       value: dev-fss.pdl.pdl-api-q1
