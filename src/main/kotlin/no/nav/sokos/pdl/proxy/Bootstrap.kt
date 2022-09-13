@@ -61,6 +61,6 @@ fun main() {
         }
     } catch (exception: Exception) {
         logger.error { "Exception på hent av accessToken: ${exception}" }
-        logger.error { "${exception.stackTrace}" }
+        logger.error { "${exception.printStackTrace()}" }
     }
 }
