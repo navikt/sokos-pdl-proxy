@@ -49,14 +49,18 @@ fun main() {
                     httpServer.start()
                 } catch (ex: Exception) {
                     logger.error { "Exception å skape httpServer ${ex}" }
+                    logger.error { "${ex.stackTrace}" }
                 }
             } catch (e: Exception) {
                 logger.error { "Exception på apiSecurityService ${e}" }
+                logger.error { "${e.stackTrace}" }
             }
         } catch (error: Exception) {
             logger.error { "Exception på PdlService: ${error} " }
+            logger.error { "${error.stackTrace}" }
         }
     } catch (exception: Exception) {
         logger.error { "Exception på hent av accessToken: ${exception}" }
+        logger.error { "${exception.stackTrace}" }
     }
 }
