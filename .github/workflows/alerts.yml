@@ -36,9 +36,9 @@ jobs:
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-fss
+          CLUSTER: dev-gcp
           RESOURCE: .nais/alerterator.yaml
-          VARS: .nais/q1-fss.json
+          VARS: .nais/q1-gcp.json
 
   deploy-alerts-prod:
     name: Deploy alarmer til prod

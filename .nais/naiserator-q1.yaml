@@ -30,7 +30,7 @@ spec:
       outbound:
         external:
           - host: pdl-api.dev-fss-pub.nais.io
-  webproxy: true
+
   resources:
     limits:
       cpu: 2000m
