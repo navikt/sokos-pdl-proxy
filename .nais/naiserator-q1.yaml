@@ -30,7 +30,7 @@ spec:
       outbound:
         external:
           - host: pdl-api.dev-fss-pub.nais.io
-
+  webproxy: true
   resources:
     limits:
       cpu: 2000m
@@ -59,7 +59,7 @@ spec:
     enabled: true
     path: /metrics
   ingresses:
-    - https://sokos-pdl-proxy-q1.dev.intern.nav.no
+    - https://sokos-pdl-proxy-q1.dev.adeo.no
   env:
     - name: PDL_CLIENT_ID
       value: dev-fss.pdl.pdl-api-q1
