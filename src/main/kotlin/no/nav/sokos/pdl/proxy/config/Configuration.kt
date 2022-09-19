@@ -18,7 +18,7 @@ private val logger = KotlinLogging.logger {}
 data class Configuration(
     val useAuthentication: Boolean = readProperty("USE_AUTHENTICATION", default = "true") != "false",
     val azureAdServer: AzureAdServer = AzureAdServer(),
-    val azureAdClint: AzureAdClient = AzureAdClient(),
+    val azureAdClient: AzureAdClient = AzureAdClient(),
     val appName: String = readProperty("NAIS_APP_NAME"),
     val pdlUrl: String = readProperty("PDL_URL"),
 ) {
