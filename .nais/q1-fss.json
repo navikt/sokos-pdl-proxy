@@ -3,5 +3,5 @@
   "team": "okonomi",
   "namespace": "okonomi",
   "slack-channel": "okonomi-alerts-q1",
-  "slack-notify-type": "sokos-pdl-proxy | "
+  "slack-notify-type": "sokos-pdl-proxy-q1 | "
 }
