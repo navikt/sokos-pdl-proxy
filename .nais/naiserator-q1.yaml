@@ -29,7 +29,7 @@ spec:
           namespace: okonomi
       outbound:
         external:
-          - host: https://pdl-api-q1.dev-fss-pub.nais.io
+          - host: pdl-api-q1.dev-fss-pub.nais.io
 
   resources:
     limits:
