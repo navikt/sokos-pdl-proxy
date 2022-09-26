@@ -27,9 +27,9 @@ spec:
         - application: oppdragz
           cluster: dev-fss
           namespace: okonomi
-    outbound:
-      external:
-        - host: pdl-api-q1.dev.intern.nav.no
+      outbound:
+        external:
+          - host: pdl-api-q1.dev-fss-pub.nais.io
 
   resources:
     limits:
