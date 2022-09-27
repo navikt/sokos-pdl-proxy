@@ -33,7 +33,7 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          RESOURCE: .nais/naiserator-q1.yaml
+          RESOURCE: .nais/naiserator-dev-q1.yaml
 
   deploy-prod-gcp:
     name: Deploy til prod-gcp
