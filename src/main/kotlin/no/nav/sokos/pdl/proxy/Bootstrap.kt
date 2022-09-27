@@ -19,7 +19,7 @@ fun main() {
     try {
         val accessTokenClient =
             if (configuration.useAuthentication) AccessTokenClient(
-                configuration.azureAdClient,
+                configuration.azureAdClint,
                 httpClient
             ) else null
         logger.info { "accessTokenClient er null: ${accessTokenClient == null}" }
