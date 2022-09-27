@@ -5,6 +5,8 @@ on:
 
 env:
   IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}:dev
+  GITHUB_USERNAME: x-access-token
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   bygg-og-push-docker-image:
