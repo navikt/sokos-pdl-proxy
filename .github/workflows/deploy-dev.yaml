@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}:dev
+  IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}-dev
   GITHUB_USERNAME: x-access-token
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
