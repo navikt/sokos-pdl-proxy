@@ -22,7 +22,6 @@ fun main() {
                 configuration.azureAdClint,
                 httpClient
             ) else null
-        logger.info { "accessTokenClient er null: ${accessTokenClient == null}" }
         try {
 
             val pdlService =
@@ -31,8 +30,6 @@ fun main() {
                     configuration.pdlUrl,
                     accessTokenClient
                 )
-
-            logger.info { "pdlService er null: ${pdlService == null}" }
             try {
 
                 val apiSecurityService = ApiSecurityService(
