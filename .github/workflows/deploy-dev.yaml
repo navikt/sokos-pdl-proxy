@@ -45,7 +45,7 @@ jobs:
           docker push ${IMAGE}
 
   deploy-dev-gcp:
-    name: Deploy til dev-gcp
+    name: Deploy til dev
     needs: [ bygg ]
     runs-on: ubuntu-latest
     steps:
@@ -57,7 +57,7 @@ jobs:
           RESOURCE: .nais/naiserator-dev.yaml
 
   deploy-dev-q1-gcp:
-    name: Deploy til dev-gcp
+    name: Deploy dev-q1
     needs: [ bygg, deploy-dev-gcp ]
     runs-on: ubuntu-latest
     steps:
