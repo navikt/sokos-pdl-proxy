@@ -58,7 +58,7 @@ jobs:
 
   deploy-dev-gcp-q1:
     name: Deploy til dev-gcp q1
-    needs: [ bygg-og-push-docker-image ]
+    needs: [ bygg ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
