@@ -38,12 +38,6 @@ spec:
     requests:
       cpu: 500m
       memory: 1Gi
-  startup:
-    failureThreshold: 40
-    initialDelay: 10
-    path: /internal/started
-    periodSeconds: 5
-    timeout: 1
   liveness:
     path: /internal/is_alive
     initialDelay: 5
