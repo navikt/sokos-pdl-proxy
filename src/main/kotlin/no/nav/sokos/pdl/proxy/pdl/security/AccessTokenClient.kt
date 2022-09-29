@@ -10,6 +10,7 @@ import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.Parameters
 import java.time.Instant
 import kotlinx.coroutines.runBlocking
@@ -57,8 +58,15 @@ class AccessTokenClient(
                     append("grant_type", "client_credentials")
                 }))
             }
-            logger.info {  "Statuskode fra accesstokenProvider: ${response.status}"}
-            response.body()
+
+            if (response.status != HttpStatusCode.OK) {
+                val feilmelding =
+                    "Acesstoken provider fikk ikke token fra Azure. Fikk følgende statuskode: ${response.status}"
+                logger.error { feilmelding }
+                throw RuntimeException(feilmelding)
+            } else {
+                response.body()
+            }
         }
 }
 
