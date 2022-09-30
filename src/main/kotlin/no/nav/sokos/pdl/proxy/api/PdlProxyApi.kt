@@ -25,6 +25,7 @@ fun Application.pdlProxyV1Api(
         autentiser(useAuthentication, Api.PDLPROXY.name) {
             route("/api/pdl-proxy/v1") {
                 post("hent-person") {
+                    logger.info { "Noen kalte hent-person" }
                     val personIdent: PersonIdent = call.receive()
                     val person = pdlService.hentPersonDetaljer(personIdent.ident)
                     logger.info("Kall til hent-person gikk ok")
