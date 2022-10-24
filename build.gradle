@@ -78,7 +78,7 @@ dependencies {
     testImplementation("io.rest-assured:rest-assured:$restAssuredVersion")
     testImplementation("com.atlassian.oai:swagger-request-validator-restassured:$swaggerRequestValidatorVersion")
 
-    swaggerUI 'org.webjars:swagger-ui:4.14.0'
+    swaggerUI 'org.webjars:swagger-ui:4.15.0'
 }
 
 
