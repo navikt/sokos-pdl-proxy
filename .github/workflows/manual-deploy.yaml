@@ -1,4 +1,4 @@
-name: Bygg image og deploy til dev
+name: Manuell deploy til dev og q1
 
 on:
   workflow_dispatch:
