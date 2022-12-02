@@ -4,6 +4,8 @@ Applikasjonen er et bindeledd mellom stormaskin og PDL (Persondataløsningen).
 Stormaskin har ikke mulighet til å gjøre GraphQL rest-kall men ved hjelp av denne proxy har vi mulighet 
 til å hente et lite subset av persondata og identer.
 
+# System Diagram
+
 [System-Diagram](./dokuments/system-diagram.md)
 
 ## API-dokumentasjon
