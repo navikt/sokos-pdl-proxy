@@ -25,7 +25,7 @@ AAD --> |REST| PDL
 
 sequenceDiagram
     
-    Client->>AzureAD: hentToken for sokos-pdl-proxy
+    Stormaskin[OS eller UR]->>AzureAD: hentToken for sokos-pdl-proxy
     AzureAD-->>Client: token
     Client->>sokos-pdl-proxy: hentPerson
     sokos-pdl-proxy->>AzureAD: hentToken for PDL
