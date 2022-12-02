@@ -4,11 +4,13 @@ Applikasjonen er et bindeledd mellom stormaskin og PDL (Persondataløsningen).
 Stormaskin har ikke mulighet til å gjøre GraphQL rest-kall men ved hjelp av denne proxy har vi mulighet 
 til å hente et lite subset av persondata og identer.
 
+[System-Diagram](./dokuments/system-diagram.md)
+
 ## API-dokumentasjon
 Tilbyr følgende API-er:
 * Person identer, fornavn, mellomnavn, familie navn og kort navn.
 
----
+--- 
 
 ## Oppsett av utviklermaskin
 * JDK17
@@ -87,3 +89,4 @@ kubectl -nokonomi exec --stdin --tty $POD --container sokos-pdl-proxy  -- /bin/b
 - [Prod-gcp](https://sokos-pdl-proxy.intern.nav.no/person-proxy/api/v1/docs/#/)
 - [Dev-gcp](https://sokos-pdl-proxy.dev.intern.nav.no/person-proxy/api/v1/docs/#/)
 - [Lokalt](http://0.0.0.0:8080/person-proxy/api/v1/docs/)
+
