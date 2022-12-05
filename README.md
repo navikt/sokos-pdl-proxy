@@ -1,4 +1,4 @@
-# Prosjektnavn
+# sokos-pdl-proxy
 
 # Innholdsoversikt
 * [1. Funksjonelle krav](#1-funksjonelle-krav)
