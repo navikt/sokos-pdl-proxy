@@ -69,14 +69,12 @@ For å se på logger må man logge seg på logs.adeo.no og velge NAV logs.
 
 Feilmeldinger og infomeldinger som ikke innheholder sensitive data logges til indeksen `logstash-apps`, mens meldinger som inneholder sensitive data logges til indeksen `tjenestekall`.
 
-### Filter for Produksjon
+- Filter for Produksjon
+  * application:sokos-pdl-proxy AND envclass:p
 
-* application:sokos-pdl-proxy AND envclass:p
+- Filter for Dev
+  * application:sokos-pdl-proxy AND envclass:q
 
-### Filter for Dev
-
-* application:sokos-pdl-proxy AND envclass:q
-* 
 [sikker-utvikling/logging](https://sikkerhet.nav.no/docs/sikker-utvikling/logging) - Anbefales å lese
 
 ### Kubectl
