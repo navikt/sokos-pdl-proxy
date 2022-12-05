@@ -1,36 +1,31 @@
-# sokos-pdl-proxy
+# Prosjektnavn
 
-Applikasjonen er et bindeledd mellom stormaskin og PDL (Persondataløsningen).
-Stormaskin har ikke mulighet til å gjøre GraphQL rest-kall men ved hjelp av denne proxy har vi mulighet 
-til å hente et lite subset av persondata og identer.
+# Innholdsoversikt
+* [1. Funksjonelle krav](#1-funksjonelle-krav)
+* [2. Utviklingsmiljø](#2-utviklingsmiljø)
+* [3. Programvarearkitektur](#3-programvarearkitektur)
+* [4. Deployment](#4-deployment)
+* [5. Autentisering](#5-autentisering)
+* [6. Drift og støtte](#6-drift-og-støtte)
+* [7. Swagger](#7-swagger)
+---
 
-# System Diagram
+# 1. Funksjonelle Krav
+Applikasjonen er et bindeledd mellom stormaskin og PDL (Persondataløsningen). Stormaskin har ikke mulighet til å gjøre GraphQL rest-kall men ved hjelp av denne proxy har vi mulighet til å hente et lite subset av persondata og identer fra PDL.
 
-[System-Diagram](./dokuments/system-diagram.md)
-
-## API-dokumentasjon
 Tilbyr følgende API-er:
-* Person identer, fornavn, mellomnavn, familie navn og kort navn.
+- Person identer, fornavn, mellomnavn, familie navn og kort navn.
 
---- 
 
-## Oppsett av utviklermaskin
-* JDK17
+# 2. Utviklingsmiljø
+### Forutsetninger
+* Java 17
 * Gradle
 
----
+### Bygge prosjekt
+`./gradlew clean build`
 
-## Bygging
-Fra kommandolinje
-```
-./gradlew clean build
-```
-
----
-
-## Lokal utvikling
-
-### Properties
+### Lokal utvikling
 Opprett en run configuration for Bootstrap.kt og angi properties nedenfor som environment variabler
 
 ```properties
@@ -43,10 +38,31 @@ LOG_APPENDER=CONSOLE
 ### PDL proxy
 Start [mockPdlServer](src/test/kotlin/devtools/mockPdlServer.kt)
 
----
+# 3. Programvarearkitektur
+[System diagram](./dokumentasjon/system-diagram.md)
 
-# Logging
+# 4. Deployment
+Distribusjon av tjenesten er gjort med bruk av Github Actions.
+[sokos-pdl-proxy CI / CD](https://github.com/navikt/sokos-pdl-proxy/actions)
 
+Push/merge til master branche vil teste, bygge og deploye til produksjonsmiljø og testmiljø.
+Det foreligger også mulighet for manuell deploy.
+
+# 7. Autentisering
+Applikasjonen bruker [AzureAD](https://docs.nais.io/security/auth/azure-ad/) autentisering
+
+### Hente token
+1. Installer `vault` kommandolinje verktøy
+2. Gi rettighet for å kjøre scriptet `chmod 755 getToken.sh`
+3. Kjør scriptet:
+   ```
+   ./getToken.sh
+   ```
+4. Skriv inn applikasjonsnavn du vil hente `client_id` og `client_secret` for
+
+# 6. Drift og støtte
+
+### Logging
 Vi logger til logs.adeo.no.
 
 For å se på logger må man logge seg på logs.adeo.no og velge NAV logs.
@@ -60,35 +76,33 @@ Feilmeldinger og infomeldinger som ikke innheholder sensitive data logges til in
 ### Filter for Dev
 
 * application:sokos-pdl-proxy AND envclass:q
+* 
+[sikker-utvikling/logging](https://sikkerhet.nav.no/docs/sikker-utvikling/logging) - Anbefales å lese
 
+### Kubectl
+For dev-gcp:
+```shell script
+kubectl config use-context dev-gcp
+kubectl get pods -n okonomi | grep sokos-ktor-template
+kubectl logs -f sokos-ktor-template-<POD-ID> --namespace okonomi -c sokos-ktor-template
+```
+
+For prod-gcp:
+```shell script
+kubectl config use-context prod-gcp
+kubectl get pods -n okonomi | grep sokos-ktor-template
+kubectl logs -f sokos-ktor-template-<POD-ID> --namespace okonomi -c sokos-ktor-template
+```
+
+### Alarmer
+Vi bruker [nais-alerts](https://doc.nais.io/observability/alerts) for å sette opp alarmer. Disse finner man konfigurert i [.nais/alerterator.yaml](.nais/alerterator.yaml) filen.
+
+### Grafana
+- [sokos-pdl-proxy](https://grafana.nais.io/d/ytprGMj7z/sokos-pdl-proxy?orgId=1&refresh=30s)
 ---
 
-# Nyttig informasjon
-
-
-## Hvordan skaffe token i preprod
-
-`curl` kommando for å hente JWT-token:
-```
-curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "client_id={{AZURE_CLIENT_ID_UR}}&scope=api://{{AZURE_APP_CLIENT_ID}}/.default&client_secret={{AZURE_CLIENT_SECRET_UR}}&grant_type=client_credentials" "https://login.microsoftonline.com/$AZURE_APP_TENANT_ID/oauth2/v2.0/token"
-```
-
-Vi trenger følgende:
-* `AZURE_CLIENT_ID-<konsument-system>` -> Finner i vault under `secrets/azuread/show/dev/creds/<system>` 
-* `AZURE_CLIENT_SECRET-<kosument-system>` -> Finner i vault under `secrets/azuread/show/dev/creds/<system>`
-* `AZURE_APP_CLIENT_ID` -> Hente fra pod
-* `AZURE_APP_TENANT_ID` -> Hente fra pod
-
-### Slik kan man logge seg på pod med bash
-```
-kubectl config use-context dev-gcp
-POD=$(kubectl get pods -nokonomi | grep sokos-pdl-proxy | grep Running | awk '{ print $1; }' | sed -n 1p )
-kubectl -nokonomi exec --stdin --tty $POD --container sokos-pdl-proxy  -- /bin/bash
-```
-
-## Swagger URL
+# 7. Swagger
 
 - [Prod-gcp](https://sokos-pdl-proxy.intern.nav.no/person-proxy/api/v1/docs/#/)
 - [Dev-gcp](https://sokos-pdl-proxy.dev.intern.nav.no/person-proxy/api/v1/docs/#/)
 - [Lokalt](http://0.0.0.0:8080/person-proxy/api/v1/docs/)
-

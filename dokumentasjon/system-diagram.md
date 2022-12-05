@@ -6,7 +6,7 @@ flowchart TB
 subgraph k1 [Stormaskin]
   direction TB
   OS[Oppslag System]     
-  UR[Utbetalings Resskontro]     
+  UR[Utbetalingsreskontro]     
 end
 
 
