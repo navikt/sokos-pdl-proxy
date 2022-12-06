@@ -77,20 +77,23 @@ Feilmeldinger og infomeldinger som ikke innheholder sensitive data logges til in
   * application:sokos-pdl-proxy AND envclass:q
 
 [sikker-utvikling/logging](https://sikkerhet.nav.no/docs/sikker-utvikling/logging) - Anbefales å lese
+- Filter for sikkerhet logs på https://logs.adeo.no 
+  * bytte Change index pattern fra: logstash-* til: tjenestekall-*
+  * bruk application:sokos-pdl-proxy og bytte envclass mellom p og q som viser over.
 
 ### Kubectl
 For dev-gcp:
 ```shell script
 kubectl config use-context dev-gcp
-kubectl get pods -n okonomi | grep sokos-ktor-template
-kubectl logs -f sokos-ktor-template-<POD-ID> --namespace okonomi -c sokos-ktor-template
+kubectl get pods -n okonomi | grep sokos-pdl-proxy
+kubectl logs -f sokos-pdl-proxy-<POD-ID> --namespace okonomi -c sokos-pdl-proxy
 ```
 
 For prod-gcp:
 ```shell script
 kubectl config use-context prod-gcp
-kubectl get pods -n okonomi | grep sokos-ktor-template
-kubectl logs -f sokos-ktor-template-<POD-ID> --namespace okonomi -c sokos-ktor-template
+kubectl get pods -n okonomi | grep sokos-pdl-proxy
+kubectl logs -f sokos-pdl-proxy-<POD-ID> --namespace okonomi -c sokos-pdl-proxy
 ```
 
 ### Alarmer
