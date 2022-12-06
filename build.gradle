@@ -13,7 +13,8 @@ repositories {
     mavenCentral()
 }
 
-final def logback_version = '1.2.11'
+final def logback_version = '1.4.5'
+final def logback_encoder_version = '7.2'
 final def kotlin_version = '1.7.10'
 final def ktor_version = '2.1.0'
 final def jackson_version = '2.14.1'
@@ -65,9 +66,9 @@ dependencies {
     implementation "com.expediagroup:graphql-kotlin-client-jackson:$graphqlClientVersion"
     implementation "org.apache.avro:avro:$avroVersion"
 
-    implementation 'ch.qos.logback:logback-core:1.2.11'
-    implementation 'ch.qos.logback:logback-classic:1.2.11'
-    implementation 'net.logstash.logback:logstash-logback-encoder:7.1.1'
+    implementation "ch.qos.logback:logback-core:$logback_version"
+    implementation "ch.qos.logback:logback-classic:$logback_version"
+    implementation "net.logstash.logback:logstash-logback-encoder:$logback_encoder_version"
 
     testImplementation "org.junit.jupiter:junit-jupiter:$junit_version"
     testImplementation "io.mockk:mockk:$mockk_version"
