@@ -53,9 +53,13 @@ Det foreligger også mulighet for manuell deploy.
 Applikasjonen bruker [AzureAD](https://docs.nais.io/security/auth/azure-ad/) autentisering
 
 ### Hente token
-1. Installer `vault` kommandolinje verktøy
-2. Gi rettighet for å kjøre scriptet `chmod 755 getToken.sh`
-3. Kjør scriptet:
+1. Installer `vault` kommandolinje verktøy: https://github.com/navikt/utvikling/blob/main/docs/teknisk/Vault.md
+2. For å vise token skal vi installere jq: 
+   - brew install jq (på mac)
+   - choco install jq for windows (install chocolatey før: https://community.chocolatey.org/packages/autocomplete)
+   - apt-get install jq (på ubuntu).
+3. Gi rettighet for å kjøre scriptet `chmod 755 getToken.sh`
+4. Kjør scriptet:
    ```
    ./getToken.sh
    ```
