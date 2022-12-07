@@ -26,7 +26,6 @@ fun main() {
             accessTokenClient
         )
     val apiSecurityService = ApiSecurityService(
-        configuration.azureAdServer.apiAllowLists,
         configuration.azureAdServer.preAutorizedApps
     )
     val httpServer = HttpServer(applicationState, configuration, pdlService = pdlService, apiSecurityService)

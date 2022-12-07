@@ -55,11 +55,9 @@ private fun JWTAuthenticationProvider.Config.azureAuth(
             }
             if (api != null) {
                 val azp = credentials.payload.getClaim("azp").asString()
-                check(apiSecurityService.verifyAccessToApi(azp, api)) {
                     val client = apiSecurityService.getPreAuthorizedApp(azp)
                     logger.warn("${client?.appName} har forsøkt å nå $api API. Tilgang nektet")
                     "Auth: Client does not have access to API"
-                }
             }
             JWTPrincipal(credentials.payload)
         } catch (e: Throwable) {

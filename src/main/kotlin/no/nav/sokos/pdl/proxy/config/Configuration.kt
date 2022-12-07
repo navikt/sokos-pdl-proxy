@@ -7,7 +7,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import kotlinx.coroutines.runBlocking
-import no.nav.sokos.pdl.proxy.pdl.security.Api
 import no.nav.sokos.pdl.proxy.pdl.security.PreAuthorizedApp
 import java.net.URL
 import java.util.concurrent.TimeUnit
@@ -36,9 +35,6 @@ data class Configuration(
         val authorityEndpoint: String = readProperty("AZURE_APP_WELL_KNOWN_URL", ""),
         val preAutorizedApps: List<PreAuthorizedApp> =
             readProperty("AZURE_APP_PRE_AUTHORIZED_APPS", "[]").let { jsonMapper.readValue(it) },
-        val apiAllowLists: Map<Api, List<String>> = mapOf(
-            Api.PDLPROXY to readProperty("ALLOW_LIST_PDLPROXY", "").split(","),
-        ),
     ) {
         val openIdConfiguration: AzureAdOpenIdConfiguration by lazy {
             runBlocking { httpClient.get(authorityEndpoint).body() }
