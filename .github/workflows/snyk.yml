@@ -24,7 +24,7 @@ jobs:
       - name: Kjører Snyk for å sjekke sårbarheter
         uses: snyk/actions/gradle@master
         with:
-          command: test
+          command: monitor
           args: --org=team-mob --project-name=${{ github.repository }} --remote-repo-url=https://github.com/${{ github.repository }}.git
 
   docker-image-vulnerabilities:
