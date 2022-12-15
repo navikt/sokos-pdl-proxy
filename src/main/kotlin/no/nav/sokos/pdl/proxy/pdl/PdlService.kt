@@ -43,17 +43,18 @@ class PdlService(
             }
         }
 
-        secureLogger.info { "Fikk følgende fra PDL hentPerson: ${respons.data?.hentPerson}" }
-
         return respons.errors?.let { feilmeldingerFraPdl ->
-            håndterFeilFraPdl(feilmeldingerFraPdl)
-        } ?: validerOgBehandleResultat(respons)
+
+            håndterFeilFraPdl(feilmeldingerFraPdl, ident)
+        } ?: validerOgBehandleResultat(respons, ident)
     }
 
-    private fun validerOgBehandleResultat(respons: GraphQLClientResponse<HentPerson.Result>): Result<Person?> {
+    private fun validerOgBehandleResultat(respons: GraphQLClientResponse<HentPerson.Result>, ident: String): Result<Person?> {
         respons.data?.hentPerson?.let {
             PersonFraPDLValidator.valider(it)
         }
+
+        secureLogger.info { "Henting av Person med ident ${ident} fra PDL vellykket" }
 
         return Result.success(respons.data?.hentPerson)
     }
@@ -66,15 +67,14 @@ class PdlService(
                 header("Authorization", "Bearer $accessToken")
             }
         }
-        secureLogger.info { "Fikk følgende fra PDL hentIdenter: ${respons.data?.hentIdenter}" }
 
         return respons.errors?.let { feilmeldingerFraPdl ->
-            håndterFeilFraPdl(feilmeldingerFraPdl)
-        } ?: Result.success(hentUtIdenter(respons))
+            håndterFeilFraPdl(feilmeldingerFraPdl, ident)
+        } ?: Result.success(hentUtIdenter(respons, ident))
     }
 
     @Suppress("FunctionName")
-    private fun <T> håndterFeilFraPdl(errors: List<GraphQLClientError>): Result<T> {
+    private fun <T> håndterFeilFraPdl(errors: List<GraphQLClientError>, ident: String): Result<T> {
         val metoderSomGirFeil = errors
             .mapNotNull { error -> error.path }
             .joinToString { s -> s.toString() }
@@ -86,10 +86,12 @@ class PdlService(
 
         val httpFeilkode = when {
             feilkoderFraPDL.contains("not_found") -> {
+                secureLogger.info { "Henting av person med ident ${ident} fra PDL mislykket" }
                 logger.info { "Fant ikke person i PDL ved kall til $metoderSomGirFeil." }
                 404
             }
             else -> {
+                secureLogger.error {  "Henting av data fra PDL feilet ved kall til $metoderSomGirFeil. Feilmeldinger er: $feilmeldingerFraPDL" }
                 logger.error { "Henting av data fra PDL feilet ved kall til $metoderSomGirFeil. Feilmeldinger er: $feilmeldingerFraPDL" }
                 500
             }
@@ -97,14 +99,16 @@ class PdlService(
         return Result.failure(PdlApiException(httpFeilkode, "$feilmeldingerFraPDL"))
     }
 
-    private fun hentUtIdenter(result: GraphQLClientResponse<HentIdenter.Result>) =
-        result.data?.hentIdenter?.identer?.map {
+    private fun hentUtIdenter(result: GraphQLClientResponse<HentIdenter.Result>, ident: String) : List<Ident> {
+        secureLogger.info { "Henting av Identer med ident ${ident} fra PDL vellykket" }
+        return result.data?.hentIdenter?.identer?.map {
             Ident(
                 ident = it.ident,
                 aktiv = !it.historisk,
                 identifikatorType = fra(it.gruppe)
             )
         } ?: emptyList()
+    }
 
 }
 
