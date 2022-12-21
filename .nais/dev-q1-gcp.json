@@ -2,6 +2,6 @@
   "app": "sokos-pdl-proxy-q1",
   "team": "okonomi",
   "namespace": "okonomi",
-  "slack-channel": "okonomi-alerts-dev",
+  "slack-channel": "team-mob-alerts-dev",
   "slack-notify-type": "sokos-pdl-proxy-q1 | "
 }
