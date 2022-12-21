@@ -14,8 +14,8 @@
 # 1. Funksjonelle Krav
 Applikasjonen er et bindeledd mellom stormaskin og PDL (Persondataløsningen). Stormaskin har ikke mulighet til å gjøre GraphQL rest-kall men ved hjelp av denne proxy har vi mulighet til å hente et lite subset av persondata og identer fra PDL.
 
-Tilbyr følgende API-er:
-- Person identer, fornavn, mellomnavn, familie navn og kort navn.
+API tilbyr følgende:
+- Person identer, fornavn, mellomnavn, etternavn, forkortet navn, bostedsadresse, martikkeladresse, utenlandskadresse, ukjent bosted, metdata, kontaktadresse, oppholdsadresse
 
 
 # 2. Utviklingsmiljø
@@ -49,7 +49,7 @@ Distribusjon av tjenesten er gjort med bruk av Github Actions.
 Push/merge til master branche vil teste, bygge og deploye til produksjonsmiljø og testmiljø.
 Det foreligger også mulighet for manuell deploy.
 
-# 7. Autentisering
+# 5. Autentisering
 Applikasjonen bruker [AzureAD](https://docs.nais.io/security/auth/azure-ad/) autentisering
 
 ### Hente token
