@@ -16,7 +16,7 @@ import org.hamcrest.CoreMatchers.containsStringIgnoringCase
 import org.junit.jupiter.api.Test
 
 internal class PdlProxyApiTest {
-    private val validationFilter = OpenApiValidationFilter("spec/sokos-pdl-proxy-v1-swagger2.json")
+    private val validationFilter = OpenApiValidationFilter("openapi/sokos-pdl-proxy-v1-swagger2.json")
     private val pdlUrl = "http://0.0.0.0"
 
     @Test
