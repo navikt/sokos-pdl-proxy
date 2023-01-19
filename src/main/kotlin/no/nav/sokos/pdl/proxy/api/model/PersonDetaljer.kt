@@ -28,8 +28,8 @@ data class PersonDetaljer(
                 )
             }
 
-            val navnFraPdlKilde : Navn? = person?.navn?.filter { navn -> navn.metadata.master.equals("PDL") }?.firstOrNull()
-            val navnFraFregKilde: Navn? = person?.navn?.filter { navn -> navn.metadata.master.equals("FREG") }?.firstOrNull()
+            val navnFraPdlKilde : Navn? = person?.navn?.filter { navn -> navn.metadata.master.equals(NavnKilder.PDL.toString()) }?.firstOrNull()
+            val navnFraFregKilde: Navn? = person?.navn?.filter { navn -> navn.metadata.master.equals(NavnKilder.FREG.toString()) }?.firstOrNull()
 
             if (null == navnFraPdlKilde?.gyldigFraOgMed || null == navnFraFregKilde?.gyldigFraOgMed) {
                 return PersonDetaljer(
@@ -43,11 +43,7 @@ data class PersonDetaljer(
                     person?.oppholdsadresse.orEmpty(),
                 )
             }
-            val dateFormater = SimpleDateFormat("yyyy.MM.dd HH:mm")
-            val endringDatoFraPdlKile = dateFormater.parse(navnFraPdlKilde.gyldigFraOgMed)
-            val endringDatoFraFregKilde = dateFormater.parse(navnFraFregKilde.gyldigFraOgMed)
-
-            val dateComparison = endringDatoFraPdlKile.compareTo(endringDatoFraFregKilde)
+            val dateComparison = sammenlikneDatoerFraForskelligeKilder(navnFraPdlKilde.gyldigFraOgMed, navnFraFregKilde.gyldigFraOgMed)
 
             when {
                 dateComparison > 0 -> {
@@ -89,6 +85,15 @@ data class PersonDetaljer(
                     )
                 }
             }
+        }
+
+        private fun sammenlikneDatoerFraForskelligeKilder(datoFraPdlKilde: String, datoFraFregKilde: String): Int {
+            val dateFormater = SimpleDateFormat("yyyy.MM.dd HH:mm")
+            val endringDatoFraPdlKile = dateFormater.parse(datoFraPdlKilde)
+            val endringDatoFraFregKilde = dateFormater.parse(datoFraFregKilde)
+
+            val dateComparison = endringDatoFraPdlKile.compareTo(endringDatoFraFregKilde)
+            return dateComparison
         }
     }
 }
