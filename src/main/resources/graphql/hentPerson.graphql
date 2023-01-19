@@ -5,6 +5,12 @@ query($ident: ID!){
 			mellomnavn
 			etternavn
 			forkortetNavn
+			gyldigFraOgMed
+            metadata {
+                opplysningsId
+                master
+                historisk
+            }
 		}
 		bostedsadresse {
 			angittFlyttedato,

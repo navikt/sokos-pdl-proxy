@@ -6,7 +6,13 @@
           "fornavn": "ÅPENHJERTIG",
           "mellomnavn": null,
           "etternavn": "STAUDE",
-          "forkortetNavn": "STAUDE ÅPENHJERTIG"
+          "forkortetNavn": "STAUDE ÅPENHJERTIG",
+          "gyldigFraOgMed": "2023-01-18",
+          "metadata": {
+            "opplysningsId": "eb7bcd8a-a204-46cf-a494-2730757c7577",
+            "master": "FREG",
+            "historisk": false
+          }
         }
       ],
       "bostedsadresse": [],
