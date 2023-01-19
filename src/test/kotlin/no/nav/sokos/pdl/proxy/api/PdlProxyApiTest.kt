@@ -42,6 +42,50 @@ internal class PdlProxyApiTest {
     }
 
     @Test
+    fun `Solskinnshistorie flere navn fra flere kilder- klient kaller tjeneste med suksess som validerer ok mot swagger-kontrakten`() {
+        val port = enTilfleldigPort()
+
+        enTestserverMedResponsFraPDL(
+            port,
+            "hentIdenter_success_response.json",
+            "hentPerson_med_flere_aktive_navn_success_response.json"
+        )
+
+        RestAssured.given()
+            .filter(validationFilter)
+            .header(Header("Content-Type", "application/json"))
+            .header(Header("Authorization", "Bearer dummytoken"))
+            .body(PersonIdent("ikke interessant").tilJson())
+            .port(port)
+            .post("/hent-person")
+            .then()
+            .assertThat()
+            .statusCode(200)
+    }
+
+    @Test
+    fun `Solskinnshistorie flere navn fra flere kilder uten gyldig dato- klient kaller tjeneste med suksess som validerer ok mot swagger-kontrakten`() {
+        val port = enTilfleldigPort()
+
+        enTestserverMedResponsFraPDL(
+            port,
+            "hentIdenter_success_response.json",
+            "hentPerson_success_response_med_flere_navn_uten_gyldigDato.json"
+        )
+
+        RestAssured.given()
+            .filter(validationFilter)
+            .header(Header("Content-Type", "application/json"))
+            .header(Header("Authorization", "Bearer dummytoken"))
+            .body(PersonIdent("ikke interessant").tilJson())
+            .port(port)
+            .post("/hent-person")
+            .then()
+            .assertThat()
+            .statusCode(200)
+    }
+
+    @Test
     fun `Klient kaller begge tjenester med suksess, men ingen navn på person, skal også validerer ok mot swagger-kontrakten`() {
         val port = enTilfleldigPort()
 

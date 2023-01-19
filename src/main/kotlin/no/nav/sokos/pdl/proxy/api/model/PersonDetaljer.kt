@@ -28,8 +28,8 @@ data class PersonDetaljer(
                 )
             }
 
-            val navnFraPdlKilde : Navn? = person?.navn?.filter { navn -> navn.metadata.master.equals(NavnKilder.PDL.toString()) }?.firstOrNull()
-            val navnFraFregKilde: Navn? = person?.navn?.filter { navn -> navn.metadata.master.equals(NavnKilder.FREG.toString()) }?.firstOrNull()
+            val navnFraPdlKilde : Navn? = person?.navn?.filter { navn -> navn.metadata.master.equals(NavnKilder.PDL.toString(), ignoreCase = true) }?.firstOrNull()
+            val navnFraFregKilde: Navn? = person?.navn?.filter { navn -> navn.metadata.master.equals(NavnKilder.FREG.toString(), ignoreCase = true) }?.firstOrNull()
 
             if (null == navnFraPdlKilde?.gyldigFraOgMed || null == navnFraFregKilde?.gyldigFraOgMed) {
                 return PersonDetaljer(
@@ -88,7 +88,7 @@ data class PersonDetaljer(
         }
 
         private fun sammenlikneDatoerFraForskelligeKilder(datoFraPdlKilde: String, datoFraFregKilde: String): Int {
-            val dateFormater = SimpleDateFormat("yyyy.MM.dd HH:mm")
+            val dateFormater = SimpleDateFormat("yyyy-MM-dd")
             val endringDatoFraPdlKile = dateFormater.parse(datoFraPdlKilde)
             val endringDatoFraFregKilde = dateFormater.parse(datoFraFregKilde)
 

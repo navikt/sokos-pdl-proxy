@@ -1,0 +1,142 @@
+{
+  "data": {
+    "hentPerson": {
+      "navn": [
+        {
+          "fornavn": "Talefør",
+          "mellomnavn": "Blunkende",
+          "etternavn": "Mast",
+          "forkortetNavn": null,
+          "gyldigFraOgMed": "2023-01-18",
+          "metadata": {
+            "opplysningsId": "89fa8a62-8369-4f5a-95b3-99df306936cc",
+            "master": "PDL",
+            "historisk": false
+          }
+        },
+        {
+          "fornavn": "Interessant",
+          "mellomnavn": null,
+          "etternavn": "Pendel",
+          "forkortetNavn": null,
+          "gyldigFraOgMed": "1971-10-20",
+          "metadata": {
+            "opplysningsId": "b21763bc-c557-44ec-a6f5-e14535ebee93",
+            "master": "FREG",
+            "historisk": false
+          }
+        }
+      ],
+      "bostedsadresse": [
+        {
+          "angittFlyttedato": "1979-11-24",
+          "gyldigFraOgMed": "1979-11-24T00:00",
+          "gyldigTilOgMed": null,
+          "coAdressenavn": null,
+          "vegadresse": {
+            "husnummer": "55",
+            "husbokstav": null,
+            "bruksenhetsnummer": null,
+            "adressenavn": "HUSANTUNVEIEN",
+            "kommunenummer": "3024",
+            "bydelsnummer": null,
+            "tilleggsnavn": null,
+            "postnummer": "1358"
+          },
+          "matrikkeladresse": null,
+          "utenlandskAdresse": null,
+          "ukjentBosted": null,
+          "metadata": {
+            "opplysningsId": "b3293355-1cde-4299-a99c-bad2984e694e",
+            "master": "Freg",
+            "endringer": [
+              {
+                "type": "OPPRETT",
+                "registrert": "2020-12-08T14:32:26",
+                "registrertAv": "Folkeregisteret",
+                "systemkilde": "FREG",
+                "kilde": "Dolly"
+              }
+            ],
+            "historisk": false
+          }
+        }
+      ],
+      "oppholdsadresse": [
+        {
+          "oppholdAnnetSted": null,
+          "coAdressenavn": null,
+          "gyldigFraOgMed": "1979-11-24T00:00",
+          "gyldigTilOgMed": "2020-11-24T00:00",
+          "utenlandskAdresse": null,
+          "vegadresse": {
+            "husnummer": "55",
+            "husbokstav": null,
+            "bruksenhetsnummer": null,
+            "adressenavn": "HUSANTUNVEIEN",
+            "kommunenummer": "3024",
+            "bydelsnummer": null,
+            "tilleggsnavn": null,
+            "postnummer": "1358"
+          },
+          "matrikkeladresse": null,
+          "metadata": {
+            "opplysningsId": "e498f445-704a-4b05-8322-7b9fe4e734b2",
+            "master": "Freg",
+            "endringer": [
+              {
+                "type": "OPPRETT",
+                "registrert": "2020-12-08T14:32:25",
+                "registrertAv": "Folkeregisteret",
+                "systemkilde": "FREG",
+                "kilde": "Dolly"
+              }
+            ],
+            "historisk": false
+          }
+        }
+      ],
+      "kontaktadresse": [
+        {
+          "gyldigFraOgMed": "1979-11-24T00:00",
+          "gyldigTilOgMed": null,
+          "type": "Innland",
+          "coAdressenavn": null,
+          "postboksadresse": null,
+          "vegadresse": {
+            "husnummer": "55",
+            "husbokstav": null,
+            "bruksenhetsnummer": null,
+            "adressenavn": "HUSANTUNVEIEN",
+            "kommunenummer": null,
+            "bydelsnummer": null,
+            "tilleggsnavn": null,
+            "postnummer": "1358"
+          },
+          "postadresseIFrittFormat": {
+            "adresselinje1": "adresse 1",
+            "adresselinje2": "adresse 2",
+            "adresselinje3": "adresse 3",
+            "postnummer": "4242"
+          },
+          "utenlandskAdresse": null,
+          "utenlandskAdresseIFrittFormat": null,
+          "metadata": {
+            "opplysningsId": "6ae8f985-0763-441e-ad33-59ae9f01ad49",
+            "master": "Freg",
+            "endringer": [
+              {
+                "type": "OPPRETT",
+                "registrert": "2020-12-08T14:32:25",
+                "registrertAv": "Folkeregisteret",
+                "systemkilde": "FREG",
+                "kilde": "Dolly"
+              }
+            ],
+            "historisk": false
+          }
+        }
+      ]
+    }
+  }
+}
