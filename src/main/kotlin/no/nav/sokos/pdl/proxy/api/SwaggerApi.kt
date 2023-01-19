@@ -6,6 +6,6 @@ import io.ktor.server.routing.routing
 
 fun Application.swaggerApi() {
     routing {
-        swaggerUI(path = "api/v1/docs", swaggerFile = "openapi/sokos-skattekort-person-v1-swagger.yaml")
+        swaggerUI(path = "api/pdl-proxy/v1/docs", swaggerFile = "openapi/sokos-pdl-proxy-v1-swagger2.json")
     }
 }

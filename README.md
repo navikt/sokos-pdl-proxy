@@ -109,9 +109,9 @@ Vi bruker [nais-alerts](https://doc.nais.io/observability/alerts) for å sette o
 
 # 7. Swagger
 
-- [Prod-gcp](https://sokos-pdl-proxy.intern.nav.no/person-proxy/api/v1/docs/#/)
-- [Dev-gcp](https://sokos-pdl-proxy.dev.intern.nav.no/person-proxy/api/v1/docs/#/)
-- [Lokalt](http://0.0.0.0:8080/person-proxy/api/v1/docs/)
+- [Prod-gcp](https://sokos-pdl-proxy.intern.nav.no/pdl-proxy/api/v1/docs)
+- [Dev-gcp](https://sokos-pdl-proxy.dev.intern.nav.no/pdl-proxy/api/v1/docs)
+- [Lokalt](http://0.0.0.0:8080/person-proxy/api/v1/docs)
 
 # 8. Henvendelser
 Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på Github.
