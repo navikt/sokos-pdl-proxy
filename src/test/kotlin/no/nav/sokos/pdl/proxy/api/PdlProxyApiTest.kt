@@ -11,6 +11,7 @@ import no.nav.sokos.pdl.proxy.TestServer
 import no.nav.sokos.pdl.proxy.api.model.PersonIdent
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 import no.nav.sokos.pdl.proxy.pdl.setupMockEngine
+import no.nav.sokos.pdl.proxy.util.ApplicationState
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.containsStringIgnoringCase
 import org.junit.jupiter.api.Test
@@ -305,7 +306,7 @@ internal class PdlProxyApiTest {
         )
         val pdlService = PdlService(mockkGraphQlClient, pdlUrl, accessTokenClient = null)
 
-        TestServer(port, pdlService)
+        TestServer(port, pdlService, applicationState = ApplicationState())
     }
 
     private fun enTilfleldigPort() = Random.nextInt(32000, 42000)

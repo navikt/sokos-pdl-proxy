@@ -13,6 +13,7 @@ import no.nav.sokos.pdl.proxy.config.Configuration
 import no.nav.sokos.pdl.proxy.config.installMetrics
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 import no.nav.sokos.pdl.proxy.api.metricsApi
+import no.nav.sokos.pdl.proxy.config.routingConfig
 import no.nav.sokos.pdl.proxy.util.ApplicationState
 
 
@@ -26,10 +27,7 @@ class HttpServer(
         installSecurity(configuration, configuration.useAuthentication)
         installCommonFeatures()
         installMetrics()
-        pdlProxyV1Api(pdlService, configuration.useAuthentication)
-        metricsApi()
-        swaggerApi()
-        naisApi({ applicationState.alive }, { applicationState.ready })
+        routingConfig(applicationState, pdlService, configuration.useAuthentication)
     }
 
     fun start() = embeddedServer.start(wait = true)

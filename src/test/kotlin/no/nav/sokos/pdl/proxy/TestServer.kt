@@ -6,18 +6,20 @@ import io.ktor.server.netty.Netty
 import io.restassured.RestAssured
 import io.restassured.config.ObjectMapperConfig
 import io.restassured.config.RestAssuredConfig
-import no.nav.sokos.pdl.proxy.api.pdlProxyV1Api
 import no.nav.sokos.pdl.proxy.config.jsonMapper
+import no.nav.sokos.pdl.proxy.config.routingConfig
 import no.nav.sokos.pdl.proxy.pdl.PdlService
+import no.nav.sokos.pdl.proxy.util.ApplicationState
 
 class TestServer(
     private val port: Int = 1100,
     private val pdlService: PdlService,
+    applicationState: ApplicationState,
 ) {
     init {
         embeddedServer(Netty, port) {
             installCommonFeatures()
-            pdlProxyV1Api(pdlService, false)
+            routingConfig(applicationState, pdlService, false)
             RestAssured.baseURI = "http://localhost"
             RestAssured.basePath = "/api/pdl-proxy/v1"
             RestAssured.port = port

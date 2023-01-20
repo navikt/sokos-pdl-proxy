@@ -8,11 +8,9 @@ import io.ktor.client.engine.ProxyBuilder
 import io.ktor.client.engine.http
 import io.ktor.client.request.get
 import io.ktor.server.application.Application
-import io.ktor.server.auth.authenticate
 import io.ktor.server.auth.authentication
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
-import io.ktor.server.routing.Route
 import java.net.URL
 import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.runBlocking
@@ -57,10 +55,6 @@ fun Application.installSecurity(
 
 
     } else logger.warn("Running WITHOUT authentication!")
-}
-
-fun Route.autentiser(brukAutentisering: Boolean, authenticationProviderId: String? = null, block: Route.() -> Unit) {
-    if (brukAutentisering) authenticate(authenticationProviderId) { block() } else block()
 }
 
 private fun cachedJwkProvider(jwksUri: String): JwkProvider {
