@@ -1,10 +1,10 @@
-name: Manuell deploy til dev og q1
+name: Manuell deploy til q1
 
 on:
   workflow_dispatch:
 
 env:
-  IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}-dev
+  IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}-q1
   GITHUB_USERNAME: x-access-token
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -43,18 +43,6 @@ jobs:
           docker build --tag ${IMAGE} .
           docker login ghcr.io -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
           docker push ${IMAGE}
-
-  deploy-dev-gcp:
-    name: Deploy til dev
-    needs: [ bygg ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: nais/deploy/actions/deploy@v1
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-gcp
-          RESOURCE: .nais/naiserator-dev.yaml
 
   deploy-dev-q1-gcp:
     name: Deploy dev-q1
