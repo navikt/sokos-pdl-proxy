@@ -42,7 +42,7 @@ jobs:
 
   deploy-alerts-prod:
     name: Deploy alarmer til prod
-    needs: [deploy-alerts-dev, deploy-alerts-dev-q1]
+    needs: [ deploy-alerts-dev, deploy-alerts-dev-q1 ]
     runs-on: ubuntu-latest
     steps:
       - name: Sjekker ut kode

@@ -2,7 +2,7 @@ name: Sikkerhet
 
 on:
   workflow_run:
-    workflows: ["Deploy til dev og prod"]
+    workflows: [ "Deploy til dev og prod" ]
     types:
       - completed
   schedule:

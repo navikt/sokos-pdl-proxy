@@ -10,12 +10,12 @@ import mu.KotlinLogging
 import no.nav.pdl.HentIdenter
 import no.nav.pdl.HentPerson
 import no.nav.pdl.hentperson.Person
-import no.nav.sokos.pdl.proxy.SECURE_LOGGER_NAME
 import no.nav.sokos.pdl.proxy.api.model.Ident
 import no.nav.sokos.pdl.proxy.api.model.IdentifikatorType.Companion.fra
 import no.nav.sokos.pdl.proxy.api.model.PersonDetaljer
-import no.nav.sokos.pdl.proxy.exception.PdlApiException
+import no.nav.sokos.pdl.proxy.config.SECURE_LOGGER_NAME
 import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
+import no.nav.sokos.pdl.proxy.util.PdlApiException
 
 private val logger = KotlinLogging.logger {}
 private val secureLogger = KotlinLogging.logger(SECURE_LOGGER_NAME)
@@ -49,7 +49,10 @@ class PdlService(
         } ?: validerOgBehandleResultat(respons, ident)
     }
 
-    private fun validerOgBehandleResultat(respons: GraphQLClientResponse<HentPerson.Result>, ident: String): Result<Person?> {
+    private fun validerOgBehandleResultat(
+        respons: GraphQLClientResponse<HentPerson.Result>,
+        ident: String
+    ): Result<Person?> {
         respons.data?.hentPerson?.let {
             PersonFraPDLValidator.valider(it)
         }
@@ -90,8 +93,9 @@ class PdlService(
                 logger.info { "Fant ikke person i PDL ved kall til $metoderSomGirFeil." }
                 404
             }
+
             else -> {
-                secureLogger.error {  "Henting av data fra PDL feilet ved kall til $metoderSomGirFeil. Feilmeldinger er: $feilmeldingerFraPDL" }
+                secureLogger.error { "Henting av data fra PDL feilet ved kall til $metoderSomGirFeil. Feilmeldinger er: $feilmeldingerFraPDL" }
                 logger.error { "Henting av data fra PDL feilet ved kall til $metoderSomGirFeil. Feilmeldinger er: $feilmeldingerFraPDL" }
                 500
             }
@@ -99,7 +103,7 @@ class PdlService(
         return Result.failure(PdlApiException(httpFeilkode, "$feilmeldingerFraPDL"))
     }
 
-    private fun hentUtIdenter(result: GraphQLClientResponse<HentIdenter.Result>, ident: String) : List<Ident> {
+    private fun hentUtIdenter(result: GraphQLClientResponse<HentIdenter.Result>, ident: String): List<Ident> {
         secureLogger.info { "Henting av Identer med ident ${ident} fra PDL vellykket" }
         return result.data?.hentIdenter?.identer?.map {
             Ident(

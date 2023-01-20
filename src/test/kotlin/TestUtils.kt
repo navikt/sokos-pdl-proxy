@@ -1,5 +1,11 @@
-import java.net.URL
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
-private fun String.asResource(): URL = {}::class.java.classLoader.getResource(this)!!
+fun String.readFromResource() = {}::class.java.classLoader.getResource(this)!!.readText()
+fun Any.toJson() = jsonMapper().writeValueAsString(this)!!
 
-fun resourceToString(filename: String) = filename.asResource().readText()
+private fun jsonMapper(): ObjectMapper = jacksonObjectMapper().apply {
+    configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+    findAndRegisterModules()
+}

@@ -19,9 +19,9 @@ import io.ktor.http.headersOf
 import java.net.URL
 import no.nav.pdl.hentperson.PostadresseIFrittFormat
 import no.nav.sokos.pdl.proxy.api.model.Ident
-import no.nav.sokos.pdl.proxy.exception.PdlApiException
+import no.nav.sokos.pdl.proxy.util.PdlApiException
 import org.junit.jupiter.api.Test
-import resourceToString
+import readFromResource
 
 private const val pdlUrl = "http://0.0.0.0"
 
@@ -120,13 +120,13 @@ fun setupMockEngine(
         val body = request.body as TextContent
         if (body.text.contains("hentIdenter")) {
             respond(
-                content = hentIdenterResponseFilNavn?.let { resourceToString(it)}.orEmpty(),
+                content = hentIdenterResponseFilNavn?.let { (it).readFromResource() }.orEmpty(),
                 headers = headersOf("Content-Type", ContentType.Application.Json.toString()),
                 status = statusCode
             )
         } else {
             respond(
-                content = hentPersonResponseFilNavn?.let {  resourceToString(it)}.orEmpty(),
+                content = hentPersonResponseFilNavn?.let { (it).readFromResource() }.orEmpty(),
                 headers = headersOf("Content-Type", ContentType.Application.Json.toString()),
                 status = statusCode
             )

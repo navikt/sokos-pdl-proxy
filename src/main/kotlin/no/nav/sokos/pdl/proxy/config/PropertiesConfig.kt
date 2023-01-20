@@ -6,16 +6,18 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import kotlinx.coroutines.runBlocking
-import no.nav.sokos.pdl.proxy.pdl.security.Api
-import no.nav.sokos.pdl.proxy.pdl.security.PreAuthorizedApp
 import java.net.URL
 import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
+import no.nav.sokos.pdl.proxy.pdl.security.Api
+import no.nav.sokos.pdl.proxy.pdl.security.PreAuthorizedApp
+import no.nav.sokos.pdl.proxy.util.httpClient
+import no.nav.sokos.pdl.proxy.util.jsonMapper
 
 private val logger = KotlinLogging.logger {}
 
-data class Configuration(
+data class PropertiesConfig(
     val useAuthentication: Boolean = readProperty("USE_AUTHENTICATION", default = "true") != "false",
     val azureAdServer: AzureAdServer = AzureAdServer(),
     val azureAdClint: AzureAdClient = AzureAdClient(),

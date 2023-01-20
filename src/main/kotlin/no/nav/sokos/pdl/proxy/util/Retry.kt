@@ -2,7 +2,7 @@ package no.nav.sokos.pdl.proxy.util
 
 import kotlinx.coroutines.delay
 
-suspend fun <T> retry (
+suspend fun <T> retry(
     numOfRetries: Int = 5,
     initialDelayMs: Long = 250,
     block: suspend () -> T,

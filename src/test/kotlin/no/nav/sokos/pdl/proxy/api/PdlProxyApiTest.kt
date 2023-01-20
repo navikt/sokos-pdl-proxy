@@ -7,6 +7,7 @@ import io.restassured.RestAssured
 import io.restassured.http.Header
 import java.net.URL
 import kotlin.random.Random
+import no.nav.sokos.pdl.proxy.ApplicationState
 import no.nav.sokos.pdl.proxy.TestServer
 import no.nav.sokos.pdl.proxy.api.model.PersonIdent
 import no.nav.sokos.pdl.proxy.pdl.PdlService
@@ -14,6 +15,7 @@ import no.nav.sokos.pdl.proxy.pdl.setupMockEngine
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.containsStringIgnoringCase
 import org.junit.jupiter.api.Test
+import toJson
 
 internal class PdlProxyApiTest {
     private val validationFilter = OpenApiValidationFilter("openapi/sokos-pdl-proxy-v1-swagger2.json")
@@ -33,7 +35,7 @@ internal class PdlProxyApiTest {
             .filter(validationFilter)
             .header(Header("Content-Type", "application/json"))
             .header(Header("Authorization", "Bearer dummytoken"))
-            .body(PersonIdent("ikke interessant").tilJson())
+            .body(PersonIdent("ikke interessant").toJson())
             .port(port)
             .post("/hent-person")
             .then()
@@ -55,7 +57,7 @@ internal class PdlProxyApiTest {
             .filter(validationFilter)
             .header(Header("Content-Type", "application/json"))
             .header(Header("Authorization", "Bearer dummytoken"))
-            .body(PersonIdent("ikke interessant").tilJson())
+            .body(PersonIdent("ikke interessant").toJson())
             .port(port)
             .post("/hent-person")
             .then()
@@ -77,7 +79,7 @@ internal class PdlProxyApiTest {
             .filter(validationFilter)
             .header(Header("Content-Type", "application/json"))
             .header(Header("Authorization", "Bearer dummytoken"))
-            .body(PersonIdent("ikke interessant").tilJson())
+            .body(PersonIdent("ikke interessant").toJson())
             .port(port)
             .post("/hent-person")
             .then()
@@ -102,7 +104,7 @@ internal class PdlProxyApiTest {
             .filter(validationFilter)
             .header(Header("Content-Type", "application/json"))
             .header(Header("Authorization", "Bearer dummytoken"))
-            .body(PersonIdent("ikke interessant").tilJson())
+            .body(PersonIdent("ikke interessant").toJson())
             .port(port)
             .post("/hent-person")
             .then()
@@ -127,7 +129,7 @@ internal class PdlProxyApiTest {
             .filter(validationFilter)
             .header(Header("Content-Type", "application/json"))
             .header(Header("Authorization", "Bearer dummytoken"))
-            .body(PersonIdent("ikke interessant").tilJson())
+            .body(PersonIdent("ikke interessant").toJson())
             .port(port)
             .post("/hent-person")
             .then()
@@ -152,7 +154,7 @@ internal class PdlProxyApiTest {
             .filter(validationFilter)
             .header(Header("Content-Type", "application/json"))
             .header(Header("Authorization", "Bearer dummytoken"))
-            .body(PersonIdent("ikke interessant").tilJson())
+            .body(PersonIdent("ikke interessant").toJson())
             .port(port)
             .post("/hent-person")
             .then()
@@ -178,7 +180,7 @@ internal class PdlProxyApiTest {
             .filter(validationFilter)
             .header(Header("Content-Type", "application/json"))
             .header(Header("Authorization", "Bearer dummytoken"))
-            .body(PersonIdent("ikke interessant").tilJson())
+            .body(PersonIdent("ikke interessant").toJson())
             .port(port)
             .post("/hent-person")
             .then()
@@ -201,7 +203,7 @@ internal class PdlProxyApiTest {
         RestAssured.given()
             .header(Header("Content-Type", "application/json"))
             .header(Header("Authorization", "Bearer dummytoken"))
-            .body(PersonIdent("ikke interessant").tilJson())
+            .body(PersonIdent("ikke interessant").toJson())
             .port(port)
             .post("/hent-person")
             .then()
@@ -224,7 +226,7 @@ internal class PdlProxyApiTest {
             .filter(validationFilter)
             .header(Header("Content-Type", "application/json"))
             .header(Header("Authorization", "Bearer dummytoken"))
-            .body(PersonIdent("ikke interessant").tilJson())
+            .body(PersonIdent("ikke interessant").toJson())
             .port(port)
             .post("/hent-person")
             .then()
@@ -252,7 +254,7 @@ internal class PdlProxyApiTest {
             .filter(validationFilter)
             .header(Header("Content-Type", "application/json"))
             .header(Header("Authorization", "Bearer dummytoken"))
-            .body(PersonIdent("ikke interessant").tilJson())
+            .body(PersonIdent("ikke interessant").toJson())
             .port(port)
             .post("/hent-person")
             .then()
@@ -281,7 +283,7 @@ internal class PdlProxyApiTest {
             .header(Header("Content-Type", "application/json"))
             .header(Header("Authorization", "Bearer dummytoken"))
             .header(Header("x-correlation-id", "enId123"))
-            .body(PersonIdent("ikke interessant").tilJson())
+            .body(PersonIdent("ikke interessant").toJson())
             .port(port)
             .post("/hent-person")
             .then()
@@ -305,7 +307,7 @@ internal class PdlProxyApiTest {
         )
         val pdlService = PdlService(mockkGraphQlClient, pdlUrl, accessTokenClient = null)
 
-        TestServer(port, pdlService)
+        TestServer(port, pdlService, applicationState = ApplicationState())
     }
 
     private fun enTilfleldigPort() = Random.nextInt(32000, 42000)

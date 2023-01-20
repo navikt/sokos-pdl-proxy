@@ -159,7 +159,7 @@ tasks {
         reports.forEach { report -> report.required.value(false) }
     }
 
-    withType<GraphQLGenerateClientTask>().configureEach{
+    withType<GraphQLGenerateClientTask>().configureEach {
         packageName.set("no.nav.pdl")
         schemaFile.set(file("$projectDir/src/main/resources/graphql/schema.graphql"))
         queryFileDirectory.set(file("$projectDir/src/main/resources/graphql"))
