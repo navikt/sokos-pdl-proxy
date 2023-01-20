@@ -13,7 +13,6 @@ import no.nav.sokos.pdl.proxy.config.Configuration
 import no.nav.sokos.pdl.proxy.config.installMetrics
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 import no.nav.sokos.pdl.proxy.api.metricsApi
-import no.nav.sokos.pdl.proxy.pdl.security.ApiSecurityService
 import no.nav.sokos.pdl.proxy.util.ApplicationState
 
 
@@ -21,11 +20,10 @@ class HttpServer(
     applicationState: ApplicationState,
     configuration: Configuration,
     pdlService: PdlService,
-    apiSecurityService: ApiSecurityService,
     port: Int = 8080,
 ) {
     private val embeddedServer = embeddedServer(Netty, port) {
-        installSecurity(apiSecurityService, configuration, configuration.useAuthentication)
+        installSecurity(configuration, configuration.useAuthentication)
         installCommonFeatures()
         installMetrics()
         pdlProxyV1Api(pdlService, configuration.useAuthentication)

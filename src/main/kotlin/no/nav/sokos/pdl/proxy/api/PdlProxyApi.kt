@@ -11,9 +11,9 @@ import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
 import mu.KotlinLogging
 import no.nav.sokos.pdl.proxy.api.model.PersonIdent
+import no.nav.sokos.pdl.proxy.config.AUTHENTICATION_NAME
 import no.nav.sokos.pdl.proxy.config.autentiser
 import no.nav.sokos.pdl.proxy.pdl.PdlService
-import no.nav.sokos.pdl.proxy.pdl.security.Api
 
 private val logger = KotlinLogging.logger {}
 
@@ -22,7 +22,7 @@ fun Application.pdlProxyV1Api(
     useAuthentication: Boolean = true,
 ) {
     routing {
-        autentiser(useAuthentication, Api.PDLPROXY.name) {
+        autentiser(useAuthentication, AUTHENTICATION_NAME) {
             route("/api/pdl-proxy/v1") {
                 post("hent-person") {
                     logger.info { "Noen kalte hent-person" }

@@ -6,7 +6,6 @@ import no.nav.sokos.pdl.proxy.config.Configuration
 import no.nav.sokos.pdl.proxy.config.httpClient
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
-import no.nav.sokos.pdl.proxy.pdl.security.ApiSecurityService
 import no.nav.sokos.pdl.proxy.util.ApplicationState
 
 const val SECURE_LOGGER_NAME = "secureLogger"
@@ -25,11 +24,8 @@ fun main() {
             configuration.pdlUrl,
             accessTokenClient
         )
-    val apiSecurityService = ApiSecurityService(
-        configuration.azureAdServer.apiAllowLists,
-        configuration.azureAdServer.preAutorizedApps
-    )
-    val httpServer = HttpServer(applicationState, configuration, pdlService = pdlService, apiSecurityService)
+
+    val httpServer = HttpServer(applicationState, configuration, pdlService = pdlService)
 
     applicationState.ready = true
 
