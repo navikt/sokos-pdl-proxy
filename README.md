@@ -108,6 +108,7 @@ Vi bruker [nais-alerts](https://doc.nais.io/observability/alerts) for å sette o
 
 - [Prod-gcp](https://sokos-pdl-proxy.intern.nav.no/person-proxy/api/v1/docs/#/)
 - [Dev-gcp](https://sokos-pdl-proxy.dev.intern.nav.no/person-proxy/api/v1/docs/#/)
+- [Q1-gcp](https://sokos-pdl-proxy-q1.dev.intern.nav.no/person-proxy/api/v1/docs/#/)
 - [Lokalt](http://0.0.0.0:8080/person-proxy/api/v1/docs/)
 
 # 8. Henvendelser
