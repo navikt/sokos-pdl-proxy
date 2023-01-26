@@ -5,6 +5,9 @@ import com.expediagroup.graphql.client.types.GraphQLClientError
 import com.expediagroup.graphql.client.types.GraphQLClientResponse
 import io.ktor.client.request.header
 import io.ktor.client.request.url
+import io.micrometer.core.instrument.Counter
+import io.micrometer.core.instrument.MeterRegistry
+import io.micrometer.prometheus.PrometheusMeterRegistry
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import no.nav.pdl.HentIdenter
@@ -24,13 +27,16 @@ class PdlService(
     private val graphQlClient: GraphQLKtorClient,
     private val pdlUrl: String,
     private val accessTokenClient: AccessTokenClient?,
+    private val allNamesCounter: Counter,
+    private val fregNamesCounter: Counter,
+    private val pdlNamesCounter: Counter
 ) {
 
     fun hentPersonDetaljer(ident: String): PersonDetaljer {
         val identer = hentIdenterForPerson(ident).getOrThrow()
         val person = hentPerson(ident).getOrThrow()
 
-        return PersonDetaljer.fra(identer, person)
+        return PersonDetaljer.fra(identer, person, allNamesCounter, fregNamesCounter, pdlNamesCounter)
     }
 
     fun hentPerson(ident: String): Result<Person?> {

@@ -1,5 +1,6 @@
 package no.nav.sokos.pdl.proxy.api.model
 
+import io.micrometer.core.instrument.Counter
 import no.nav.pdl.hentperson.*
 import java.text.SimpleDateFormat
 
@@ -14,8 +15,14 @@ data class PersonDetaljer(
     val oppholdsadresse: List<Oppholdsadresse>,
 ) {
     companion object {
-        fun fra(identer: List<Ident>, person: Person?): PersonDetaljer {
+        fun fra(
+            identer: List<Ident>,
+            person: Person?,
+            allNamesCounter: Counter,
+            fregNamesCounter: Counter,
+            pdlNamesCounter: Counter): PersonDetaljer {
             if (person?.navn?.size == 1) {
+
                 return PersonDetaljer(
                     identer,
                     person.navn.firstOrNull()?.fornavn,
@@ -28,10 +35,13 @@ data class PersonDetaljer(
                 )
             }
 
+
             val navnFraPdlKilde : Navn? = person?.navn?.filter { navn -> navn.metadata.master.equals(NavnKilder.PDL.toString(), ignoreCase = true) }?.firstOrNull()
             val navnFraFregKilde: Navn? = person?.navn?.filter { navn -> navn.metadata.master.equals(NavnKilder.FREG.toString(), ignoreCase = true) }?.firstOrNull()
+            allNamesCounter.increment()
 
             if (null == navnFraPdlKilde?.gyldigFraOgMed || null == navnFraFregKilde?.gyldigFraOgMed) {
+                pdlNamesCounter.increment()
                 return PersonDetaljer(
                     identer,
                     navnFraPdlKilde?.fornavn,
@@ -47,6 +57,7 @@ data class PersonDetaljer(
 
             when {
                 dateComparison > 0 -> {
+                    pdlNamesCounter.increment()
                     return PersonDetaljer(
                         identer,
                         navnFraPdlKilde.fornavn,
@@ -60,6 +71,7 @@ data class PersonDetaljer(
                 }
 
                 dateComparison < 0 -> {
+                    fregNamesCounter.increment()
                     return PersonDetaljer(
                         identer,
                         navnFraFregKilde.fornavn,
@@ -73,6 +85,7 @@ data class PersonDetaljer(
                 }
 
                 else -> {
+                    pdlNamesCounter.increment()
                     return PersonDetaljer(
                         identer,
                         navnFraPdlKilde.fornavn,
