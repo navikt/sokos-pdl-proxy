@@ -3,12 +3,14 @@ package no.nav.sokos.pdl.proxy.api
 import com.atlassian.oai.validator.restassured.OpenApiValidationFilter
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import io.ktor.http.HttpStatusCode
+import io.prometheus.client.Counter
 import io.restassured.RestAssured
 import io.restassured.http.Header
 import java.net.URL
 import kotlin.random.Random
 import no.nav.sokos.pdl.proxy.TestServer
 import no.nav.sokos.pdl.proxy.api.model.PersonIdent
+import no.nav.sokos.pdl.proxy.metrics.Metrics
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 import no.nav.sokos.pdl.proxy.pdl.setupMockEngine
 import org.hamcrest.CoreMatchers.containsString
@@ -339,6 +341,19 @@ internal class PdlProxyApiTest {
         hentPersonResponsFilnavn: String?,
         httpStatusCode: HttpStatusCode = HttpStatusCode.OK
     ) {
+        val allNamesCounter: io.micrometer.core.instrument.Counter =  io.micrometer.core.instrument.Counter.builder("pdl.person")
+            .tag("name", "ALL")
+            .description("The number of persons having two active names")
+            .register(Metrics.prometheusRegistry);
+        val fregNamesCounter: io.micrometer.core.instrument.Counter =  io.micrometer.core.instrument.Counter.builder("pdl.person")
+            .tag("name", "FREG")
+            .description("The number of person name from FREG in use")
+            .register(Metrics.prometheusRegistry);
+        val pdlNamesCounter: io.micrometer.core.instrument.Counter = io.micrometer.core.instrument.Counter.builder("pdl.person")
+            .tag("name", "PDL")
+            .description("The number of person name from PDL in use")
+            .register(Metrics.prometheusRegistry);
+
         val mockkGraphQlClient = GraphQLKtorClient(
             URL(pdlUrl),
             setupMockEngine(
@@ -347,7 +362,8 @@ internal class PdlProxyApiTest {
                 httpStatusCode
             )
         )
-        val pdlService = PdlService(mockkGraphQlClient, pdlUrl, accessTokenClient = null)
+
+        val pdlService = PdlService(mockkGraphQlClient, pdlUrl, accessTokenClient = null, allNamesCounter, fregNamesCounter, pdlNamesCounter)
 
         TestServer(port, pdlService)
     }

@@ -20,12 +20,25 @@ import java.net.URL
 import no.nav.pdl.hentperson.PostadresseIFrittFormat
 import no.nav.sokos.pdl.proxy.api.model.Ident
 import no.nav.sokos.pdl.proxy.exception.PdlApiException
+import no.nav.sokos.pdl.proxy.metrics.Metrics
 import org.junit.jupiter.api.Test
 import resourceToString
 
 private const val pdlUrl = "http://0.0.0.0"
 
 internal class PdlServiceTest {
+    val allNamesCounter: io.micrometer.core.instrument.Counter =  io.micrometer.core.instrument.Counter.builder("pdl.person")
+        .tag("name", "ALL")
+        .description("The number of persons having two active names")
+        .register(Metrics.prometheusRegistry);
+    val fregNamesCounter: io.micrometer.core.instrument.Counter =  io.micrometer.core.instrument.Counter.builder("pdl.person")
+        .tag("name", "FREG")
+        .description("The number of person name from FREG in use")
+        .register(Metrics.prometheusRegistry);
+    val pdlNamesCounter: io.micrometer.core.instrument.Counter = io.micrometer.core.instrument.Counter.builder("pdl.person")
+        .tag("name", "PDL")
+        .description("The number of person name from PDL in use")
+        .register(Metrics.prometheusRegistry);
     @Test
     fun `Vellykket hent av en persons identer, navn og adresser fra Pdl`() {
         assertThat(
@@ -39,7 +52,10 @@ internal class PdlServiceTest {
                     )
                 ),
                 pdlUrl,
-                accessTokenClient = null
+                accessTokenClient = null,
+                allNamesCounter,
+                fregNamesCounter,
+                pdlNamesCounter
             )
                 .hentPersonDetaljer("22334455667")
         )
@@ -68,7 +84,10 @@ internal class PdlServiceTest {
                     "hentPerson_fant_ikke_person_response.json"
                 ),
                 pdlUrl,
-                accessTokenClient = null
+                accessTokenClient = null,
+                allNamesCounter,
+                fregNamesCounter,
+                pdlNamesCounter
             )
                 .hentPersonDetaljer("22334455667")
         }
@@ -89,7 +108,10 @@ internal class PdlServiceTest {
                     "hentPerson_ikke_authentisert_response.json"
                 ),
                 pdlUrl,
-                accessTokenClient = null
+                accessTokenClient = null,
+                allNamesCounter,
+                fregNamesCounter,
+                pdlNamesCounter
             )
                 .hentPersonDetaljer("22334455667")
         }
