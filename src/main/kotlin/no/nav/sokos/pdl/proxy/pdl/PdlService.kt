@@ -26,17 +26,14 @@ private val secureLogger = KotlinLogging.logger(SECURE_LOGGER_NAME)
 class PdlService(
     private val graphQlClient: GraphQLKtorClient,
     private val pdlUrl: String,
-    private val accessTokenClient: AccessTokenClient?,
-    private val allNamesCounter: Counter,
-    private val fregNamesCounter: Counter,
-    private val pdlNamesCounter: Counter
+    private val accessTokenClient: AccessTokenClient?
 ) {
 
     fun hentPersonDetaljer(ident: String): PersonDetaljer {
         val identer = hentIdenterForPerson(ident).getOrThrow()
         val person = hentPerson(ident).getOrThrow()
 
-        return PersonDetaljer.fra(identer, person, allNamesCounter, fregNamesCounter, pdlNamesCounter)
+        return PersonDetaljer.fra(identer, person)
     }
 
     fun hentPerson(ident: String): Result<Person?> {

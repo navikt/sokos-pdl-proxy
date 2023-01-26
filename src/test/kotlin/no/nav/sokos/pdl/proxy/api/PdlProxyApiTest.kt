@@ -341,19 +341,6 @@ internal class PdlProxyApiTest {
         hentPersonResponsFilnavn: String?,
         httpStatusCode: HttpStatusCode = HttpStatusCode.OK
     ) {
-        val allNamesCounter: io.micrometer.core.instrument.Counter =  io.micrometer.core.instrument.Counter.builder("pdl.person")
-            .tag("name", "ALL")
-            .description("The number of persons having two active names")
-            .register(Metrics.prometheusRegistry);
-        val fregNamesCounter: io.micrometer.core.instrument.Counter =  io.micrometer.core.instrument.Counter.builder("pdl.person")
-            .tag("name", "FREG")
-            .description("The number of person name from FREG in use")
-            .register(Metrics.prometheusRegistry);
-        val pdlNamesCounter: io.micrometer.core.instrument.Counter = io.micrometer.core.instrument.Counter.builder("pdl.person")
-            .tag("name", "PDL")
-            .description("The number of person name from PDL in use")
-            .register(Metrics.prometheusRegistry);
-
         val mockkGraphQlClient = GraphQLKtorClient(
             URL(pdlUrl),
             setupMockEngine(
@@ -363,7 +350,7 @@ internal class PdlProxyApiTest {
             )
         )
 
-        val pdlService = PdlService(mockkGraphQlClient, pdlUrl, accessTokenClient = null, allNamesCounter, fregNamesCounter, pdlNamesCounter)
+        val pdlService = PdlService(mockkGraphQlClient, pdlUrl, accessTokenClient = null)
 
         TestServer(port, pdlService)
     }

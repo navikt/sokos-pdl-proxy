@@ -19,19 +19,6 @@ const val SECURE_LOGGER_NAME = "secureLogger"
 fun main() {
     val applicationState = ApplicationState()
     val configuration = Configuration()
-    val prometheusMeterRegistry: PrometheusMeterRegistry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
-    val allNamesCounter: Counter =  Counter.builder("pdl.person")
-        .tag("name", "ALL")
-        .description("The number of persons having two active names")
-        .register(prometheusMeterRegistry);
-    val fregNamesCounter: Counter =  Counter.builder("pdl.person")
-        .tag("name", "FREG")
-        .description("The number of person name from FREG in use")
-        .register(prometheusMeterRegistry);
-    val pdlNamesCounter: Counter = Counter.builder("pdl.person")
-        .tag("name", "PDL")
-        .description("The number of person name from PDL in use")
-        .register(prometheusMeterRegistry);
     val accessTokenClient =
         if (configuration.useAuthentication) AccessTokenClient(
             configuration.azureAdClint,
@@ -41,10 +28,7 @@ fun main() {
         PdlService(
             GraphQLKtorClient(URL(configuration.pdlUrl), httpClient),
             configuration.pdlUrl,
-            accessTokenClient,
-            allNamesCounter,
-            fregNamesCounter,
-            pdlNamesCounter
+            accessTokenClient
         )
     val apiSecurityService = ApiSecurityService(
         configuration.azureAdServer.apiAllowLists,

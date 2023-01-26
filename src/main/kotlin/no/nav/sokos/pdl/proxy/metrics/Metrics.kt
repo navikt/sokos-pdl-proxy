@@ -21,4 +21,22 @@ object Metrics {
         .help("app state ready changed to false")
         .register(prometheusRegistry.prometheusRegistry)
 
+    var allNamesCounter: Counter = Counter.build()
+        .namespace(NAMESPACE)
+        .name("count_to_aktivt_navn_personer")
+        .help("The number of persons having two active names")
+        .register(prometheusRegistry.prometheusRegistry)
+
+    var fregNamesCounter: Counter = Counter.build()
+        .namespace(NAMESPACE)
+        .name("count_to_aktivt_navn_personer_freg_ibruk")
+        .help("The number of persons using FREG name and having two active names\"")
+        .register(prometheusRegistry.prometheusRegistry)
+
+    var pdlNamesCounter: Counter = Counter.build()
+        .namespace(NAMESPACE)
+        .name("count_to_aktivt_navn_personer_pdl_ibruk")
+        .help("The number of persons using PDL name and having two active names")
+        .register(prometheusRegistry.prometheusRegistry)
+
 }
