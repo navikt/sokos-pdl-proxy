@@ -46,7 +46,7 @@ jobs:
 
   deploy-dev-q1-gcp:
     name: Deploy dev-q1
-    uses: .github/workflows/manual-deploy-dev.yaml
+    uses: ./.github/workflows/manual-deploy-dev.yaml
     needs: [ bygg, deploy-dev-gcp ]
     runs-on: ubuntu-latest
     steps:
