@@ -3,14 +3,13 @@ package no.nav.sokos.pdl.proxy.api
 import com.atlassian.oai.validator.restassured.OpenApiValidationFilter
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import io.ktor.http.HttpStatusCode
-import io.prometheus.client.Counter
 import io.restassured.RestAssured
 import io.restassured.http.Header
+import no.nav.pdl.hentperson.Navn
 import java.net.URL
 import kotlin.random.Random
 import no.nav.sokos.pdl.proxy.TestServer
 import no.nav.sokos.pdl.proxy.api.model.PersonIdent
-import no.nav.sokos.pdl.proxy.metrics.Metrics
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 import no.nav.sokos.pdl.proxy.pdl.setupMockEngine
 import org.hamcrest.CoreMatchers.containsString
@@ -72,7 +71,7 @@ internal class PdlProxyApiTest {
         enTestserverMedResponsFraPDL(
             port,
             "hentIdenter_success_response.json",
-            "hentPerson_success_response_med_flere_navn_uten_gyldigDato.json"
+            "hentPerson_success_response_med_flere_aktiv_navn_uten_gyldigDato_både_for_FREG_og_PDL.json"
         )
 
         RestAssured.given()
@@ -85,6 +84,7 @@ internal class PdlProxyApiTest {
             .then()
             .assertThat()
             .statusCode(200)
+            .extract().path<List<Navn>>("navn")
     }
 
     @Test

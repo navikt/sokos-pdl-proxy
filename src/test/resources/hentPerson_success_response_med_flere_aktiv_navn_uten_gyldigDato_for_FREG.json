@@ -3,10 +3,10 @@
     "hentPerson": {
       "navn": [
         {
-          "fornavn": "yjeky",
-          "mellomnavn": null,
-          "etternavn": "zårodPDL-TEST",
-          "forkortetNavn": "fæpuv åsu",
+          "fornavn": "navn1",
+          "mellomnavn": "Kilde1",
+          "etternavn": "FREG",
+          "forkortetNavn": "fæpuv åsu FREG",
           "gyldigFraOgMed": null,
           "metadata": {
             "opplysningsId": "60ea63db-0d7d-40cc-bd64-2a1a81e6d4ee",
@@ -15,10 +15,10 @@
           }
         },
         {
-          "fornavn": "yjeky",
-          "mellomnavn": null,
-          "etternavn": "zårodPDL-TEST",
-          "forkortetNavn": "fæpuv åsu",
+          "fornavn": "navn2",
+          "mellomnavn": "kilde2",
+          "etternavn": "PDL",
+          "forkortetNavn": "fæpuv åsu PDL",
           "gyldigFraOgMed": "2023-01-18",
           "metadata": {
             "opplysningsId": "5mrr63db-0d7d-40cc-bd64-2a1a81e6m5rr",

@@ -61,6 +61,170 @@ internal class PdlServiceTest {
     }
 
     @Test
+    fun `Vellykket hent av en persons med to navn fra Pdl og FREG med FRED navn dato etter PDL navn dato`() {
+        assertThat(
+            PdlService(
+                GraphQLKtorClient(
+                    URL(pdlUrl),
+                    setupMockEngine(
+                        "hentIdenter_success_response.json",
+                        "hentPerson_med_flere_aktive_navn_FREG_dato_etter_PDL_success_response.json",
+                        HttpStatusCode.OK
+                    )
+                ),
+                pdlUrl,
+                accessTokenClient = null
+            )
+                .hentPersonDetaljer("22334455667")
+        )
+            .isNotNull()
+            .all {
+                transform { it.identer.map(Ident::ident) }
+                    .containsExactlyInAnyOrder("2804958208728", "24117920441")
+                transform { it.fornavn }
+                    .isNotNull()
+                    .isEqualTo("Kvart", true)
+                transform { it.mellomnavn }
+                    .isNotNull()
+                    .isEqualTo("Smiskende",true)
+                transform { it.etternavn }
+                    .isNotNull()
+                    .isEqualTo("Direktør",true)
+            }
+    }
+
+    @Test
+    fun `Vellykket hent av en persons med to navn fra Pdl og FREG med PDL navn dato etter FREG navn dato`() {
+        assertThat(
+            PdlService(
+                GraphQLKtorClient(
+                    URL(pdlUrl),
+                    setupMockEngine(
+                        "hentIdenter_success_response.json",
+                        "hentPerson_med_flere_aktive_navn_PDL_dato_etter_FREG_success_response.json",
+                        HttpStatusCode.OK
+                    )
+                ),
+                pdlUrl,
+                accessTokenClient = null
+            )
+                .hentPersonDetaljer("22334455667")
+        )
+            .isNotNull()
+            .all {
+                transform { it.identer.map(Ident::ident) }
+                    .containsExactlyInAnyOrder("2804958208728", "24117920441")
+                transform { it.fornavn }
+                    .isNotNull()
+                    .isEqualTo("Öm", true)
+                transform { it.mellomnavn }
+                    .isNotNull()
+                    .isEqualTo("Levende",true)
+                transform { it.etternavn }
+                    .isNotNull()
+                    .isEqualTo("Mengde",true)
+            }
+    }
+
+    @Test
+    fun `Vellykket hent av en persons med to aktivt navn fra Pdl og FREG uten gyldig dato for navn fra både FREG og PDL`() {
+        assertThat(
+            PdlService(
+                GraphQLKtorClient(
+                    URL(pdlUrl),
+                    setupMockEngine(
+                        "hentIdenter_success_response.json",
+                        "hentPerson_success_response_med_flere_aktiv_navn_uten_gyldigDato_både_for_FREG_og_PDL.json",
+                        HttpStatusCode.OK
+                    )
+                ),
+                pdlUrl,
+                accessTokenClient = null
+            )
+                .hentPersonDetaljer("22334455667")
+        )
+            .isNotNull()
+            .all {
+                transform { it.identer.map(Ident::ident) }
+                    .containsExactlyInAnyOrder("2804958208728", "24117920441")
+                transform { it.fornavn }
+                    .isNotNull()
+                    .isEqualTo("navn2", true)
+                transform { it.mellomnavn }
+                    .isNotNull()
+                    .isEqualTo("kilde2",true)
+                transform { it.etternavn }
+                    .isNotNull()
+                    .isEqualTo("PDL",true)
+            }
+    }
+    @Test
+    fun `Vellykket hent av en persons med to aktivt navn fra Pdl og FREG uten gyldig dato for navn fra FREG`() {
+        assertThat(
+            PdlService(
+                GraphQLKtorClient(
+                    URL(pdlUrl),
+                    setupMockEngine(
+                        "hentIdenter_success_response.json",
+                        "hentPerson_success_response_med_flere_aktiv_navn_uten_gyldigDato_for_FREG.json",
+                        HttpStatusCode.OK
+                    )
+                ),
+                pdlUrl,
+                accessTokenClient = null
+            )
+                .hentPersonDetaljer("22334455667")
+        )
+            .isNotNull()
+            .all {
+                transform { it.identer.map(Ident::ident) }
+                    .containsExactlyInAnyOrder("2804958208728", "24117920441")
+                transform { it.fornavn }
+                    .isNotNull()
+                    .isEqualTo("navn2", true)
+                transform { it.mellomnavn }
+                    .isNotNull()
+                    .isEqualTo("kilde2",true)
+                transform { it.etternavn }
+                    .isNotNull()
+                    .isEqualTo("PDL",true)
+            }
+    }
+
+    @Test
+    fun `Vellykket hent av en persons med to aktivt navn fra Pdl og FREG uten gyldig dato for navn fra PDL`() {
+        assertThat(
+            PdlService(
+                GraphQLKtorClient(
+                    URL(pdlUrl),
+                    setupMockEngine(
+                        "hentIdenter_success_response.json",
+                        "hentPerson_success_response_med_flere_aktiv_navn_uten_gyldigDato_for_PDL.json",
+                        HttpStatusCode.OK
+                    )
+                ),
+                pdlUrl,
+                accessTokenClient = null
+            )
+                .hentPersonDetaljer("22334455667")
+        )
+            .isNotNull()
+            .all {
+                transform { it.identer.map(Ident::ident) }
+                    .containsExactlyInAnyOrder("2804958208728", "24117920441")
+                transform { it.fornavn }
+                    .isNotNull()
+                    .isEqualTo("navn2", true)
+                transform { it.mellomnavn }
+                    .isNotNull()
+                    .isEqualTo("kilde2",true)
+                transform { it.etternavn }
+                    .isNotNull()
+                    .isEqualTo("PDL",true)
+            }
+    }
+
+    @Test
     fun `Finnes ikke person identer fra Pdl`() {
         assertThat {
             PdlService(
