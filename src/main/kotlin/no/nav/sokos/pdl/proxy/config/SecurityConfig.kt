@@ -1,69 +1,88 @@
 package no.nav.sokos.pdl.proxy.config
 
+import com.auth0.jwk.JwkProvider
+import com.auth0.jwk.JwkProviderBuilder
+import com.fasterxml.jackson.annotation.JsonProperty
+import io.ktor.client.call.body
+import io.ktor.client.engine.ProxyBuilder
+import io.ktor.client.engine.http
+import io.ktor.client.request.get
 import io.ktor.server.application.Application
-import io.ktor.server.application.install
-import io.ktor.server.auth.Authentication
-import io.ktor.server.auth.AuthenticationConfig
-import io.ktor.server.auth.authenticate
-import io.ktor.server.auth.jwt.JWTAuthenticationProvider
+import io.ktor.server.auth.authentication
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
-import io.ktor.server.routing.Route
+import java.net.URL
+import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
-import no.nav.sokos.pdl.proxy.pdl.security.Api
-import no.nav.sokos.pdl.proxy.pdl.security.ApiSecurityService
+import no.nav.sokos.pdl.proxy.util.httpClient
 
 private val logger = KotlinLogging.logger {}
+const val AUTHENTICATION_NAME = "azureAd"
 
 fun Application.securityConfig(
-    apiSecurityService: ApiSecurityService,
     propertiesConfig: PropertiesConfig,
     useAuthentication: Boolean = true,
 ) {
     if (useAuthentication) {
         logger.info("Running with authentication")
-        install(Authentication) {
-            apiJwt(apiSecurityService, propertiesConfig)
-            jwt { azureAuth(propertiesConfig, apiSecurityService) }
+        val openIdMetadata: OpenIdMetadata = wellKnowConfig(propertiesConfig.azureAdServer.authorityEndpoint)
+        val jwkProvider = cachedJwkProvider(openIdMetadata.jwksUri)
+        authentication {
+            jwt(AUTHENTICATION_NAME) {
+                realm = propertiesConfig.appName
+                verifier(
+                    jwkProvider = jwkProvider,
+                    issuer = openIdMetadata.issuer
+                )
+                validate { credential ->
+                    try {
+                        requireNotNull(credential.payload.audience) {
+                            logger.info("Auth: Missing audience in token")
+                            "Auth: Missing audience in token"
+                        }
+                        require(credential.payload.audience.contains(propertiesConfig.azureAdServer.clientId)) {
+                            logger.info("Auth: Valid audience not found in claims")
+                            "Auth: Valid audience not found in claims"
+                        }
+                        JWTPrincipal(credential.payload)
+                    } catch (e: Exception) {
+                        logger.warn(e) { "Client authentication failed" }
+                        null
+                    }
+                }
+            }
         }
+
+
     } else logger.warn("Running WITHOUT authentication!")
 }
 
-fun AuthenticationConfig.apiJwt(apiSecurityService: ApiSecurityService, propertiesConfig: PropertiesConfig) =
-    Api.values().forEach { api -> jwt(api.name) { azureAuth(propertiesConfig, apiSecurityService, api) } }
+private fun cachedJwkProvider(jwksUri: String): JwkProvider {
+    val jwkProviderBuilder = JwkProviderBuilder(URL(jwksUri))
+    System.getenv("HTTP_PROXY")?.let {
+        jwkProviderBuilder.proxied(ProxyBuilder.http(it))
+    }
 
-fun Route.autentiser(brukAutentisering: Boolean, authenticationProviderId: String? = null, block: Route.() -> Unit) {
-    if (brukAutentisering) authenticate(authenticationProviderId) { block() } else block()
+    return jwkProviderBuilder
+        .cached(10, 24, TimeUnit.HOURS) // cache up to 10 JWKs for 24 hours
+        .rateLimited(
+            10,
+            1,
+            TimeUnit.MINUTES
+        ) // if not cached, only allow max 10 different keys per minute to be fetched from external provider
+        .build()
 }
 
-private fun JWTAuthenticationProvider.Config.azureAuth(
-    propertiesConfig: PropertiesConfig,
-    apiSecurityService: ApiSecurityService,
-    api: Api? = null,
-) {
-    verifier(propertiesConfig.azureAdServer.jwkProvider, propertiesConfig.azureAdServer.openIdConfiguration.issuer)
-    realm = propertiesConfig.appName
-    validate { credentials ->
-        try {
-            requireNotNull(credentials.payload.audience) {
-                logger.info("Auth: Missing audience in token")
-                "Auth: Missing audience in token"
-            }
-            require(credentials.payload.audience.contains(propertiesConfig.azureAdServer.clientId)) {
-                logger.info("Auth: Valid audience not found in claims")
-                "Auth: Valid audience not found in claims"
-            }
-            if (api != null) {
-                val azp = credentials.payload.getClaim("azp").asString()
-                check(apiSecurityService.verifyAccessToApi(azp, api)) {
-                    val client = apiSecurityService.getPreAuthorizedApp(azp)
-                    logger.warn("${client?.appName} har forsøkt å nå $api API. Tilgang nektet")
-                    "Auth: Client does not have access to API"
-                }
-            }
-            JWTPrincipal(credentials.payload)
-        } catch (e: Throwable) {
-            null
-        }
+data class OpenIdMetadata(
+    @JsonProperty("jwks_uri") val jwksUri: String,
+    @JsonProperty("issuer") val issuer: String,
+    @JsonProperty("token_endpoint") val tokenEndpoint: String,
+)
+
+private fun wellKnowConfig(wellKnownUrl: String): OpenIdMetadata {
+    val openIdMetadata: OpenIdMetadata by lazy {
+        runBlocking { httpClient.get(wellKnownUrl).body() }
     }
+    return openIdMetadata
 }

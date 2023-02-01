@@ -15,7 +15,6 @@ import no.nav.sokos.pdl.proxy.metrics.Metrics.appStateReadyFalse
 import no.nav.sokos.pdl.proxy.metrics.Metrics.appStateRunningFalse
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
-import no.nav.sokos.pdl.proxy.pdl.security.ApiSecurityService
 import no.nav.sokos.pdl.proxy.util.httpClient
 
 fun main() {
@@ -32,19 +31,14 @@ fun main() {
             propertiesConfig.pdlUrl,
             accessTokenClient
         )
-    val apiSecurityService = ApiSecurityService(
-        propertiesConfig.azureAdServer.apiAllowLists,
-        propertiesConfig.azureAdServer.preAutorizedApps
-    )
 
-    HttpServer(applicationState, propertiesConfig, pdlService = pdlService, apiSecurityService).start()
+    HttpServer(applicationState, propertiesConfig, pdlService = pdlService).start()
 }
 
 class HttpServer(
     private val applicationState: ApplicationState,
     private val propertiesConfig: PropertiesConfig,
     private val pdlService: PdlService,
-    private val apiSecurityService: ApiSecurityService,
     port: Int = 8080,
 ) {
 
@@ -56,7 +50,7 @@ class HttpServer(
 
     private val embeddedServer = embeddedServer(Netty, port) {
         commonConfig()
-        securityConfig(apiSecurityService, propertiesConfig, propertiesConfig.useAuthentication)
+        securityConfig(propertiesConfig, propertiesConfig.useAuthentication)
         routingConfig(applicationState, pdlService, propertiesConfig.useAuthentication)
     }
 

@@ -9,8 +9,7 @@
 * [5. Autentisering](#5-autentisering)
 * [6. Drift og støtte](#6-drift-og-støtte)
 * [7. Swagger](#7-swagger)
-* [8. Henvendelser](#7-henvendelser)
-
+* [8. Henvendelser](#8-henvendelser)
 ---
 
 # 1. Funksjonelle Krav
@@ -69,15 +68,12 @@ Applikasjonen bruker [AzureAD](https://docs.nais.io/security/auth/azure-ad/) aut
 ### Hente token
 
 1. Installer `vault` kommandolinje verktøy: https://github.com/navikt/utvikling/blob/main/docs/teknisk/Vault.md
-2. For å vise token skal vi installere jq:
-    - brew install jq (på mac)
-    - choco install jq for windows (install chocolatey før: https://community.chocolatey.org/packages/autocomplete)
-    - apt-get install jq (på ubuntu).
+2. Installer `jq` kommandolinje verktøy: https://github.com/stedolan/jq
 3. Gi rettighet for å kjøre scriptet `chmod 755 getToken.sh`
-4. Kjør scriptet:
-   ```
-   ./getToken.sh
-   ```
+4. Kjør scriptet [getToken.sh](getToken.sh)
+      ```
+      chmod 755 getToken.sh && ./getToken.sh
+      ```
 4. Skriv inn applikasjonsnavn du vil hente `client_id` og `client_secret` for
 
 # 6. Drift og støtte
@@ -98,10 +94,9 @@ som inneholder sensitive data logges til indeksen `tjenestekall`.
     * application:sokos-pdl-proxy AND envclass:q
 
 [sikker-utvikling/logging](https://sikkerhet.nav.no/docs/sikker-utvikling/logging) - Anbefales å lese
-
 - Filter for sikkerhet logs på https://logs.adeo.no
-    * bytte Change index pattern fra: logstash-* til: tjenestekall-*
-    * bruk application:sokos-pdl-proxy og bytte envclass mellom p og q som viser over.
+    * Bytte Change index pattern fra: logstash-* til: tjenestekall-*
+    * Bruk samme filter for dev og prod som er vist over
 
 ### Kubectl
 

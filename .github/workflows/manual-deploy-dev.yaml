@@ -1,4 +1,4 @@
-name: Manuell deploy til dev og q1
+name: Manuell deploy til dev
 
 on:
   workflow_dispatch:
@@ -55,15 +55,3 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: .nais/naiserator-dev.yaml
-
-  deploy-dev-q1-gcp:
-    name: Deploy dev-q1
-    needs: [ bygg, deploy-dev-gcp ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: nais/deploy/actions/deploy@v1
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-gcp
-          RESOURCE: .nais/naiserator-dev-q1.yaml

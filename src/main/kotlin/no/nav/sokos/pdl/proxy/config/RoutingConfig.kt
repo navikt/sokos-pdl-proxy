@@ -8,6 +8,8 @@ import no.nav.sokos.pdl.proxy.api.naisApi
 import no.nav.sokos.pdl.proxy.api.pdlProxyApi
 import no.nav.sokos.pdl.proxy.api.swaggerApi
 import no.nav.sokos.pdl.proxy.pdl.PdlService
+import io.ktor.server.auth.authenticate
+import io.ktor.server.routing.Route
 
 fun Application.routingConfig(
     applicationState: ApplicationState,
@@ -20,4 +22,8 @@ fun Application.routingConfig(
         swaggerApi()
         pdlProxyApi(pdlService, useAuthentication)
     }
+}
+
+fun Route.autentiser(brukAutentisering: Boolean, authenticationProviderId: String? = null, block: Route.() -> Unit) {
+    if (brukAutentisering) authenticate(authenticationProviderId) { block() } else block()
 }
