@@ -4,7 +4,7 @@ plugins {
     id 'org.hidetake.swagger.generator' version '2.19.2'
     id 'com.expediagroup.graphql' version '6.3.0'
     id 'org.betterplugin.avro' version "0.19.2-SNAPSHOT"
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.7.10'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.10'
 }
 
 group = 'no.nav.sokos'
