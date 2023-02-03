@@ -69,10 +69,10 @@ Applikasjonen bruker [AzureAD](https://docs.nais.io/security/auth/azure-ad/) aut
 
 1. Installer `vault` kommandolinje verktøy: https://github.com/navikt/utvikling/blob/main/docs/teknisk/Vault.md
 2. Installer `jq` kommandolinje verktøy: https://github.com/stedolan/jq
-3. Gi rettighet for å kjøre scriptet `chmod 755 getToken.sh`
-4. Kjør scriptet [getToken.sh](getToken.sh)
+3. Gi rettighet for å kjøre scriptet `chmod 755 getAzureAdToken.sh`
+4. Kjør scriptet [getAzureAdToken.sh](getAzureAdToken.sh)
       ```
-      chmod 755 getToken.sh && ./getToken.sh
+      chmod 755 getAzureAdToken.sh && ./getAzureAdToken.sh
       ```
 4. Skriv inn applikasjonsnavn du vil hente `client_id` og `client_secret` for
 

@@ -6,8 +6,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 plugins {
-    kotlin("jvm") version "1.8.0"
-    kotlin("plugin.serialization") version "1.8.0"
+    kotlin("jvm") version "1.8.10"
+    kotlin("plugin.serialization") version "1.8.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("org.openapi.generator") version "6.2.1"
     id("com.expediagroup.graphql") version "6.3.0"
@@ -29,14 +29,14 @@ val logbackVersion = "1.4.5"
 val logstashVersion = "7.2"
 val jacksonVersion = "2.14.1"
 val prometheusVersion = "1.10.2"
-val kotlinLoggingVersion = "3.0.4"
+val kotlinLoggingVersion = "3.0.5"
 val junitVersion = "5.9.1"
 val mockkVersion = "1.13.3"
 val graphqlClientVersion = "6.3.3"
 val flywayVersion = "9.14.0"
 val avroVersion = "1.11.1"
 val restAssuredVersion = "5.3.0"
-val swaggerRequestValidatorVersion = "2.32.0"
+val swaggerRequestValidatorVersion = "2.33.1"
 val assertJvmVersion = "0.25"
 
 
