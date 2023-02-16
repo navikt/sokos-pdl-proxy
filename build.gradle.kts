@@ -96,7 +96,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("no.nav.sokos.pdl.proxy.BootstrapKt")
+    mainClass.set("no.nav.sokos.pdl.proxy.ApplicationKt")
 }
 
 sourceSets {
@@ -138,7 +138,7 @@ tasks {
         enabled = true
         archiveFileName.set("app.jar")
         manifest {
-            attributes["Main-Class"] = "no.nav.sokos.pdl.proxy.BootstrapKt"
+            attributes["Main-Class"] = "no.nav.sokos.pdl.proxy.ApplicationKt"
         }
     }
 

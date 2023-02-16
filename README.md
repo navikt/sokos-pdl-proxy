@@ -36,7 +36,7 @@ API tilbyr følgende:
 
 ### Lokal utvikling
 
-Opprett en run configuration for Bootstrap.kt og angi properties nedenfor som environment variabler
+Opprett en run configuration for Application.kt og angi properties nedenfor som environment variabler
 
 ```properties
 NAIS_APP_NAME=sokos-pdl-proxy;
