@@ -33,7 +33,7 @@ class PdlService(
         return PersonDetaljer.fra(identer, person)
     }
 
-    fun hentPerson(ident: String): Result<Person?> {
+    private fun hentPerson(ident: String): Result<Person?> {
         val respons: GraphQLClientResponse<HentPerson.Result> = runBlocking {
             val accessToken = accessTokenClient?.hentAccessToken()
             graphQlClient.execute(HentPerson(HentPerson.Variables(ident = ident))) {
