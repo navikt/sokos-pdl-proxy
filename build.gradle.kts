@@ -9,7 +9,7 @@ plugins {
     kotlin("jvm") version "1.8.10"
     kotlin("plugin.serialization") version "1.8.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("org.openapi.generator") version "6.2.1"
+    id("org.openapi.generator") version "6.4.0"
     id("com.expediagroup.graphql") version "6.3.0"
     id("org.betterplugin.avro") version "0.19.2-SNAPSHOT"
 
