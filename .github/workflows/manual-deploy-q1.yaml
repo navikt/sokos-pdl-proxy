@@ -46,7 +46,7 @@ jobs:
 
   deploy-dev-q1-gcp:
     name: Deploy dev-q1
-    needs: [ bygg, deploy-dev-gcp ]
+    needs: [ bygg ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

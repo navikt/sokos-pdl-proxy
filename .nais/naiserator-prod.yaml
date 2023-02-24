@@ -59,5 +59,3 @@ spec:
       value: https://pdl-api.prod-fss-pub.nais.io/graphql
     - name: USE_AUTHENTICATION
       value: "true"
-    - name: ALLOW_LIST_PDLPROXY
-      value: utbetalingsreskontro,oppdragz

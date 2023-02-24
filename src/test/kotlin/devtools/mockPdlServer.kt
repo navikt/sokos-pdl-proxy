@@ -10,7 +10,7 @@ import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
 
-fun main(){
+fun main() {
     embeddedServer(Netty, 9090) {
         routing {
             route("graphql") {
