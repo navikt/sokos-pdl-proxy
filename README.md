@@ -51,12 +51,6 @@ For å kjøre applikasjonen må du gjøre følgende:
   koden `"USE_AUTHENTICATION" to "true"` i
   filen [PropertiesConfig](src/main/kotlin/no/nav/sokos/pdl/proxy/config/PropertiesConfig.kt).
 
-
-
-### PDL proxy
-
-Start [mockPdlServer](src/test/kotlin/devtools/mockPdlServer.kt)
-
 # 3. Programvarearkitektur
 
 [System diagram](./dokumentasjon/system-diagram.md)
