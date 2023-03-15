@@ -1,5 +1,6 @@
 package no.nav.sokos.pdl.proxy
 
+import io.ktor.server.application.Application
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.engine.stop
@@ -19,25 +20,25 @@ import no.nav.sokos.pdl.proxy.util.httpClient
 
 fun main() {
     val applicationState = ApplicationState()
-    val propertiesConfig = PropertiesConfig()
+    val applicationConfiguration = PropertiesConfig.Configuration()
     val accessTokenClient =
-        if (propertiesConfig.useAuthentication) AccessTokenClient(
-            propertiesConfig.azureAdClint,
+        if (applicationConfiguration.useAuthentication) AccessTokenClient(
+            applicationConfiguration.azureAdClientConfig,
             httpClient
         ) else null
     val pdlService =
         PdlService(
-            GraphQLKtorClient(URL(propertiesConfig.pdlUrl), httpClient),
-            propertiesConfig.pdlUrl,
+            GraphQLKtorClient(URL(applicationConfiguration.pdlConfig.pdlUrl), httpClient),
+            applicationConfiguration.pdlConfig.pdlUrl,
             accessTokenClient
         )
 
-    HttpServer(applicationState, propertiesConfig, pdlService = pdlService).start()
+    HttpServer(applicationState, applicationConfiguration, pdlService).start()
 }
 
-class HttpServer(
+private class HttpServer(
     private val applicationState: ApplicationState,
-    private val propertiesConfig: PropertiesConfig,
+    private val applicationConfiguration: PropertiesConfig.Configuration,
     private val pdlService: PdlService,
     port: Int = 8080,
 ) {
@@ -48,11 +49,9 @@ class HttpServer(
         })
     }
 
-    private val embeddedServer = embeddedServer(Netty, port) {
-        commonConfig()
-        securityConfig(propertiesConfig, propertiesConfig.useAuthentication)
-        routingConfig(applicationState, pdlService, propertiesConfig.useAuthentication)
-    }
+    private val embeddedServer = embeddedServer(Netty, port, module = {
+        applicationModule(applicationConfiguration, applicationState, pdlService)
+    })
 
     fun start() {
         applicationState.running = true
@@ -75,4 +74,10 @@ class ApplicationState(
     var running: Boolean by Delegates.observable(ready) { _, _, newValue ->
         if (!newValue) appStateRunningFalse.inc()
     }
+}
+
+fun Application.applicationModule(applicationConfiguration: PropertiesConfig.Configuration, applicationState: ApplicationState, pdlService: PdlService) {
+    commonConfig()
+    securityConfig(applicationConfiguration.azureAdServerConfig, applicationConfiguration.useAuthentication)
+    routingConfig(applicationState, pdlService, applicationConfiguration.useAuthentication)
 }

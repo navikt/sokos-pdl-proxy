@@ -63,6 +63,7 @@ class PdlService(
     }
 
     private fun hentIdenterForPerson(ident: String): Result<List<Ident>> {
+        logger.info { "1 ::::::::::" }
         val respons: GraphQLClientResponse<HentIdenter.Result> = runBlocking {
             val accessToken = accessTokenClient?.hentAccessToken()
             graphQlClient.execute(HentIdenter(HentIdenter.Variables(ident = ident))) {
@@ -70,6 +71,7 @@ class PdlService(
                 header("Authorization", "Bearer $accessToken")
             }
         }
+        logger.info { "2 ::::::::::" }
 
         return respons.errors?.let { feilmeldingerFraPdl ->
             håndterFeilFraPdl(feilmeldingerFraPdl, ident)
