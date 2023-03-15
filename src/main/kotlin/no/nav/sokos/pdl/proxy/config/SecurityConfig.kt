@@ -8,7 +8,6 @@ import io.ktor.client.engine.ProxyBuilder
 import io.ktor.client.engine.http
 import io.ktor.client.request.get
 import io.ktor.server.application.Application
-import io.ktor.server.application.log
 import io.ktor.server.auth.authentication
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt

@@ -13,7 +13,6 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.Parameters
 import java.time.Instant
-import kotlin.math.log
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -33,7 +32,6 @@ class AccessTokenClient(
     @Volatile
     private var token: AccessToken = runBlocking { AccessToken(hentAccessTokenFraProvider()) }
     suspend fun hentAccessToken(): String {
-        logger.info { "HER DU INNE I ACCESSTOKENCLIENT klassen?? :::::::" }
         val omToMinutter = Instant.now().plusSeconds(120L)
         return mutex.withLock {
             when {
@@ -50,7 +48,6 @@ class AccessTokenClient(
 
     private suspend fun hentAccessTokenFraProvider(): AzureAccessToken =
         retry {
-            logger.info { "hentAccessTokenFraProvider :::::" }
             val response: HttpResponse = client.post(aadAccessTokenUrl) {
                 accept(ContentType.Application.Json)
                 method = HttpMethod.Post

@@ -31,6 +31,7 @@ val jacksonVersion = "2.14.1"
 val prometheusVersion = "1.10.2"
 val kotlinLoggingVersion = "3.0.5"
 val natpryceVersion = "1.6.10.0"
+val janionVersion = "3.1.9"
 val junitVersion = "5.9.1"
 val mockkVersion = "1.13.3"
 val graphqlClientVersion = "6.4.0"
@@ -74,6 +75,7 @@ dependencies {
 
     // Logging
     implementation("io.github.microutils:kotlin-logging-jvm:$kotlinLoggingVersion")
+    runtimeOnly("org.codehaus.janino:janino:$janionVersion")
     runtimeOnly("ch.qos.logback:logback-classic:$logbackVersion")
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:$logstashVersion")
 
