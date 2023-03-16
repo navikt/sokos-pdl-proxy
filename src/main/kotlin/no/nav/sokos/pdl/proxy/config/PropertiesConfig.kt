@@ -11,7 +11,7 @@ object PropertiesConfig {
 
     private val defaultProperties = ConfigurationMap(
         mapOf(
-            "NAIS_APP_NAME" to "sokos-pdl-proxy",
+            "NAIS_APP_NAME" to "sokos-pdl-proxy-q1",
             "NAIS_NAMESPACE" to "okonomi",
         )
     )
