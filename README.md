@@ -36,18 +36,20 @@ API tilbyr følgende:
 
 ### Lokal utvikling
 
-Opprett en run configuration for Application.kt og angi properties nedenfor som environment variabler
+NB! Du må ha [naisdevice](https://docs.nais.io/device/) kjørende på maskinen.
 
-```properties
-NAIS_APP_NAME=sokos-pdl-proxy;
-USE_AUTHENTICATION=false;
-PDL_URL=http://0.0.0.0:9090/graphql;
-LOG_APPENDER=CONSOLE
-```
+For å kjøre applikasjonen må du gjøre følgende:
 
-### PDL proxy
-
-Start [mockPdlServer](src/test/kotlin/devtools/mockPdlServer.kt)
+- Kjør scriptet [setupLocalEnvironment.sh](setupLocalEnvironment.sh)
+     ```
+     chmod 755 setupLocalEnvironment.sh && ./setupLocalEnvironment.sh
+     ```
+  Denne vil opprette [default.properties](defaults.properties) med alle environment variabler du trenger for å kjøre
+  applikasjonen som er definert
+  i [PropertiesConfig](src/main/kotlin/no/nav/sokos/pdl/proxy/config/PropertiesConfig.kt).
+  Her vil du også kunne f.eks endre om du ønsker slå på autentisering eller ikke i
+  koden `"USE_AUTHENTICATION" to "true"` i
+  filen [PropertiesConfig](src/main/kotlin/no/nav/sokos/pdl/proxy/config/PropertiesConfig.kt).
 
 # 3. Programvarearkitektur
 

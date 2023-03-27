@@ -1,5 +1,6 @@
 package no.nav.sokos.pdl.proxy.api
 
+import EmbeddedTestServer
 import com.atlassian.oai.validator.restassured.OpenApiValidationFilter
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import io.ktor.http.HttpStatusCode
@@ -8,7 +9,6 @@ import io.restassured.http.Header
 import java.net.URL
 import kotlin.random.Random
 import no.nav.sokos.pdl.proxy.ApplicationState
-import no.nav.sokos.pdl.proxy.TestServer
 import no.nav.sokos.pdl.proxy.api.model.PersonIdent
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 import no.nav.sokos.pdl.proxy.pdl.setupMockEngine
@@ -22,10 +22,10 @@ internal class PdlProxyApiTest {
     private val pdlUrl = "http://0.0.0.0"
 
     @Test
-    fun `Solskinnshistorie - klient kaller tjeneste med suksess som validerer ok mot swagger-kontrakten`() {
-        val port = enTilfleldigPort()
+    fun `Klient kaller tjeneste med suksess som validerer ok mot swagger-kontrakten`() {
+        val port = randomPort()
 
-        enTestserverMedResponsFraPDL(
+        testServerWithResponseFromPDL(
             port,
             "hentIdenter_success_response.json",
             "hentPerson_success_response.json"
@@ -45,9 +45,9 @@ internal class PdlProxyApiTest {
 
     @Test
     fun `Klient kaller begge tjenester med suksess, men ingen navn på person, skal også validerer ok mot swagger-kontrakten`() {
-        val port = enTilfleldigPort()
+        val port = randomPort()
 
-        enTestserverMedResponsFraPDL(
+        testServerWithResponseFromPDL(
             port,
             "hentIdenter_success_response.json",
             "hentPerson_tomt_navn_response.json"
@@ -67,9 +67,9 @@ internal class PdlProxyApiTest {
 
     @Test
     fun `Finner ikke data for hverken hentIdenter eller hentPerson, skal returnere 404 med feilmelding`() {
-        val port = enTilfleldigPort()
+        val port = randomPort()
 
-        enTestserverMedResponsFraPDL(
+        testServerWithResponseFromPDL(
             port,
             "hentIdenter_fant_ikke_person_response.json",
             "hentPerson_fant_ikke_person_response.json"
@@ -92,9 +92,9 @@ internal class PdlProxyApiTest {
 
     @Test
     fun `Finner ikke data for hentPerson, skal returnere 404 med feilmelding`() {
-        val port = enTilfleldigPort()
+        val port = randomPort()
 
-        enTestserverMedResponsFraPDL(
+        testServerWithResponseFromPDL(
             port,
             "hentIdenter_success_response.json",
             "hentPerson_fant_ikke_person_response.json"
@@ -117,9 +117,9 @@ internal class PdlProxyApiTest {
 
     @Test
     fun `Finner ikke data for hentIdenter, skal returnere 404 med feilmelding`() {
-        val port = enTilfleldigPort()
+        val port = randomPort()
 
-        enTestserverMedResponsFraPDL(
+        testServerWithResponseFromPDL(
             port,
             "hentIdenter_fant_ikke_person_response.json",
             "hentPerson_success_response.json"
@@ -142,9 +142,9 @@ internal class PdlProxyApiTest {
 
     @Test
     fun `ikke autentisert, skal returnere 500 med feilmelding`() {
-        val port = enTilfleldigPort()
+        val port = randomPort()
 
-        enTestserverMedResponsFraPDL(
+        testServerWithResponseFromPDL(
             port,
             "hentIdenter_ikke_authentisert_response.json",
             "hentPerson_success_response.json"
@@ -168,9 +168,9 @@ internal class PdlProxyApiTest {
 
     @Test
     fun `Andre feilkoder fra PDL skal returnere 500 med en beskrivende feilmelding`() {
-        val port = enTilfleldigPort()
+        val port = randomPort()
 
-        enTestserverMedResponsFraPDL(
+        testServerWithResponseFromPDL(
             port,
             "hentIdenter_annen_feilmelding_response.json",
             "hentPerson_success_response.json"
@@ -191,9 +191,9 @@ internal class PdlProxyApiTest {
 
     @Test
     fun `Teste når vi ikke får svar fra PDL, så skal det returneres 500 med en beskrivende feilmelding`() {
-        val port = enTilfleldigPort()
+        val port = randomPort()
 
-        enTestserverMedResponsFraPDL(
+        testServerWithResponseFromPDL(
             port,
             null,
             null,
@@ -214,9 +214,9 @@ internal class PdlProxyApiTest {
 
     @Test
     internal fun `For å begrense datamengde til stormaskin så tillattes maks 3 stk kontaktadresser, og api skal gi feil dersom dette overstiges`() {
-        val port = enTilfleldigPort()
+        val port = randomPort()
 
-        enTestserverMedResponsFraPDL(
+        testServerWithResponseFromPDL(
             port,
             "hentIdenter_success_response.json",
             "hentPerson_success_response_med_4_kontaktadresser.json"
@@ -242,9 +242,9 @@ internal class PdlProxyApiTest {
 
     @Test
     internal fun `For å begrense datamengde til stormaskin så tillattes maks 2 stk oppholdsadresse, og api skal gi feil dersom dette overstiges`() {
-        val port = enTilfleldigPort()
+        val port = randomPort()
 
-        enTestserverMedResponsFraPDL(
+        testServerWithResponseFromPDL(
             port,
             "hentIdenter_success_response.json",
             "hentPerson_success_response_med_3_oppholdsadresser.json"
@@ -270,9 +270,9 @@ internal class PdlProxyApiTest {
 
     @Test
     fun `x-correlation-id fra request skal følge med tilbake i repons`() {
-        val port = enTilfleldigPort()
+        val port = randomPort()
 
-        enTestserverMedResponsFraPDL(
+        testServerWithResponseFromPDL(
             port,
             "hentIdenter_success_response.json",
             "hentPerson_success_response.json"
@@ -291,7 +291,7 @@ internal class PdlProxyApiTest {
             .header("x-correlation-id", "enId123")
     }
 
-    private fun enTestserverMedResponsFraPDL(
+    private fun testServerWithResponseFromPDL(
         port: Int,
         hentIdenterResponsFilnavn: String?,
         hentPersonResponsFilnavn: String?,
@@ -307,8 +307,8 @@ internal class PdlProxyApiTest {
         )
         val pdlService = PdlService(mockkGraphQlClient, pdlUrl, accessTokenClient = null)
 
-        TestServer(port, pdlService, applicationState = ApplicationState())
+        EmbeddedTestServer(port, pdlService, applicationState = ApplicationState())
     }
 
-    private fun enTilfleldigPort() = Random.nextInt(32000, 42000)
+    private fun randomPort() = Random.nextInt(32000, 42000)
 }

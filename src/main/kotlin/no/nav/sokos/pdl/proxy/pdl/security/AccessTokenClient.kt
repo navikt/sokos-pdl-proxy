@@ -17,15 +17,15 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import mu.KotlinLogging
-import no.nav.sokos.pdl.proxy.config.PropertiesConfig
 import no.nav.sokos.pdl.proxy.util.retry
+import no.nav.sokos.pdl.proxy.config.PropertiesConfig.AzureAdClientConfig
 
 private val logger = KotlinLogging.logger {}
 
 class AccessTokenClient(
-    private val azureAd: PropertiesConfig.AzureAdClient,
+    private val azureAdClientConfig: AzureAdClientConfig,
     private val client: HttpClient,
-    private val aadAccessTokenUrl: String = "https://login.microsoftonline.com/${azureAd.tenant}/oauth2/v2.0/token"
+    private val aadAccessTokenUrl: String = "https://login.microsoftonline.com/${azureAdClientConfig.tenant}/oauth2/v2.0/token"
 ) {
     private val mutex = Mutex()
 
@@ -52,10 +52,10 @@ class AccessTokenClient(
                 accept(ContentType.Application.Json)
                 method = HttpMethod.Post
                 setBody(FormDataContent(Parameters.build {
-                    append("tenant", azureAd.tenant)
-                    append("client_id", azureAd.clientId)
-                    append("scope", "api://${azureAd.pdlClientId}/.default")
-                    append("client_secret", azureAd.clientSecret)
+                    append("tenant", azureAdClientConfig.tenant)
+                    append("client_id", azureAdClientConfig.clientId)
+                    append("scope", "api://${azureAdClientConfig.pdlClientId}/.default")
+                    append("client_secret", azureAdClientConfig.clientSecret)
                     append("grant_type", "client_credentials")
                 }))
             }

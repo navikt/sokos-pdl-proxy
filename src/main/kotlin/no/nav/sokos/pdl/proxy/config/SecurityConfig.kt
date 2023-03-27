@@ -16,21 +16,23 @@ import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import no.nav.sokos.pdl.proxy.util.httpClient
+import no.nav.sokos.pdl.proxy.config.PropertiesConfig.AzureAdServerConfig
 
 private val logger = KotlinLogging.logger {}
 const val AUTHENTICATION_NAME = "azureAd"
 
 fun Application.securityConfig(
-    propertiesConfig: PropertiesConfig,
-    useAuthentication: Boolean = true,
+    azureAdServerConfig: AzureAdServerConfig,
+    useAuthentication: Boolean = true
 ) {
+    logger.info("Use authentication: $useAuthentication")
     if (useAuthentication) {
-        logger.info("Running with authentication")
-        val openIdMetadata: OpenIdMetadata = wellKnowConfig(propertiesConfig.azureAdServer.authorityEndpoint)
+        val openIdMetadata: OpenIdMetadata = wellKnowConfig(azureAdServerConfig.authorityEndpoint)
         val jwkProvider = cachedJwkProvider(openIdMetadata.jwksUri)
+
         authentication {
             jwt(AUTHENTICATION_NAME) {
-                realm = propertiesConfig.appName
+                realm = PropertiesConfig.Configuration().naisAppName
                 verifier(
                     jwkProvider = jwkProvider,
                     issuer = openIdMetadata.issuer
@@ -41,7 +43,7 @@ fun Application.securityConfig(
                             logger.info("Auth: Missing audience in token")
                             "Auth: Missing audience in token"
                         }
-                        require(credential.payload.audience.contains(propertiesConfig.azureAdServer.clientId)) {
+                        require(credential.payload.audience.contains(azureAdServerConfig.clientId)) {
                             logger.info("Auth: Valid audience not found in claims")
                             "Auth: Valid audience not found in claims"
                         }
@@ -53,9 +55,7 @@ fun Application.securityConfig(
                 }
             }
         }
-
-
-    } else logger.warn("Running WITHOUT authentication!")
+    }
 }
 
 private fun cachedJwkProvider(jwksUri: String): JwkProvider {

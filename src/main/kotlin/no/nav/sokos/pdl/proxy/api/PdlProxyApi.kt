@@ -18,7 +18,7 @@ private val logger = KotlinLogging.logger {}
 
 fun Route.pdlProxyApi(
     pdlService: PdlService,
-    useAuthentication: Boolean = true,
+    useAuthentication: Boolean,
 ) {
     autentiser(useAuthentication, AUTHENTICATION_NAME) {
         route("/api/pdl-proxy/v1") {
