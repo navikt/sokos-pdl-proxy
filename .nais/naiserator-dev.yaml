@@ -52,7 +52,7 @@ spec:
     enabled: true
     path: /metrics
   ingresses:
-    - https://sokos-pdl-proxy.dev.intern.nav.no
+    - https://sokos-pdl-proxy.intern.dev.nav.no
   env:
     - name: PDL_CLIENT_ID
       value: dev-fss.pdl.pdl-api
