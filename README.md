@@ -131,8 +131,8 @@ i [.nais/alerterator.yaml](.nais/alerterator.yaml) filen.
 
 # 7. Swagger
 
-- [Prod-gcp](https://sokos-pdl-proxy.intern.nav.no/pdl-proxy/api/pdl-proxy/v1/docs)
-- [Dev-gcp](https://sokos-pdl-proxy.dev.intern.nav.no/api/pdl-proxy/v1/docs)
+- [Prod-gcp](https://sokos-pdl-proxy.intern.nav.no/api/pdl-proxy/v1/docs)
+- [Dev-gcp](https://sokos-pdl-proxy.intern.dev.nav.no/api/pdl-proxy/v1/docs)
 - [Lokalt](http://0.0.0.0:8080/api/pdl-proxy/v1/docs)
 
 # 8. Henvendelser

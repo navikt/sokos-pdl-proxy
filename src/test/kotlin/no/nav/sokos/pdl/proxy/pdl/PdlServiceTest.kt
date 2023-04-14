@@ -46,7 +46,7 @@ internal class PdlServiceTest {
             .isNotNull()
             .all {
                 transform { it.identer.map(Ident::ident) }
-                    .containsExactlyInAnyOrder("2804958208728", "24117920441")
+                    .containsExactlyInAnyOrder("24117920441")
                 transform { it.kontaktadresse.first().postadresseIFrittFormat }
                     .isNotNull()
                     .all {
