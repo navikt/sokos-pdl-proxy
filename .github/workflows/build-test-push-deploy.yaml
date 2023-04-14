@@ -94,8 +94,7 @@ jobs:
 
   deploy-prod-gcp:
     name: Deploy til prod-gcp
-    needs: [ deploy-dev-gcp, deploy-dev-gcp-q1 ]
-    if: github.ref == 'refs/heads/master'
+    needs: [ deploy-dev-gcp, deploy-dev-gcp-q1, bygg-test-push-image ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
