@@ -5,6 +5,9 @@ on:
 
 jobs:
   bygg-push-image:
+    permissions:
+      contents: read
+      id-token: write
     name: Bygg og push Docker container
     runs-on: ubuntu-latest
     steps:
@@ -44,7 +47,6 @@ jobs:
           tag: manuell
     outputs:
       image: ${{ steps.docker-build-push.outputs.image }}
-
 
   deploy-manuell-dev-gcp:
     name: Deploy manuelt til dev-gcp
