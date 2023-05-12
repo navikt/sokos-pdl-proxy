@@ -1,0 +1,292 @@
+{
+  "data": {
+    "hentPerson": {
+      "bostedsadresse": [
+        {
+          "angittFlyttedato": "1980-11-06",
+          "coAdressenavn": null,
+          "gyldigFraOgMed": "1980-11-06T00:00",
+          "gyldigTilOgMed": null,
+          "vegadresse": {
+            "matrikkelId": 71083529,
+            "husbokstav": null,
+            "husnummer": "5",
+            "adressenavn": "Fjordvegen",
+            "bruksenhetsnummer": null,
+            "tilleggsnavn": null,
+            "postnummer": "3520",
+            "kommunenummer": "3053",
+            "bydelsnummer": null,
+            "koordinater": {
+              "x": 576666.17,
+              "y": 6679165.58,
+              "z": 0,
+              "kvalitet": null
+            }
+          },
+          "matrikkeladresse": null,
+          "ukjentBosted": null,
+          "utenlandskAdresse": null,
+          "folkeregistermetadata": {
+            "aarsak": null,
+            "ajourholdstidspunkt": "1980-11-06T00:00",
+            "gyldighetstidspunkt": "1980-11-06T00:00",
+            "kilde": "Dolly",
+            "opphoerstidspunkt": null,
+            "sekvens": null
+          },
+          "metadata": {
+            "endringer": [
+              {
+                "kilde": "Dolly",
+                "registrert": "2023-05-12T15:36:15",
+                "registrertAv": "Folkeregisteret",
+                "systemkilde": "FREG",
+                "type": "OPPRETT"
+              }
+            ],
+            "master": "FREG",
+            "opplysningsId": "87a479ce-e567-4f72-b6ef-fece77d855f7",
+            "historisk": false
+          }
+        }
+      ],
+      "oppholdsadresse": [
+        {
+          "oppholdAnnetSted": null,
+          "coAdressenavn": null,
+          "gyldigFraOgMed": "2023-05-01T00:00",
+          "utenlandskAdresse": {
+            "adressenavnNummer": "57 Rue de la Liberté",
+            "bygningEtasjeLeilighet": "",
+            "postboksNummerNavn": null,
+            "postkode": "75001",
+            "bySted": "Paris",
+            "regionDistriktOmraade": "",
+            "landkode": "FRA"
+          },
+          "vegadresse": null,
+          "matrikkeladresse": null,
+          "folkeregistermetadata": null,
+          "metadata": {
+            "endringer": [
+              {
+                "kilde": "Dolly",
+                "registrert": "2023-05-12T15:36:15",
+                "registrertAv": "dev-fss:dolly:testnav-pdl-proxy-trygdeetaten",
+                "systemkilde": "dev-fss:dolly:testnav-pdl-proxy-trygdeetaten",
+                "type": "OPPRETT"
+              }
+            ],
+            "master": "PDL",
+            "opplysningsId": "b1623bdb-69ed-46e0-80fe-4aa075b0876f",
+            "historisk": false
+          }
+        }
+      ],
+      "kontaktadresse": [
+        {
+          "gyldigFraOgMed": "2023-05-12T15:36:12",
+          "gyldigTilOgMed": "2024-05-12T15:36:12",
+          "type": "Innland",
+          "coAdressenavn": null,
+          "postboksadresse": null,
+          "vegadresse": {
+            "matrikkelId": 108132157,
+            "husbokstav": null,
+            "husnummer": "211",
+            "adressenavn": "Vester-Volhaugvegen",
+            "bruksenhetsnummer": null,
+            "tilleggsnavn": null,
+            "postnummer": "7655",
+            "kommunenummer": "5038",
+            "bydelsnummer": null,
+            "koordinater": {
+              "x": 621971,
+              "y": 7079819,
+              "z": 0,
+              "kvalitet": null
+            }
+          },
+          "postadresseIFrittFormat": null,
+          "utenlandskAdresse": null,
+          "utenlandskAdresseIFrittFormat": null,
+          "folkeregistermetadata": {
+            "aarsak": null,
+            "ajourholdstidspunkt": "2023-05-12T15:36:12",
+            "gyldighetstidspunkt": "2023-05-12T15:36:12",
+            "kilde": "Dolly",
+            "opphoerstidspunkt": "2024-05-12T15:36:12",
+            "sekvens": null
+          },
+          "metadata": {
+            "endringer": [
+              {
+                "kilde": "Dolly",
+                "registrert": "2023-05-12T15:36:15",
+                "registrertAv": "Folkeregisteret",
+                "systemkilde": "FREG",
+                "type": "OPPRETT"
+              }
+            ],
+            "master": "FREG",
+            "opplysningsId": "1690acd0-dfe4-425a-b88a-c0fda2f92c2a",
+            "historisk": false
+          }
+        }
+      ],
+      "navn": [
+        {
+          "fornavn": "Riktig",
+          "mellomnavn": "Sløvende",
+          "etternavn": "Navn",
+          "forkortetNavn": null,
+          "originaltNavn": null,
+          "gyldigFraOgMed": "2023-05-12",
+          "folkeregistermetadata": {
+            "aarsak": null,
+            "ajourholdstidspunkt": "2023-05-12T15:35:17",
+            "gyldighetstidspunkt": "2023-05-12T15:35:17",
+            "kilde": "Dolly",
+            "opphoerstidspunkt": null,
+            "sekvens": null
+          },
+          "metadata": {
+            "endringer": [
+              {
+                "kilde": "Dolly",
+                "registrert": "2023-05-12T15:36:15",
+                "registrertAv": "Folkeregisteret",
+                "systemkilde": "FREG",
+                "type": "OPPRETT"
+              }
+            ],
+            "master": "FREG",
+            "opplysningsId": "4530a459-557f-4226-9ffb-57e44211afd6",
+            "historisk": false
+          }
+        },
+        {
+          "fornavn": "Uriktig",
+          "mellomnavn": "Uvitende",
+          "etternavn": "Mandag",
+          "forkortetNavn": null,
+          "originaltNavn": null,
+          "gyldigFraOgMed": "2023-05-12",
+          "folkeregistermetadata": {
+            "aarsak": null,
+            "ajourholdstidspunkt": "1990-09-09T15:36:16",
+            "gyldighetstidspunkt": "1990-09-09T15:36:16",
+            "kilde": "Dolly",
+            "opphoerstidspunkt": null,
+            "sekvens": null
+          },
+          "metadata": {
+            "endringer": [
+              {
+                "kilde": "Dolly",
+                "registrert": "1990-09-09T15:36:15",
+                "registrertAv": "Folkeregisteret",
+                "systemkilde": "FREG",
+                "type": "OPPRETT"
+              }
+            ],
+            "master": "FREG",
+            "opplysningsId": "3bd1b332-65e3-432b-a5ea-aba31ad24a1f",
+            "historisk": false
+          }
+        },
+        {
+          "fornavn": "Gal",
+          "mellomnavn": "Sprellende",
+          "etternavn": "Kjørvel",
+          "forkortetNavn": null,
+          "originaltNavn": null,
+          "gyldigFraOgMed": "1980-11-06",
+          "folkeregistermetadata": {
+            "aarsak": null,
+            "ajourholdstidspunkt": "1980-11-06T00:00",
+            "gyldighetstidspunkt": "1980-11-06T00:00",
+            "kilde": "Dolly",
+            "opphoerstidspunkt": null,
+            "sekvens": null
+          },
+          "metadata": {
+            "endringer": [
+              {
+                "kilde": "Dolly",
+                "registrert": "1980-11-06T00:00:15",
+                "registrertAv": "Folkeregisteret",
+                "systemkilde": "FREG",
+                "type": "OPPRETT"
+              }
+            ],
+            "master": "FREG",
+            "opplysningsId": "2a982ea3-5a4a-4373-8bf1-3b657c11c776",
+            "historisk": false
+          }
+        },
+        {
+          "fornavn": "Ukorrekt",
+          "mellomnavn": "Fintfølende",
+          "etternavn": "Betaling",
+          "forkortetNavn": null,
+          "originaltNavn": null,
+          "gyldigFraOgMed": "2012-03-14",
+          "folkeregistermetadata": {
+            "aarsak": null,
+            "ajourholdstidspunkt": "2012-03-14T15:09:26",
+            "gyldighetstidspunkt": "2012-03-14T15:09:26",
+            "kilde": "Dolly",
+            "opphoerstidspunkt": null,
+            "sekvens": null
+          },
+          "metadata": {
+            "endringer": [
+              {
+                "kilde": "Dolly",
+                "registrert": "2012-03-14T15:09:26",
+                "registrertAv": "Folkeregisteret",
+                "systemkilde": "FREG",
+                "type": "OPPRETT"
+              }
+            ],
+            "master": "FREG",
+            "opplysningsId": "45c19592-9706-463e-8315-f99e5ebae2a9",
+            "historisk": false
+          }
+        },
+        {
+          "fornavn": "Feilaktig",
+          "mellomnavn": "Minkende",
+          "etternavn": "Kjøttdeig",
+          "forkortetNavn": null,
+          "originaltNavn": null,
+          "gyldigFraOgMed": "2020-02-22",
+          "folkeregistermetadata": {
+            "aarsak": null,
+            "ajourholdstidspunkt": "2020-02-22T20:02:02",
+            "gyldighetstidspunkt": "2020-02-22T20:02:02",
+            "kilde": "Dolly",
+            "opphoerstidspunkt": null,
+            "sekvens": null
+          },
+          "metadata": {
+            "endringer": [
+              {
+                "kilde": "Dolly",
+                "registrert": "2020-02-22T20:02:02",
+                "registrertAv": "Folkeregisteret",
+                "systemkilde": "FREG",
+                "type": "OPPRETT"
+              }
+            ],
+            "master": "FREG",
+            "opplysningsId": "9a03053b-a00c-4144-931f-3e268c9448b6",
+            "historisk": false
+          }
+        }
+      ]
+    }
+  }
+}
