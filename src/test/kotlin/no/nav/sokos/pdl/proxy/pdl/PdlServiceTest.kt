@@ -81,6 +81,31 @@ internal class PdlServiceTest {
     }
 
     @Test
+    fun `Benytte navn med historisk er false`() {
+        assertThat(
+            PdlService(
+                GraphQLKtorClient(
+                    URL(pdlUrl),
+                    setupMockEngine(
+                        "hentIdenter_success_response.json",
+                        "hentPerson_flere_aktive_navn.json",
+                        HttpStatusCode.OK
+                    )
+                ),
+                pdlUrl,
+                accessTokenClient = null
+            )
+                .hentPersonDetaljer("22334455667")
+        )
+            .isNotNull()
+            .all {
+                transform { it.identer.map(Ident::ident) }
+                    .containsExactlyInAnyOrder("24117920441")
+                transform { it.fornavn }.isEqualTo("Riktig")
+            }
+    }
+
+    @Test
     fun `Ikke authentisert å hente person identer fra Pdl`() {
         assertThat {
             PdlService(
