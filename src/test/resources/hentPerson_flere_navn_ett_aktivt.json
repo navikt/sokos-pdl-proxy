@@ -116,7 +116,7 @@
                 "registrert": "1990-09-09T15:36:15"
               }
             ],
-            "historisk": false
+            "historisk": true
           }
         },
         {
@@ -130,12 +130,12 @@
                 "registrert": "1980-11-06T00:00:15"
               }
             ],
-            "historisk": false
+            "historisk": true
           }
         },
         {
-          "fornavn": "Riktig",
-          "mellomnavn": "Sløvende",
+          "fornavn": "Eneste",
+          "mellomnavn": "Aktive",
           "etternavn": "Navn",
           "forkortetNavn": null,
           "metadata": {
@@ -158,7 +158,7 @@
                 "registrert": "2012-03-14T15:09:26"
               }
             ],
-            "historisk": false
+            "historisk": true
           }
         },
         {
@@ -172,7 +172,7 @@
                 "registrert": "2020-02-22T20:02:02"
               }
             ],
-            "historisk": false
+            "historisk": true
           }
         }
       ]
