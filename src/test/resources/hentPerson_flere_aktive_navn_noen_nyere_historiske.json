@@ -113,6 +113,9 @@
           "metadata": {
             "endringer": [
               {
+                "registrert": "2001-01-01T01:01:01"
+              },
+              {
                 "registrert": "1990-09-09T15:36:15"
               }
             ],
@@ -141,6 +144,15 @@
           "metadata": {
             "endringer": [
               {
+                "registrert": "1990-01-01T01:01:01"
+              },
+              {
+                "registrert": "1995-02-02T02:02:02"
+              },
+              {
+                "registrert": "2000-03-03T03:03:03"
+              },
+              {
                 "registrert": "2023-05-12T15:36:15"
               }
             ],
@@ -154,6 +166,15 @@
           "forkortetNavn": null,
           "metadata": {
             "endringer": [
+              {
+                "registrert": "1980-01-01T01:01:01"
+              },
+              {
+                "registrert": "1982-02-02T02:02:02"
+              },
+              {
+                "registrert": "1983-03-03T03:03:03"
+              },
               {
                 "registrert": "2012-03-14T15:09:26"
               }
