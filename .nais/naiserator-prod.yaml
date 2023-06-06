@@ -26,9 +26,9 @@ spec:
         - application: oppdragz
           cluster: prod-fss
           namespace: okonomi
-      outbound:
-        external:
-          - host: pdl-api.prod-fss-pub.nais.io
+    outbound:
+      external:
+        - host: pdl-api.prod-fss-pub.nais.io
   resources:
     limits:
       memory: 4096Mi

@@ -57,7 +57,7 @@ class PdlService(
             PersonFraPDLValidator.valider(it)
         }
 
-        secureLogger.info { "Henting av Person med ident ${ident} fra PDL vellykket" }
+        secureLogger.info { "Henting av Person med ident $ident fra PDL vellykket" }
 
         return Result.success(respons.data?.hentPerson)
     }
@@ -89,7 +89,7 @@ class PdlService(
 
         val httpFeilkode = when {
             feilkoderFraPDL.contains("not_found") -> {
-                secureLogger.info { "Henting av person med ident ${ident} fra PDL mislykket" }
+                secureLogger.info { "Henting av person med ident $ident fra PDL mislykket" }
                 logger.info { "Fant ikke person i PDL ved kall til $metoderSomGirFeil." }
                 404
             }
@@ -104,7 +104,7 @@ class PdlService(
     }
 
     private fun hentUtIdenter(result: GraphQLClientResponse<HentIdenter.Result>, ident: String): List<Ident> {
-        secureLogger.info { "Henting av Identer med ident ${ident} fra PDL vellykket" }
+        secureLogger.info { "Henting av Identer med ident $ident fra PDL vellykket" }
         return result.data?.hentIdenter?.identer?.map {
             Ident(
                 ident = it.ident,
