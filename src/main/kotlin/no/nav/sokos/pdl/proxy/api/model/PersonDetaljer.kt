@@ -17,9 +17,9 @@ data class PersonDetaljer(
     companion object {
         fun fra(identer: List<Ident>, person: Person?): PersonDetaljer {
             val navnList = person?.navn ?: emptyList()
-            with(navnList.filter { it.metadata.historisk.not() }.size) {
-                if (this == 0) Metrics.noAktivtNavnCounter.inc()
-                if (this > 1) Metrics.multipleAktiveNavnCounter.inc()
+            when (navnList.count { !it.metadata.historisk }) {
+                0 -> Metrics.noAktivtNavnCounter.inc()
+                in 2..Int.MAX_VALUE -> Metrics.multipleAktiveNavnCounter.inc()
             }
 
             val riktigNavn = navnList
