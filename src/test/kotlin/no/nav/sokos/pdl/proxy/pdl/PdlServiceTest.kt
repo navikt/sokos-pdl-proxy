@@ -81,6 +81,87 @@ internal class PdlServiceTest {
     }
 
     @Test
+    fun `Benytte eneste aktive navn hvis de andre er historiske`() {
+        assertThat(
+            PdlService(
+                GraphQLKtorClient(
+                    URL(pdlUrl),
+                    setupMockEngine(
+                        "hentIdenter_success_response.json",
+                        "hentPerson_flere_navn_ett_aktivt.json",
+                        HttpStatusCode.OK
+                    )
+                ),
+                pdlUrl,
+                accessTokenClient = null
+            )
+                .hentPersonDetaljer("22334455667")
+        )
+            .isNotNull()
+            .all {
+                transform { it.identer.map(Ident::ident) }
+                    .containsExactlyInAnyOrder("24117920441")
+                transform { it.fornavn }.isEqualTo("Eneste")
+                transform { it.mellomnavn }.isEqualTo("Aktive")
+                transform { it.etternavn }.isEqualTo("Navn")
+            }
+    }
+
+    @Test
+    fun `Skal benytte nyeste aktive navn selv om historiske har nyere registreringsdato`() {
+        assertThat(
+            PdlService(
+                GraphQLKtorClient(
+                    URL(pdlUrl),
+                    setupMockEngine(
+                        "hentIdenter_success_response.json",
+                        "hentPerson_flere_aktive_navn_noen_nyere_historiske.json",
+                        HttpStatusCode.OK
+                    )
+                ),
+                pdlUrl,
+                accessTokenClient = null
+            )
+                .hentPersonDetaljer("22334455667")
+        )
+            .isNotNull()
+            .all {
+                transform { it.identer.map(Ident::ident) }
+                    .containsExactlyInAnyOrder("24117920441")
+                transform { it.fornavn }.isEqualTo("Seneste")
+                transform { it.mellomnavn }.isEqualTo("Aktive")
+                transform { it.etternavn }.isEqualTo("Navnet")
+            }
+    }
+
+    @Test
+    fun `Skal benytte seneste historiske navn hvis det ikke er noen aktive`() {
+        assertThat(
+            PdlService(
+                GraphQLKtorClient(
+                    URL(pdlUrl),
+                    setupMockEngine(
+                        "hentIdenter_success_response.json",
+                        "hentPerson_flere_bare_historiske_navn.json",
+                        HttpStatusCode.OK
+                    )
+                ),
+                pdlUrl,
+                accessTokenClient = null
+            )
+                .hentPersonDetaljer("22334455667")
+        )
+            .isNotNull()
+            .all {
+                transform { it.identer.map(Ident::ident) }
+                    .containsExactlyInAnyOrder("24117920441")
+                transform { it.fornavn }.isEqualTo("Seneste")
+                transform { it.mellomnavn }.isEqualTo("Historiske")
+                transform { it.etternavn }.isEqualTo("Navnet")
+            }
+    }
+
+    @Test
     fun `Ikke authentisert å hente person identer fra Pdl`() {
         assertThat {
             PdlService(

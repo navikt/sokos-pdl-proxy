@@ -1,0 +1,202 @@
+{
+  "data": {
+    "hentPerson": {
+      "bostedsadresse": [
+        {
+          "angittFlyttedato": "1980-11-06",
+          "coAdressenavn": null,
+          "gyldigFraOgMed": "1980-11-06T00:00",
+          "gyldigTilOgMed": null,
+          "vegadresse": {
+            "husbokstav": null,
+            "husnummer": "5",
+            "adressenavn": "Fjordvegen",
+            "bruksenhetsnummer": null,
+            "tilleggsnavn": null,
+            "postnummer": "3520",
+            "kommunenummer": "3053",
+            "bydelsnummer": null
+          },
+          "matrikkeladresse": null,
+          "ukjentBosted": null,
+          "utenlandskAdresse": null,
+          "metadata": {
+            "endringer": [
+              {
+                "kilde": "Dolly",
+                "registrert": "2023-05-12T15:36:15",
+                "registrertAv": "Folkeregisteret",
+                "systemkilde": "FREG",
+                "type": "OPPRETT"
+              }
+            ],
+            "master": "FREG",
+            "opplysningsId": "87a479ce-e567-4f72-b6ef-fece77d855f7",
+            "historisk": false
+          }
+        }
+      ],
+      "oppholdsadresse": [
+        {
+          "oppholdAnnetSted": null,
+          "coAdressenavn": null,
+          "gyldigFraOgMed": "2023-05-01T00:00",
+          "utenlandskAdresse": {
+            "adressenavnNummer": "57 Rue de la Liberté",
+            "bygningEtasjeLeilighet": "",
+            "postboksNummerNavn": null,
+            "postkode": "75001",
+            "bySted": "Paris",
+            "regionDistriktOmraade": "",
+            "landkode": "FRA"
+          },
+          "vegadresse": null,
+          "matrikkeladresse": null,
+          "metadata": {
+            "endringer": [
+              {
+                "kilde": "Dolly",
+                "registrert": "2023-05-12T15:36:15",
+                "registrertAv": "dev-fss:dolly:testnav-pdl-proxy-trygdeetaten",
+                "systemkilde": "dev-fss:dolly:testnav-pdl-proxy-trygdeetaten",
+                "type": "OPPRETT"
+              }
+            ],
+            "master": "PDL",
+            "opplysningsId": "b1623bdb-69ed-46e0-80fe-4aa075b0876f",
+            "historisk": false
+          }
+        }
+      ],
+      "kontaktadresse": [
+        {
+          "gyldigFraOgMed": "2023-05-12T15:36:12",
+          "gyldigTilOgMed": "2024-05-12T15:36:12",
+          "type": "Innland",
+          "coAdressenavn": null,
+          "postboksadresse": null,
+          "vegadresse": {
+            "husbokstav": null,
+            "husnummer": "211",
+            "adressenavn": "Vester-Volhaugvegen",
+            "bruksenhetsnummer": null,
+            "tilleggsnavn": null,
+            "postnummer": "7655",
+            "kommunenummer": "5038",
+            "bydelsnummer": null
+          },
+          "postadresseIFrittFormat": null,
+          "utenlandskAdresse": null,
+          "utenlandskAdresseIFrittFormat": null,
+          "metadata": {
+            "endringer": [
+              {
+                "kilde": "Dolly",
+                "registrert": "2023-05-12T15:36:15",
+                "registrertAv": "Folkeregisteret",
+                "systemkilde": "FREG",
+                "type": "OPPRETT"
+              }
+            ],
+            "master": "FREG",
+            "opplysningsId": "1690acd0-dfe4-425a-b88a-c0fda2f92c2a",
+            "historisk": false
+          }
+        }
+      ],
+      "navn": [
+        {
+          "fornavn": "Eldre",
+          "mellomnavn": "Aktivt",
+          "etternavn": "Navn",
+          "forkortetNavn": null,
+          "metadata": {
+            "endringer": [
+              {
+                "registrert": "2001-01-01T01:01:01"
+              },
+              {
+                "registrert": "1990-09-09T15:36:15"
+              }
+            ],
+            "historisk": false
+          }
+        },
+        {
+          "fornavn": "Gal",
+          "mellomnavn": "Sprellende",
+          "etternavn": "Kjørvel",
+          "forkortetNavn": null,
+          "metadata": {
+            "endringer": [
+              {
+                "registrert": "1980-11-06T00:00:15"
+              }
+            ],
+            "historisk": true
+          }
+        },
+        {
+          "fornavn": "Nyere",
+          "mellomnavn": "Men",
+          "etternavn": "Historisk",
+          "forkortetNavn": null,
+          "metadata": {
+            "endringer": [
+              {
+                "registrert": "1990-01-01T01:01:01"
+              },
+              {
+                "registrert": "1995-02-02T02:02:02"
+              },
+              {
+                "registrert": "2000-03-03T03:03:03"
+              },
+              {
+                "registrert": "2023-05-12T15:36:15"
+              }
+            ],
+            "historisk": true
+          }
+        },
+        {
+          "fornavn": "Seneste",
+          "mellomnavn": "Aktive",
+          "etternavn": "Navnet",
+          "forkortetNavn": null,
+          "metadata": {
+            "endringer": [
+              {
+                "registrert": "1980-01-01T01:01:01"
+              },
+              {
+                "registrert": "1982-02-02T02:02:02"
+              },
+              {
+                "registrert": "1983-03-03T03:03:03"
+              },
+              {
+                "registrert": "2012-03-14T15:09:26"
+              }
+            ],
+            "historisk": false
+          }
+        },
+        {
+          "fornavn": "Feilaktig",
+          "mellomnavn": "Minkende",
+          "etternavn": "Kjøttdeig",
+          "forkortetNavn": null,
+          "metadata": {
+            "endringer": [
+              {
+                "registrert": "2020-02-22T20:02:02"
+              }
+            ],
+            "historisk": true
+          }
+        }
+      ]
+    }
+  }
+}
