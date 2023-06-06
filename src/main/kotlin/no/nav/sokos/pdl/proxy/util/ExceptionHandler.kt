@@ -12,13 +12,13 @@ private val logger = KotlinLogging.logger { }
 fun StatusPagesConfig.exceptionHandler() {
 
     exception<PdlApiException> { call, pdlApiException ->
-        call.logInfoOgResponder(
-            pdlApiException, HttpStatusCode.fromValue(pdlApiException.feilkode)
-        ) { pdlApiException.feilmelding }
+        val response = TjenestefeilResponse(pdlApiException.feilmelding)
+        call.logInfoOgResponder(pdlApiException, HttpStatusCode.fromValue(pdlApiException.feilkode), response)
     }
 
     exception<Throwable> { call, throwable ->
-        call.logErrorOgResponder(throwable) { "En teknisk feil har oppstått. Ta kontakt med utviklerne" }
+        val response = TjenestefeilResponse("En teknisk feil har oppstått. Ta kontakt med utviklerne")
+        call.logErrorOgResponder(throwable, response)
     }
 }
 
@@ -30,21 +30,18 @@ data class PdlApiException(
 private suspend inline fun ApplicationCall.logInfoOgResponder(
     pdlApiException: PdlApiException,
     status: HttpStatusCode,
-    lazyMessage: () -> String,
+    response: TjenestefeilResponse
 ) {
-    val feilmelding = lazyMessage()
-    logger.info(pdlApiException) { feilmelding }
+    logger.info(pdlApiException) { response.melding }
 
-    val response = TjenestefeilResponse(feilmelding)
     this.respond(status, response)
 }
 
 private suspend inline fun ApplicationCall.logErrorOgResponder(
     exeption: Throwable,
+    response: TjenestefeilResponse,
     status: HttpStatusCode = HttpStatusCode.InternalServerError,
-    lazyMessage: () -> String,
 ) {
-    val message = lazyMessage()
-    logger.error(exeption) { message }
-    this.respond(status, message)
+    logger.error(exeption) { response.melding }
+    this.respond(status, response)
 }

@@ -44,7 +44,6 @@ class PdlService(
         }
 
         return respons.errors?.let { feilmeldingerFraPdl ->
-
             håndterFeilFraPdl(feilmeldingerFraPdl, ident)
         } ?: validerOgBehandleResultat(respons, ident)
     }
@@ -53,8 +52,8 @@ class PdlService(
         respons: GraphQLClientResponse<HentPerson.Result>,
         ident: String
     ): Result<Person?> {
-        respons.data?.hentPerson?.let {
-            PersonFraPDLValidator.valider(it)
+        respons.data?.hentPerson?.also { person ->
+            PersonFraPDLValidator.valider(person)
         }
 
         secureLogger.info { "Henting av Person med ident $ident fra PDL vellykket" }
@@ -78,17 +77,13 @@ class PdlService(
 
     @Suppress("FunctionName")
     private fun <T> håndterFeilFraPdl(errors: List<GraphQLClientError>, ident: String): Result<T> {
-        val metoderSomGirFeil = errors
-            .mapNotNull { error -> error.path }
-            .joinToString { s -> s.toString() }
-        val feilmeldingerFraPDL = errors
-            .map { error -> error.message }
-        val feilkoderFraPDL = errors
-            .mapNotNull { error -> error.extensions }
-            .map { entry -> entry["code"].toString() }
+        val metoderSomGirFeil = errors.joinToString { error -> error.path.toString() }
+        val feilmeldingerFraPDL = errors.map { it.message }
+        val feilkoderFraPDL =
+            errors.flatMap { it.extensions?.get("code")?.toString()?.let { listOf(it) } ?: emptyList() }
 
         val httpFeilkode = when {
-            feilkoderFraPDL.contains("not_found") -> {
+            "not_found" in feilkoderFraPDL -> {
                 secureLogger.info { "Henting av person med ident $ident fra PDL mislykket" }
                 logger.info { "Fant ikke person i PDL ved kall til $metoderSomGirFeil." }
                 404
@@ -100,7 +95,8 @@ class PdlService(
                 500
             }
         }
-        return Result.failure(PdlApiException(httpFeilkode, "$feilmeldingerFraPDL"))
+
+        return Result.failure(PdlApiException(httpFeilkode, feilmeldingerFraPDL.joinToString()))
     }
 
     private fun hentUtIdenter(result: GraphQLClientResponse<HentIdenter.Result>, ident: String): List<Ident> {
@@ -111,8 +107,8 @@ class PdlService(
                 aktiv = !it.historisk,
                 identifikatorType = fra(it.gruppe)
             )
-        } ?: emptyList()
+        } ?: emptyList<Ident>()
+            .also { secureLogger.info { "Henting av Identer med ident $ident fra PDL vellykket" } }
     }
-
 }
 
