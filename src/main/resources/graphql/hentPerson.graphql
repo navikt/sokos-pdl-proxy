@@ -5,6 +5,12 @@ query($ident: ID!){
             mellomnavn
             etternavn
             forkortetNavn
+            metadata {
+                endringer {
+                    registrert
+                }
+                historisk
+            }
         }
         bostedsadresse {
             angittFlyttedato,
