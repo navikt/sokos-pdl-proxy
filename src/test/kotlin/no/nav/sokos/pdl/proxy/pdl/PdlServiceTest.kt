@@ -5,7 +5,6 @@ import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.containsExactlyInAnyOrder
 import assertk.assertions.isEqualTo
-import assertk.assertions.isFailure
 import assertk.assertions.isNotNull
 import assertk.assertions.prop
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
@@ -21,6 +20,7 @@ import no.nav.pdl.hentperson.PostadresseIFrittFormat
 import no.nav.sokos.pdl.proxy.api.model.Ident
 import no.nav.sokos.pdl.proxy.util.PdlApiException
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import readFromResource
 
 private const val pdlUrl = "http://0.0.0.0"
@@ -28,40 +28,35 @@ private const val pdlUrl = "http://0.0.0.0"
 internal class PdlServiceTest {
     @Test
     fun `Vellykket hent av en persons identer, navn og adresser fra Pdl`() {
-        assertThat(
-            PdlService(
-                GraphQLKtorClient(
-                    URL(pdlUrl),
-                    setupMockEngine(
-                        "hentIdenter_success_response.json",
-                        "hentPerson_success_response.json",
-                        HttpStatusCode.OK
-                    )
-                ),
-                pdlUrl,
-                accessTokenClient = null
-            )
-                .hentPersonDetaljer("22334455667")
+        val result = PdlService(
+            GraphQLKtorClient(
+                URL(pdlUrl),
+                setupMockEngine(
+                    "hentIdenter_success_response.json",
+                    "hentPerson_success_response.json",
+                    HttpStatusCode.OK
+                )
+            ),
+            pdlUrl,
+            accessTokenClient = null
         )
+            .hentPersonDetaljer("22334455667")
+
+        assertThat(result).isNotNull()
+        assertThat(result.identer.map(Ident::ident)).containsExactlyInAnyOrder("24117920441")
+        assertThat(result.kontaktadresse.first().postadresseIFrittFormat)
             .isNotNull()
             .all {
-                transform { it.identer.map(Ident::ident) }
-                    .containsExactlyInAnyOrder("24117920441")
-                transform { it.kontaktadresse.first().postadresseIFrittFormat }
-                    .isNotNull()
-                    .all {
-                        prop(PostadresseIFrittFormat::adresselinje1).isEqualTo("adresse 1")
-                        prop(PostadresseIFrittFormat::adresselinje2).isEqualTo("adresse 2")
-                        prop(PostadresseIFrittFormat::adresselinje3).isEqualTo("adresse 3")
-                        prop(PostadresseIFrittFormat::postnummer).isEqualTo("4242")
-                    }
-
+                prop(PostadresseIFrittFormat::adresselinje1).isEqualTo("adresse 1")
+                prop(PostadresseIFrittFormat::adresselinje2).isEqualTo("adresse 2")
+                prop(PostadresseIFrittFormat::adresselinje3).isEqualTo("adresse 3")
+                prop(PostadresseIFrittFormat::postnummer).isEqualTo("4242")
             }
     }
 
     @Test
     fun `Finnes ikke person identer fra Pdl`() {
-        assertThat {
+        val exception = assertThrows<PdlApiException> {
             PdlService(
                 pdlSomReturnerer(
                     "hentIdenter_fant_ikke_person_response.json",
@@ -72,12 +67,10 @@ internal class PdlServiceTest {
             )
                 .hentPersonDetaljer("22334455667")
         }
-            .isFailure()
-            .transform { it as PdlApiException }
-            .all {
-                prop(PdlApiException::feilkode).isEqualTo(404)
-                prop(PdlApiException::feilmelding).contains("Fant ikke person")
-            }
+
+        assertThat(exception).isNotNull()
+        assertThat(exception.feilkode).isEqualTo(404)
+        assertThat(exception.feilmelding).contains("Fant ikke person")
     }
 
     @Test
@@ -163,7 +156,7 @@ internal class PdlServiceTest {
 
     @Test
     fun `Ikke authentisert å hente person identer fra Pdl`() {
-        assertThat {
+        val exception = assertThrows<PdlApiException> {
             PdlService(
                 pdlSomReturnerer(
                     "hentIdenter_ikke_authentisert_response.json",
@@ -174,12 +167,10 @@ internal class PdlServiceTest {
             )
                 .hentPersonDetaljer("22334455667")
         }
-            .isFailure()
-            .transform { it as PdlApiException }
-            .all {
-                prop(PdlApiException::feilkode).isEqualTo(500)
-                prop(PdlApiException::feilmelding).contains("Ikke autentisert")
-            }
+
+        assertThat(exception).isNotNull()
+        assertThat(exception.feilkode).isEqualTo(500)
+        assertThat(exception.feilmelding).contains("Ikke autentisert")
     }
 
     private fun pdlSomReturnerer(hentIdenterRespons: String, hentPersonRespons: String) = GraphQLKtorClient(
@@ -199,21 +190,18 @@ fun setupMockEngine(
 ): HttpClient {
     return HttpClient(MockEngine { request ->
         val body = request.body as TextContent
-        if (body.text.contains("hentIdenter")) {
-            respond(
-                content = hentIdenterResponseFilNavn?.let { (it).readFromResource() }.orEmpty(),
-                headers = headersOf("Content-Type", ContentType.Application.Json.toString()),
-                status = statusCode
-            )
-        } else {
-            respond(
-                content = hentPersonResponseFilNavn?.let { (it).readFromResource() }.orEmpty(),
-                headers = headersOf("Content-Type", ContentType.Application.Json.toString()),
-                status = statusCode
-            )
-        }
+        val content = when {
+            body.text.contains("hentIdenter") -> hentIdenterResponseFilNavn
+            else -> hentPersonResponseFilNavn
+        }?.readFromResource().orEmpty()
+
+        respond(
+            content = content,
+            headers = headersOf("Content-Type", ContentType.Application.Json.toString()),
+            status = statusCode
+        )
+
     }) {
         expectSuccess = false
-        install(HttpClient())
     }
 }

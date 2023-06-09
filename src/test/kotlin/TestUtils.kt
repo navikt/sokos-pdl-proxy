@@ -1,6 +1,7 @@
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import io.ktor.server.application.Application
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.restassured.RestAssured
@@ -22,20 +23,26 @@ private fun jsonMapper(): ObjectMapper = jacksonObjectMapper().apply {
 class EmbeddedTestServer(
     private val port: Int = 1100,
     private val pdlService: PdlService,
-    private val applicationState: ApplicationState,
-
-    ) {
+    private val applicationState: ApplicationState
+) {
     init {
-        embeddedServer(Netty, port) {
-            commonConfig()
-            routingConfig(applicationState, pdlService, false)
-            RestAssured.baseURI = "http://localhost"
-            RestAssured.basePath = "/api/pdl-proxy/v1"
-            RestAssured.port = port
-            RestAssured.config = RestAssuredConfig.config().objectMapperConfig(
-                ObjectMapperConfig.objectMapperConfig()
-                    .jackson2ObjectMapperFactory { _, _ -> no.nav.sokos.pdl.proxy.util.jsonMapper }
-            )
-        }.start()
+        embeddedServer(Netty, port, module = {
+            applicationModule(pdlService, applicationState)
+        }).start()
+    }
+
+    private fun Application.applicationModule(
+        pdlService: PdlService,
+        applicationState: ApplicationState,
+    ) {
+        commonConfig()
+        routingConfig(applicationState, pdlService, false)
+        RestAssured.baseURI = "http://localhost"
+        RestAssured.basePath = "/api/pdl-proxy/v1"
+        RestAssured.port = port
+        RestAssured.config = RestAssuredConfig.config().objectMapperConfig(
+            ObjectMapperConfig.objectMapperConfig()
+                .jackson2ObjectMapperFactory { _, _ -> no.nav.sokos.pdl.proxy.util.jsonMapper }
+        )
     }
 }

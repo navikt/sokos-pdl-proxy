@@ -1,44 +1,44 @@
 import com.expediagroup.graphql.plugin.gradle.tasks.GraphQLGenerateClientTask
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 plugins {
-    kotlin("jvm") version "1.8.10"
-    kotlin("plugin.serialization") version "1.8.10"
-    id("com.github.johnrengelman.shadow") version "8.1.0"
-    id("org.openapi.generator") version "6.5.0"
-    id("com.expediagroup.graphql") version "6.3.0"
+    kotlin("jvm") version "1.8.22"
+    kotlin("plugin.serialization") version "1.8.22"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("org.openapi.generator") version "6.6.0"
+    id("com.expediagroup.graphql") version "6.5.2"
     id("org.betterplugin.avro") version "0.19.2-SNAPSHOT"
 
     application
 }
 
 group = "no.nav.sokos"
-java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenCentral()
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") }
 }
 
-val ktorVersion = "2.2.3"
+val ktorVersion = "2.3.1"
 val logbackVersion = "1.4.5"
 val logstashVersion = "7.3"
-val jacksonVersion = "2.14.1"
-val prometheusVersion = "1.10.2"
+val jacksonVersion = "2.15.2"
+val prometheusVersion = "1.11.0"
 val kotlinLoggingVersion = "3.0.5"
 val natpryceVersion = "1.6.10.0"
 val janionVersion = "3.1.9"
 val junitVersion = "5.9.1"
 val mockkVersion = "1.13.3"
-val graphqlClientVersion = "6.4.0"
+val graphqlClientVersion = "6.5.2"
 val avroVersion = "1.11.1"
 val restAssuredVersion = "5.3.0"
-val swaggerRequestValidatorVersion = "2.34.0"
-val assertJvmVersion = "0.25"
+val swaggerRequestValidatorVersion = "2.35.1"
+val assertJvmVersion = "0.26.1"
 
 
 dependencies {
@@ -112,13 +112,17 @@ sourceSets {
     }
 }
 
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
 tasks {
 
     withType<KotlinCompile>().configureEach {
         dependsOn("openApiGenerate")
         dependsOn("graphqlGenerateClient")
-
-        compilerOptions.jvmTarget.set(JVM_17)
     }
 
     withType<GenerateTask>().configureEach {
@@ -153,14 +157,15 @@ tasks {
 
     withType<Test>().configureEach {
         useJUnitPlatform()
+
         testLogging {
+            showExceptions = true
+            showStackTraces = true
             exceptionFormat = FULL
-            events("passed", "skipped", "failed")
+            events = setOf(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
         }
 
-
-        // For å øke hastigheten på build kan vi benytte disse metodene
-        maxParallelForks = Runtime.getRuntime().availableProcessors() / 2
+        maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).takeIf { it > 0 } ?: 1
         reports.forEach { report -> report.required.value(false) }
     }
 

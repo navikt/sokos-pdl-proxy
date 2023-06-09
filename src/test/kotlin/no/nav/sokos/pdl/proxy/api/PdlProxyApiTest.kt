@@ -305,9 +305,8 @@ internal class PdlProxyApiTest {
                 httpStatusCode
             )
         )
-        val pdlService = PdlService(mockkGraphQlClient, pdlUrl, accessTokenClient = null)
 
-        EmbeddedTestServer(port, pdlService, applicationState = ApplicationState())
+        EmbeddedTestServer(port, PdlService(mockkGraphQlClient, pdlUrl, accessTokenClient = null), ApplicationState())
     }
 
     private fun randomPort() = Random.nextInt(32000, 42000)
