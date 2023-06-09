@@ -120,8 +120,8 @@ kubectl logs -f sokos-pdl-proxy-<POD-ID> --namespace okonomi -c sokos-pdl-proxy
 
 ### Alarmer
 
-Vi bruker [nais-alerts](https://doc.nais.io/observability/alerts) for å sette opp alarmer. Disse finner man konfigurert
-i [.nais/alerterator.yaml](.nais/alerterator.yaml) filen.
+Vi bruker [nais-alerts](https://doc.nais.io/observability/alerts) for å sette opp alarmer. 
+Disse finner man konfigurert i [.nais/alerts-dev.yaml](.nais/alerts-dev.yaml) og [.nais/alerts-prod.yaml](.nais/alerts-prod.yaml).
 
 ### Grafana
 
