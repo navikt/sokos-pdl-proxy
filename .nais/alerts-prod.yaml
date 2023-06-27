@@ -13,8 +13,20 @@ spec:
           expr: kube_deployment_status_replicas_available{deployment="sokos-pdl-proxy"} == 0
           for: 2m
           annotations:
-            action: "`kubectl describe pod {{ $labels.pod }} -n {{ $labels.namespace }}` -> `kubectl logs {{ $labels.pod }} -n {{ $labels.namespace }}`"
+            action: "Sjekk hvorfor applikasjonen er nede"
             summary: "App {{ $labels.deployment }} er nede i namespace {{ $labels.namespace }}"
+          labels:
+            namespace: okonomi
+            severity: danger
+            sokos_pdl_proxy_type: sokos-pdl-proxy
+            alert_type: custom
+
+        - alert: Applikasjonen har restartet flere ganger de siste 5 minuttene!
+          expr: sum(increase(kube_pod_container_status_restarts_total{container=~"sokos-pdl-proxy"}[5m])) by (container) > 2
+          for: 2m
+          annotations:
+            action: "Sjekk hvorfor applikasjonen ikke klarer å restarte"
+            summary: "App {{ $labels.deployment }} restarter mange ganger {{ $labels.namespace }}"
           labels:
             namespace: okonomi
             severity: danger
