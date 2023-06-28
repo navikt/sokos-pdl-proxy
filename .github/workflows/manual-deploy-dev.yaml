@@ -2,6 +2,8 @@ name: Manuell deploy til dev
 
 on:
   workflow_dispatch:
+env:
+  TZ: Europe/Oslo
 
 jobs:
   bygg-push-image:
