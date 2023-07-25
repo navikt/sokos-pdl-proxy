@@ -1,4 +1,4 @@
-name: Bygg, test og deploy dev/q1/prod
+name: Deploy
 
 on:
   push:
@@ -16,45 +16,38 @@ on:
       - '.github/workflows/alerts.yaml'
       - '.nais/alerts-dev.yaml'
       - '.nais/alerts-prod.yaml'
+      - '.github/dependabot.yml'
+env:
+  TZ: Europe/Oslo
 
 jobs:
-  bygg-test-push-image:
+  build:
     permissions:
-      contents: "read"
+      contents: "write"
       id-token: "write"
-    name: Bygg/test og push Docker image
+    name: Build/test & push image
     runs-on: ubuntu-latest
     steps:
-      - name: Sjekker ut repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
-
-      - name: Cache gradle artifakter
-        uses: actions/cache@v3
+      - uses: gradle/gradle-build-action@v2.6.1
+        env: # Eksluder test dependencies
+          DEPENDENCY_GRAPH_INCLUDE_CONFIGURATIONS: compileClasspath|runtimeClasspath
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          dependency-graph: generate-and-submit
+          arguments: build
 
-      - name: Bygg og test shadowJar
-        run: ./gradlew test shadowJar
-        env:
-          ORG_GRADLE_PROJECT_githubUser: x-access-token
-          ORG_GRADLE_PROJECT_githubPassword: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Bygg docker image
+      - name: Build docker image
         uses: docker/setup-buildx-action@v2
 
-      - name: Push docker image til Google Artifact Registry
+      - name: Push docker image to Google Artifact Registry
         uses: nais/docker-build-push@v0
         id: docker-build-push
         with:
+          byosbom: dependency-graph-reports/deploy-build.json
           team: okonomi
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
@@ -62,9 +55,9 @@ jobs:
     outputs:
       image: ${{ steps.docker-build-push.outputs.image }}
 
-  deploy-dev-gcp:
-    name: Deploy til dev-gcp
-    needs: bygg-test-push-image
+  deploy-dev:
+    name: Deploy to dev
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -72,12 +65,13 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          IMAGE: ${{ needs.bygg-test-push-image.outputs.image }}
+          IMAGE: ${{ needs.build.outputs.image }}
           RESOURCE: .nais/naiserator-dev.yaml
+          PRINT_PAYLOAD: true
 
-  deploy-dev-gcp-q1:
-    name: Deploy til dev-gcp q1
-    needs: bygg-test-push-image
+  deploy-dev-q1:
+    name: Deploy to dev-q1
+    needs: [ build , deploy-dev ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -85,12 +79,13 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          IMAGE: ${{ needs.bygg-test-push-image.outputs.image }}
+          IMAGE: ${{ needs.build.outputs.image }}
           RESOURCE: .nais/naiserator-dev-q1.yaml
+          PRINT_PAYLOAD: true
 
-  deploy-prod-gcp:
-    name: Deploy til prod-gcp
-    needs: [ deploy-dev-gcp, deploy-dev-gcp-q1, bygg-test-push-image ]
+  deploy-prod:
+    name: Deploy to prod
+    needs: [ build , deploy-dev, deploy-dev-q1 ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -98,5 +93,6 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
-          IMAGE: ${{ needs.bygg-test-push-image.outputs.image }}
+          IMAGE: ${{ needs.build.outputs.image }}
           RESOURCE: .nais/naiserator-prod.yaml
+          PRINT_PAYLOAD: true
