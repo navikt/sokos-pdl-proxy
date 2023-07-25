@@ -12,7 +12,6 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.openapi.generator") version "6.6.0"
     id("com.expediagroup.graphql") version "6.5.2"
-    id("org.betterplugin.avro") version "0.19.2-SNAPSHOT"
 
     application
 }
@@ -95,8 +94,6 @@ dependencies {
         exclude("com.expediagroup", "graphql-kotlin-client-serialization")
     }
     runtimeOnly("com.expediagroup:graphql-kotlin-client-jackson:$graphqlClientVersion")
-
-    implementation("org.apache.avro:avro:$avroVersion")
 
 }
 
