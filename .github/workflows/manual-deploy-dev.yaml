@@ -1,7 +1,9 @@
-name: Manuell deploy to dev
+name: Manual deploy to dev
 
 on:
   workflow_dispatch:
+env:
+  TZ: Europe/Oslo
 
 jobs:
   build:
@@ -18,7 +20,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - uses: gradle/gradle-build-action@v2.6.1
+      - uses: gradle/gradle-build-action@v2.7.0
         with:
           arguments: --configuration-cache build
 
