@@ -23,7 +23,7 @@ repositories {
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") }
 }
 
-val ktorVersion = "2.3.1"
+val ktorVersion = "2.3.3"
 val logbackVersion = "1.4.5"
 val logstashVersion = "7.4"
 val jacksonVersion = "2.15.2"
@@ -83,6 +83,7 @@ dependencies {
 
     // Test
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("io.ktor:ktor-client-tests:$ktorVersion")
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:$assertJvmVersion")
@@ -162,7 +163,6 @@ tasks {
             events = setOf(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
         }
 
-        maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).takeIf { it > 0 } ?: 1
         reports.forEach { report -> report.required.value(false) }
     }
 
