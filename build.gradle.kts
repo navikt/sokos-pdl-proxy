@@ -11,7 +11,7 @@ plugins {
     kotlin("plugin.serialization") version "1.9.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.openapi.generator") version "6.6.0"
-    id("com.expediagroup.graphql") version "6.5.2"
+    id("com.expediagroup.graphql") version "6.5.3"
 
     application
 }
@@ -24,19 +24,19 @@ repositories {
 }
 
 val ktorVersion = "2.3.3"
-val logbackVersion = "1.4.5"
+val logbackVersion = "1.4.11"
 val logstashVersion = "7.4"
 val jacksonVersion = "2.15.2"
-val prometheusVersion = "1.11.0"
+val prometheusVersion = "1.11.2"
 val kotlinLoggingVersion = "3.0.5"
 val natpryceVersion = "1.6.10.0"
-val janionVersion = "3.1.9"
+val janionVersion = "3.1.10"
 val junitVersion = "5.10.0"
-val mockkVersion = "1.13.3"
-val graphqlClientVersion = "6.5.2"
+val mockkVersion = "1.13.5"
+val graphqlClientVersion = "6.5.3"
 val avroVersion = "1.11.1"
-val restAssuredVersion = "5.3.0"
-val swaggerRequestValidatorVersion = "2.35.1"
+val restAssuredVersion = "5.3.1"
+val swaggerRequestValidatorVersion = "2.35.2"
 val assertJvmVersion = "0.26.1"
 
 
