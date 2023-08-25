@@ -7,8 +7,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 plugins {
-    kotlin("jvm") version "1.9.0"
-    kotlin("plugin.serialization") version "1.9.0"
+    kotlin("jvm") version "1.9.10"
+    kotlin("plugin.serialization") version "1.9.10"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.openapi.generator") version "6.6.0"
     id("com.expediagroup.graphql") version "6.5.3"
@@ -36,7 +36,7 @@ val mockkVersion = "1.13.7"
 val graphqlClientVersion = "6.5.3"
 val avroVersion = "1.11.1"
 val restAssuredVersion = "5.3.1"
-val swaggerRequestValidatorVersion = "2.35.2"
+val swaggerRequestValidatorVersion = "2.36.0"
 val assertJvmVersion = "0.26.1"
 
 
