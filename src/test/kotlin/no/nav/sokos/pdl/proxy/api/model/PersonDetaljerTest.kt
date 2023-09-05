@@ -2,10 +2,9 @@ package no.nav.sokos.pdl.proxy.api.model
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import no.nav.pdl.hentperson.Endring
-import no.nav.pdl.hentperson.Metadata
-import no.nav.pdl.hentperson.Navn
-import no.nav.pdl.hentperson.Person
+import assertk.assertions.isGreaterThan
+import assertk.assertions.isLessThan
+import no.nav.pdl.hentperson.*
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -130,8 +129,39 @@ class PersonDetaljerTest {
         ).isEqualTo("Fredrik")
     }
 
+    @Test
+    fun `oversetter bostedsadresse`() {
+        val testCoAdresse = "Torvald Meyers Gate 105"
+        val originalLengde = testCoAdresse.length
+        assertThat(originalLengde).isLessThan(255)
+        val resulterendeCoAdresse = testPersondetaljer(testCoAdresse).bostedsadresse!!.coAdressenavn
+        assertThat(resulterendeCoAdresse).isEqualTo(testCoAdresse)
+    }
+
+    @Test
+    fun `forkorter ikke coadresse med 255 tegn`() {
+        val testCoAdresse = "141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067982148086513282306647093844609550582231725359408128481117450284102701938521105559644622948954930381964428810975665933446128475648233786783165271201909145648"
+        val originalLengde = testCoAdresse.length
+        assertThat(originalLengde).isEqualTo(255)
+        val resulterendeCoAdresse = testPersondetaljer(testCoAdresse).bostedsadresse!!.coAdressenavn
+        assertThat(resulterendeCoAdresse).isEqualTo(testCoAdresse)
+    }
+
+    @Test
+    fun `forkorter coadresse over 255 tegn`() {
+        val testCoAdresse = "14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316527120190914564856692"
+        val originalLengde = testCoAdresse.length
+        assertThat(originalLengde).isGreaterThan(255)
+        val resulterendeCoAdresse = testPersondetaljer(testCoAdresse).bostedsadresse!!.coAdressenavn
+        assertThat(resulterendeCoAdresse).isEqualTo("141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067982148086513282306647093844609550582231725359408128481117450284102701938521105559644622948954930381964428810975665933446128475648233786783165271201909145648")
+        assertThat(resulterendeCoAdresse!!.length).isEqualTo(255)
+        assertThat(resulterendeCoAdresse.length).isLessThan(originalLengde)
+    }
+
     private fun testPersondetaljer(vararg testnavn: TestNavn) = PersonDetaljer.fra(emptyList(), testperson(*testnavn))
+    private fun testPersondetaljer(testCoAdresse: String) = PersonDetaljer.fra(emptyList(), testperson(testCoAdresse))
     private fun testperson(vararg navn: TestNavn) = Person(navn.map { navn(it) }, emptyList(), emptyList(), emptyList())
+    private fun testperson(co: String) = Person(emptyList(), listOf(Bostedsadresse(coAdressenavn = co, metadata = Metadata2(endringer = emptyList(), historisk = false, master = ""))), emptyList(), emptyList())
     private data class TestNavn(val historisk: Boolean, val endret: String, val navn: String)
 
     private fun navn(testNavn: TestNavn) = Navn(
