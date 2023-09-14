@@ -37,7 +37,7 @@ val graphqlClientVersion = "6.5.5"
 val avroVersion = "1.11.1"
 val restAssuredVersion = "5.3.2"
 val swaggerRequestValidatorVersion = "2.37.0"
-val assertJvmVersion = "0.26.1"
+val assertJvmVersion = "0.27.0"
 
 
 dependencies {
