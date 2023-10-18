@@ -8,12 +8,9 @@ import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 plugins {
     kotlin("jvm") version "1.9.10"
-    kotlin("plugin.serialization") version "1.9.10"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.openapi.generator") version "7.0.1"
     id("com.expediagroup.graphql") version "7.0.1"
-
-    application
 }
 
 group = "no.nav.sokos"
@@ -56,14 +53,13 @@ dependencies {
     implementation("io.ktor:ktor-client-core-jvm:$ktorVersion")
     implementation("io.ktor:ktor-client-apache-jvm:$ktorVersion")
 
-    implementation("io.ktor:ktor-serialization-jackson-jvm:$ktorVersion")
 
     // Security
     implementation("io.ktor:ktor-server-auth-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-auth-jwt-jvm:$ktorVersion")
 
-    // Jackson
-    implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
+    // Serialization / Jackson
+    implementation("io.ktor:ktor-serialization-jackson-jvm:$ktorVersion")
     implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
@@ -98,14 +94,10 @@ dependencies {
 
 }
 
-application {
-    mainClass.set("no.nav.sokos.pdl.proxy.ApplicationKt")
-}
-
 sourceSets {
     main {
         java {
-            srcDirs("$buildDir/generated/src/main/kotlin")
+            srcDirs("${layout.buildDirectory.get()}/generated/src/main/kotlin")
         }
     }
 }
@@ -127,7 +119,7 @@ tasks {
         generatorName.set("kotlin")
         generateModelDocumentation.set(false)
         inputSpec.set("$rootDir/src/main/resources/openapi/sokos-pdl-proxy-v1-swagger2.json")
-        outputDir.set("$buildDir/resources/main/api")
+        outputDir.set("${layout.buildDirectory.get()}/resources/main/api")
         globalProperties.set(
             mapOf(
                 "models" to ""
@@ -170,5 +162,9 @@ tasks {
         packageName.set("no.nav.pdl")
         schemaFile.set(file("$projectDir/src/main/resources/graphql/schema.graphql"))
         queryFileDirectory.set(file("$projectDir/src/main/resources/graphql"))
+    }
+
+    withType<Wrapper>() {
+        gradleVersion = "8.4"
     }
 }
