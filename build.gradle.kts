@@ -10,7 +10,7 @@ plugins {
     kotlin("jvm") version "1.9.10"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.openapi.generator") version "7.0.1"
-    id("com.expediagroup.graphql") version "7.0.1"
+    id("com.expediagroup.graphql") version "7.0.2"
 }
 
 group = "no.nav.sokos"
