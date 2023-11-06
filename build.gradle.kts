@@ -7,10 +7,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 plugins {
-    kotlin("jvm") version "1.9.10"
+    kotlin("jvm") version "1.9.20"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.openapi.generator") version "7.0.1"
-    id("com.expediagroup.graphql") version "7.0.1"
+    id("com.expediagroup.graphql") version "7.0.2"
 }
 
 group = "no.nav.sokos"
@@ -28,12 +28,12 @@ val prometheusVersion = "1.11.5"
 val kotlinLoggingVersion = "3.0.5"
 val natpryceVersion = "1.6.10.0"
 val janionVersion = "3.1.10"
-val junitVersion = "5.10.0"
+val junitVersion = "5.10.1"
 val mockkVersion = "1.13.8"
-val graphqlClientVersion = "7.0.1"
+val graphqlClientVersion = "7.0.2"
 val avroVersion = "1.11.1"
 val restAssuredVersion = "5.3.2"
-val swaggerRequestValidatorVersion = "2.38.0"
+val swaggerRequestValidatorVersion = "2.38.1"
 val assertJvmVersion = "0.27.0"
 
 
