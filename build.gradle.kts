@@ -9,7 +9,7 @@ import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 plugins {
     kotlin("jvm") version "1.9.10"
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("org.openapi.generator") version "7.0.1"
+    id("org.openapi.generator") version "7.1.0"
     id("com.expediagroup.graphql") version "7.0.1"
 }
 
