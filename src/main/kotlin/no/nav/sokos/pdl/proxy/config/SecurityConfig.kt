@@ -11,6 +11,7 @@ import io.ktor.server.application.Application
 import io.ktor.server.auth.authentication
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
+import java.net.URI
 import java.net.URL
 import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.runBlocking
@@ -59,7 +60,7 @@ fun Application.securityConfig(
 }
 
 private fun cachedJwkProvider(jwksUri: String): JwkProvider {
-    val jwkProviderBuilder = JwkProviderBuilder(URL(jwksUri))
+    val jwkProviderBuilder = JwkProviderBuilder(URI(jwksUri).toURL())
     System.getenv("HTTP_PROXY")?.let {
         jwkProviderBuilder.proxied(ProxyBuilder.http(it))
     }
