@@ -27,7 +27,7 @@ API tilbyr følgende:
 
 ### Forutsetninger
 
-* Java 17
+* Java 21
 * Gradle
 
 ### Bygge prosjekt
