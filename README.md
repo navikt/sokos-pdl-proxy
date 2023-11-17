@@ -60,7 +60,7 @@ For å kjøre applikasjonen må du gjøre følgende:
 Distribusjon av tjenesten er gjort med bruk av Github Actions.
 [sokos-pdl-proxy CI / CD](https://github.com/navikt/sokos-pdl-proxy/actions)
 
-Push/merge til master branche vil teste, bygge og deploye til produksjonsmiljø og testmiljø.
+Push/merge til main branch vil teste, bygge og deploye til produksjonsmiljø og testmiljø.
 Det foreligger også mulighet for manuell deploy.
 
 # 5. Autentisering
