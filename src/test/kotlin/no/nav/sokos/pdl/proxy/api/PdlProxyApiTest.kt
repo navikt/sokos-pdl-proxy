@@ -6,7 +6,7 @@ import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import io.ktor.http.HttpStatusCode
 import io.restassured.RestAssured
 import io.restassured.http.Header
-import java.net.URL
+import java.net.URI
 import kotlin.random.Random
 import no.nav.sokos.pdl.proxy.ApplicationState
 import no.nav.sokos.pdl.proxy.api.model.PersonIdent
@@ -298,7 +298,7 @@ internal class PdlProxyApiTest {
         httpStatusCode: HttpStatusCode = HttpStatusCode.OK
     ) {
         val mockkGraphQlClient = GraphQLKtorClient(
-            URL(pdlUrl),
+            URI(pdlUrl).toURL(),
             setupMockEngine(
                 hentIdenterResponsFilnavn,
                 hentPersonResponsFilnavn,

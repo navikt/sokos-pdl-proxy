@@ -32,7 +32,7 @@ API tilbyr følgende:
 
 ### Bygge prosjekt
 
-`./gradlew clean build`
+`./gradlew build shadowJar`
 
 ### Lokal utvikling
 
