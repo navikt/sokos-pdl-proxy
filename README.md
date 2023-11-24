@@ -73,8 +73,6 @@ Applikasjonen bruker [AzureAD](https://docs.nais.io/security/auth/azure-ad/) aut
 
 Vi logger til https://logs.adeo.no.
 
-For å se på logger må man logge seg på https://logs.adeo.no.
-
 Feilmeldinger og infomeldinger som ikke innheholder sensitive data logges til indeksen `logstash-apps`, mens meldinger
 som inneholder sensitive data logges til indeksen `tjenestekall`.
 
@@ -110,7 +108,12 @@ kubectl logs -f sokos-pdl-proxy-<POD-ID> --namespace okonomi -c sokos-pdl-proxy
 ### Alarmer
 
 Vi bruker [nais-alerts](https://doc.nais.io/observability/alerts) for å sette opp alarmer. 
-Disse finner man konfigurert i [.nais/alerts-dev.yaml](.nais/alerts-dev.yaml) og [.nais/alerts-prod.yaml](.nais/alerts-prod.yaml).
+Disse finner man konfigurert i 
+
+- [Prod-miljø](.nais/alerts-prod.yaml)
+- [Dev- og Q1-miljø](.nais/alerts-dev.yaml)
+
+Disse dukker opp i `#team-mob-alerts-dev` og `#team-mob-alers-prod` kanalene på Slack
 
 ### Grafana
 
