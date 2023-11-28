@@ -35,9 +35,9 @@ spec:
 
         - alert: Applikasjonen logger høy andel errors
           expr:
-            'sum(max_over_time(log_messages_errors{namespace="okonomi",app="sokos-ktor-template",level="Error"}[15m])
+            'sum(max_over_time(log_messages_errors{namespace="okonomi",app="sokos-pdl-proxy",level="Error"}[15m])
               or vector(0)) -
-              sum(max_over_time(log_messages_errors{namespace="okonomi",app="sokos-ktor-template",level="Error"}[15m]
+              sum(max_over_time(log_messages_errors{namespace="okonomi",app="sokos-pdl-proxy",level="Error"}[15m]
               offset 15m) or vector(0)) > 0'
           for: 2m
           annotations:
@@ -51,9 +51,9 @@ spec:
 
         - alert: Applikasjonen logger høy andel warnings
           expr:
-            'sum(max_over_time(log_messages_errors{namespace="okonomi",app="sokos-ktor-template",level="Warning"}[15m])
+            'sum(max_over_time(log_messages_errors{namespace="okonomi",app="sokos-pdl-proxy",level="Warning"}[15m])
               or vector(0)) -
-              sum(max_over_time(log_messages_errors{namespace="okonomi",app="sokos-ktor-template",level="Warning"}[15m]
+              sum(max_over_time(log_messages_errors{namespace="okonomi",app="sokos-pdl-proxy",level="Warning"}[15m]
               offset 15m) or vector(0)) > 0'
           for: 2m
           annotations:
