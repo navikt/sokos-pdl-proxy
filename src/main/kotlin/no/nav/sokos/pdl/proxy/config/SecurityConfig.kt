@@ -12,14 +12,11 @@ import io.ktor.server.auth.authentication
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
 import java.net.URI
-import java.net.URL
 import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.runBlocking
-import mu.KotlinLogging
 import no.nav.sokos.pdl.proxy.util.httpClient
 import no.nav.sokos.pdl.proxy.config.PropertiesConfig.AzureAdServerConfig
 
-private val logger = KotlinLogging.logger {}
 const val AUTHENTICATION_NAME = "azureAd"
 
 fun Application.securityConfig(
@@ -28,7 +25,7 @@ fun Application.securityConfig(
 ) {
     logger.info("Use authentication: $useAuthentication")
     if (useAuthentication) {
-        val openIdMetadata: OpenIdMetadata = wellKnowConfig(azureAdServerConfig.authorityEndpoint)
+        val openIdMetadata: OpenIdMetadata = wellKnowConfig(azureAdServerConfig.wellKnownUrl)
         val jwkProvider = cachedJwkProvider(openIdMetadata.jwksUri)
 
         authentication {

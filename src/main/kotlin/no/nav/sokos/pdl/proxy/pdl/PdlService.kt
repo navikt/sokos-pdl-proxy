@@ -6,19 +6,16 @@ import com.expediagroup.graphql.client.types.GraphQLClientResponse
 import io.ktor.client.request.header
 import io.ktor.client.request.url
 import kotlinx.coroutines.runBlocking
-import mu.KotlinLogging
 import no.nav.pdl.HentIdenter
 import no.nav.pdl.HentPerson
 import no.nav.pdl.hentperson.Person
 import no.nav.sokos.pdl.proxy.api.model.Ident
 import no.nav.sokos.pdl.proxy.api.model.IdentifikatorType.Companion.fra
 import no.nav.sokos.pdl.proxy.api.model.PersonDetaljer
-import no.nav.sokos.pdl.proxy.config.SECURE_LOGGER_NAME
 import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
-import no.nav.sokos.pdl.proxy.util.PdlApiException
-
-private val logger = KotlinLogging.logger {}
-private val secureLogger = KotlinLogging.logger(SECURE_LOGGER_NAME)
+import no.nav.sokos.pdl.proxy.config.PdlApiException
+import no.nav.sokos.pdl.proxy.config.logger
+import no.nav.sokos.pdl.proxy.config.secureLogger
 
 class PdlService(
     private val graphQlClient: GraphQLKtorClient,
@@ -27,9 +24,10 @@ class PdlService(
 ) {
 
     fun hentPersonDetaljer(ident: String): PersonDetaljer {
+        logger.info { "Henter persondetaljer" }
         val identer = hentIdenterForPerson(ident).getOrThrow()
         val person = hentPerson(ident).getOrThrow()
-
+        logger.info("Persondetaljer hentet")
         return PersonDetaljer.fra(identer, person)
     }
 
@@ -84,14 +82,14 @@ class PdlService(
 
         val httpFeilkode = when {
             "not_found" in feilkoderFraPDL -> {
-                secureLogger.info { "Henting av person med ident $ident fra PDL mislykket" }
-                logger.info { "Fant ikke person i PDL ved kall til $metoderSomGirFeil." }
+                secureLogger.info { "Person med ident $ident fra PDL ikke funnet" }
+                logger.info { "Person fra PDL ikke funnet" }
                 404
             }
 
             else -> {
-                secureLogger.error { "Henting av data fra PDL feilet ved kall til $metoderSomGirFeil. Feilmeldinger er: $feilmeldingerFraPDL" }
-                logger.error { "Henting av data fra PDL feilet ved kall til $metoderSomGirFeil. Feilmeldinger er: $feilmeldingerFraPDL" }
+                secureLogger.error { "$metoderSomGirFeil kallet feilet. Feilmelding: $feilmeldingerFraPDL" }
+                logger.error { "$metoderSomGirFeil kallet feilet. Feilmelding: $feilmeldingerFraPDL" }
                 500
             }
         }

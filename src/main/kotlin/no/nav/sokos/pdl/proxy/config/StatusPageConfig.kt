@@ -1,15 +1,12 @@
-package no.nav.sokos.pdl.proxy.util
+package no.nav.sokos.pdl.proxy.config
 
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.plugins.statuspages.StatusPagesConfig
 import io.ktor.server.response.respond
-import mu.KotlinLogging
 import no.nav.sokos.pdl.proxy.api.model.TjenestefeilResponse
 
-private val logger = KotlinLogging.logger { }
-
-fun StatusPagesConfig.exceptionHandler() {
+fun StatusPagesConfig.statusPageConfig() {
 
     exception<PdlApiException> { call, pdlApiException ->
         val response = TjenestefeilResponse(pdlApiException.feilmelding)

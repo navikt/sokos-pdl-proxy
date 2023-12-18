@@ -5,11 +5,12 @@ on:
 env:
   TZ: Europe/Oslo
 
+permissions:
+  contents: "write"
+  id-token: "write"
+
 jobs:
   build:
-    permissions:
-      contents: "read"
-      id-token: "write"
     name: Build/test & push image
     runs-on: ubuntu-latest
     steps:
@@ -20,7 +21,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
-      - uses: gradle/gradle-build-action@v2.10.0
+      - uses: gradle/gradle-build-action@v2.11.0
         with:
           arguments: --configuration-cache build shadowJar
 
@@ -44,9 +45,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: nais/deploy/actions/deploy@v1
+      - uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          IMAGE: ${{ needs.build.outputs.image }}
           RESOURCE: .nais/naiserator-dev-q1.yaml
+          IMAGE: ${{ needs.build.outputs.image }}
+          PRINT_PAYLOAD: true

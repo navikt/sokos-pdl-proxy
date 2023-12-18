@@ -18,7 +18,7 @@ import io.ktor.http.headersOf
 import java.net.URL
 import no.nav.pdl.hentperson.PostadresseIFrittFormat
 import no.nav.sokos.pdl.proxy.api.model.Ident
-import no.nav.sokos.pdl.proxy.util.PdlApiException
+import no.nav.sokos.pdl.proxy.config.PdlApiException
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import readFromResource

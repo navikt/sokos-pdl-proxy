@@ -44,15 +44,15 @@ object PropertiesConfig {
 
     data class AzureAdClientConfig(
         val clientId: String = get("AZURE_APP_CLIENT_ID"),
-        val authorityEndpoint: String = get("AZURE_APP_WELL_KNOWN_URL"),
-        val tenant: String = get("AZURE_APP_TENANT_ID"),
+        val wellKnownUrl: String = get("AZURE_APP_WELL_KNOWN_URL"),
+        val tenantId: String = get("AZURE_APP_TENANT_ID"),
         val clientSecret: String = get("AZURE_APP_CLIENT_SECRET"),
         val pdlClientId: String = get("PDL_CLIENT_ID")
     )
 
     data class AzureAdServerConfig(
         val clientId: String = get("AZURE_APP_CLIENT_ID"),
-        val authorityEndpoint: String = get("AZURE_APP_WELL_KNOWN_URL"),
+        val wellKnownUrl: String = get("AZURE_APP_WELL_KNOWN_URL"),
     )
 
     data class PdlConfig(

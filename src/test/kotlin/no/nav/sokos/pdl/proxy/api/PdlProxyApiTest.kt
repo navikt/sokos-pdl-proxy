@@ -234,7 +234,7 @@ internal class PdlProxyApiTest {
             .statusCode(500)
             .body(
                 containsStringIgnoringCase("For mange kontaktadresser"),
-                containsStringIgnoringCase("denne personen har 4"),
+                containsStringIgnoringCase("Personen har 4"),
                 containsStringIgnoringCase("overstiger grensen på 3")
             )
 
@@ -262,7 +262,7 @@ internal class PdlProxyApiTest {
             .statusCode(500)
             .body(
                 containsStringIgnoringCase("For mange oppholdsadresser"),
-                containsStringIgnoringCase("denne personen har 3"),
+                containsStringIgnoringCase("Personen har 3"),
                 containsStringIgnoringCase("overstiger grensen på 2")
             )
 

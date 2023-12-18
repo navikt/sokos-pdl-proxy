@@ -3,6 +3,7 @@ package no.nav.sokos.pdl.proxy.config
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.SerializationFeature
+import io.ktor.http.HttpHeaders
 import io.ktor.serialization.jackson.jackson
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
@@ -21,26 +22,23 @@ import io.micrometer.core.instrument.binder.system.UptimeMetrics
 import java.util.UUID
 import mu.KotlinLogging
 import no.nav.sokos.pdl.proxy.metrics.Metrics
-import no.nav.sokos.pdl.proxy.util.exceptionHandler
 import org.slf4j.event.Level
 
-private val logger = KotlinLogging.logger {}
-const val SECURE_LOGGER_NAME = "secureLogger"
-const val X_CORRELATION_ID = "x-correlation-id"
+private const val SECURE_LOGGER = "secureLogger"
+
+val logger = KotlinLogging.logger {}
+val secureLogger = KotlinLogging.logger(SECURE_LOGGER)
 
 fun Application.commonConfig() {
-    install(StatusPages) {
-        exceptionHandler()
-    }
     install(CallId) {
-        header(X_CORRELATION_ID)
+        header(HttpHeaders.XCorrelationId)
         generate { UUID.randomUUID().toString() }
         verify { it.isNotEmpty() }
     }
     install(CallLogging) {
         logger = no.nav.sokos.pdl.proxy.config.logger
         level = Level.INFO
-        callIdMdc(X_CORRELATION_ID)
+        callIdMdc(HttpHeaders.XCorrelationId)
         filter { call -> call.request.path().startsWith("/api/pdl-proxy") }
         disableDefaultColors()
     }
@@ -52,6 +50,9 @@ fun Application.commonConfig() {
             enable(SerializationFeature.INDENT_OUTPUT)
             setSerializationInclusion(JsonInclude.Include.NON_NULL)
         }
+    }
+    install(StatusPages) {
+        statusPageConfig()
     }
     install(MicrometerMetrics) {
         registry = Metrics.prometheusRegistry

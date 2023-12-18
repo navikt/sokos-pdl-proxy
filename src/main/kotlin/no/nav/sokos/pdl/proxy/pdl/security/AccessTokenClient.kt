@@ -16,16 +16,14 @@ import java.time.Instant
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import mu.KotlinLogging
 import no.nav.sokos.pdl.proxy.util.retry
 import no.nav.sokos.pdl.proxy.config.PropertiesConfig.AzureAdClientConfig
-
-private val logger = KotlinLogging.logger {}
+import no.nav.sokos.pdl.proxy.config.logger
 
 class AccessTokenClient(
     private val azureAdClientConfig: AzureAdClientConfig,
     private val client: HttpClient,
-    private val aadAccessTokenUrl: String = "https://login.microsoftonline.com/${azureAdClientConfig.tenant}/oauth2/v2.0/token"
+    private val aadAccessTokenUrl: String = "https://login.microsoftonline.com/${azureAdClientConfig.tenantId}/oauth2/v2.0/token"
 ) {
     private val mutex = Mutex()
 
@@ -36,7 +34,7 @@ class AccessTokenClient(
         return mutex.withLock {
             when {
                 token.expiresAt.isBefore(omToMinutter) -> {
-                    logger.info("henter ny token")
+                    logger.info("Henter ny accesstoken")
                     token = AccessToken(hentAccessTokenFraProvider())
                     token.accessToken
                 }
@@ -52,7 +50,7 @@ class AccessTokenClient(
                 accept(ContentType.Application.Json)
                 method = HttpMethod.Post
                 setBody(FormDataContent(Parameters.build {
-                    append("tenant", azureAdClientConfig.tenant)
+                    append("tenant", azureAdClientConfig.tenantId)
                     append("client_id", azureAdClientConfig.clientId)
                     append("scope", "api://${azureAdClientConfig.pdlClientId}/.default")
                     append("client_secret", azureAdClientConfig.clientSecret)
@@ -62,7 +60,7 @@ class AccessTokenClient(
 
             if (response.status != HttpStatusCode.OK) {
                 val feilmelding =
-                    "Acesstoken provider fikk ikke token fra Azure. Fikk følgende statuskode: ${response.status}"
+                    "Kunne ikke hente accesstoken Azure. Statuskode: ${response.status}"
                 logger.error { feilmelding }
                 throw RuntimeException(feilmelding)
             } else {
