@@ -6,7 +6,7 @@
     </appender>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%green(%d{HH:mm:ss}) %cyan([%-5.5t]) %boldCyan(%0.-5p) %yellow(%-20.20logger{19}) %cyan(:) %m%n
             </pattern>
         </encoder>
@@ -33,15 +33,17 @@
         </then>
     </if>
 
-    <root level="INFO">
-        <if condition='isDefined("NAIS_CLUSTER_NAME")'>
-            <then>
+    <if condition='isDefined("NAIS_CLUSTER_NAME")'>
+        <then>
+            <root level="INFO">
                 <appender-ref ref="STDOUT"/>
-            </then>
-            <else>
+            </root>
+        </then>
+        <else>
+            <root level="INFO">
                 <appender-ref ref="CONSOLE"/>
-            </else>
-        </if>
-    </root>
+            </root>
+        </else>
+    </if>
 
 </configuration>
