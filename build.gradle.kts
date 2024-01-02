@@ -6,9 +6,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 plugins {
-    kotlin("jvm") version "1.9.21"
+    kotlin("jvm") version "1.9.22"
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("org.openapi.generator") version "7.1.0"
+    id("org.openapi.generator") version "7.2.0"
     id("com.expediagroup.graphql") version "7.0.2"
 }
 
@@ -22,7 +22,7 @@ repositories {
 val ktorVersion = "2.3.7"
 val logbackVersion = "1.4.14"
 val logstashVersion = "7.4"
-val jacksonVersion = "2.16.0"
+val jacksonVersion = "2.16.1"
 val prometheusVersion = "1.12.1"
 val kotlinLoggingVersion = "3.0.5"
 val natpryceVersion = "1.6.10.0"
