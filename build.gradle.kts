@@ -32,7 +32,7 @@ val mockkVersion = "1.13.9"
 val graphqlClientVersion = "7.0.2"
 val avroVersion = "1.11.1"
 val restAssuredVersion = "5.4.0"
-val swaggerRequestValidatorVersion = "2.39.0"
+val swaggerRequestValidatorVersion = "2.40.0"
 val assertJvmVersion = "0.28.0"
 
 
