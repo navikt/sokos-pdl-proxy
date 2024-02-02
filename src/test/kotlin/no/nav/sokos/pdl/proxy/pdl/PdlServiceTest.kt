@@ -6,6 +6,7 @@ import assertk.assertions.contains
 import assertk.assertions.containsExactlyInAnyOrder
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
+import assertk.assertions.isNull
 import assertk.assertions.prop
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import io.ktor.client.HttpClient
@@ -15,7 +16,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.TextContent
 import io.ktor.http.headersOf
-import java.net.URL
+import java.net.URI
 import no.nav.pdl.hentperson.PostadresseIFrittFormat
 import no.nav.sokos.pdl.proxy.api.model.Ident
 import no.nav.sokos.pdl.proxy.config.PdlApiException
@@ -30,7 +31,7 @@ internal class PdlServiceTest {
     fun `Vellykket hent av en persons identer, navn og adresser fra Pdl`() {
         val result = PdlService(
             GraphQLKtorClient(
-                URL(pdlUrl),
+                URI(pdlUrl).toURL(),
                 setupMockEngine(
                     "hentIdenter_success_response.json",
                     "hentPerson_success_response.json",
@@ -58,9 +59,12 @@ internal class PdlServiceTest {
     fun `Finnes ikke person identer fra Pdl`() {
         val exception = assertThrows<PdlApiException> {
             PdlService(
-                pdlSomReturnerer(
-                    "hentIdenter_fant_ikke_person_response.json",
-                    "hentPerson_fant_ikke_person_response.json"
+                GraphQLKtorClient(
+                    URI(pdlUrl).toURL(),
+                    setupMockEngine(
+                        "hentIdenter_fant_ikke_person_response.json",
+                        "hentPerson_fant_ikke_person_response.json"
+                    ),
                 ),
                 pdlUrl,
                 accessTokenClient = null
@@ -78,7 +82,7 @@ internal class PdlServiceTest {
         assertThat(
             PdlService(
                 GraphQLKtorClient(
-                    URL(pdlUrl),
+                    URI(pdlUrl).toURL(),
                     setupMockEngine(
                         "hentIdenter_success_response.json",
                         "hentPerson_flere_navn_ett_aktivt.json",
@@ -105,7 +109,7 @@ internal class PdlServiceTest {
         assertThat(
             PdlService(
                 GraphQLKtorClient(
-                    URL(pdlUrl),
+                    URI(pdlUrl).toURL(),
                     setupMockEngine(
                         "hentIdenter_success_response.json",
                         "hentPerson_flere_aktive_navn_noen_nyere_historiske.json",
@@ -132,7 +136,7 @@ internal class PdlServiceTest {
         assertThat(
             PdlService(
                 GraphQLKtorClient(
-                    URL(pdlUrl),
+                    URI(pdlUrl).toURL(),
                     setupMockEngine(
                         "hentIdenter_success_response.json",
                         "hentPerson_flere_bare_historiske_navn.json",
@@ -158,9 +162,12 @@ internal class PdlServiceTest {
     fun `Ikke authentisert å hente person identer fra Pdl`() {
         val exception = assertThrows<PdlApiException> {
             PdlService(
-                pdlSomReturnerer(
-                    "hentIdenter_ikke_authentisert_response.json",
-                    "hentPerson_ikke_authentisert_response.json"
+                GraphQLKtorClient(
+                    URI(pdlUrl).toURL(),
+                    setupMockEngine(
+                        "hentIdenter_ikke_authentisert_response.json",
+                        "hentPerson_ikke_authentisert_response.json"
+                    ),
                 ),
                 pdlUrl,
                 accessTokenClient = null
@@ -172,15 +179,6 @@ internal class PdlServiceTest {
         assertThat(exception.feilkode).isEqualTo(500)
         assertThat(exception.feilmelding).contains("Ikke autentisert")
     }
-
-    private fun pdlSomReturnerer(hentIdenterRespons: String, hentPersonRespons: String) = GraphQLKtorClient(
-        URL(pdlUrl),
-        setupMockEngine(
-            hentIdenterRespons,
-            hentPersonRespons,
-            HttpStatusCode.OK
-        )
-    )
 }
 
 fun setupMockEngine(
