@@ -19,7 +19,7 @@ repositories {
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") }
 }
 
-val ktorVersion = "2.3.7"
+val ktorVersion = "2.3.8"
 val logbackVersion = "1.4.14"
 val logstashVersion = "7.4"
 val jacksonVersion = "2.16.1"
@@ -27,7 +27,7 @@ val prometheusVersion = "1.12.2"
 val kotlinLoggingVersion = "3.0.5"
 val natpryceVersion = "1.6.10.0"
 val janionVersion = "3.1.11"
-val junitVersion = "5.10.1"
+val junitVersion = "5.10.2"
 val mockkVersion = "1.13.9"
 val graphqlClientVersion = "7.0.2"
 val avroVersion = "1.11.1"
