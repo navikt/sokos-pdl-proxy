@@ -11,10 +11,10 @@ import kotlin.random.Random
 import no.nav.sokos.pdl.proxy.ApplicationState
 import no.nav.sokos.pdl.proxy.api.model.PersonIdent
 import no.nav.sokos.pdl.proxy.pdl.PdlService
-import no.nav.sokos.pdl.proxy.pdl.setupMockEngine
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.containsStringIgnoringCase
 import org.junit.jupiter.api.Test
+import setupMockEngine
 import toJson
 
 internal class PdlProxyApiTest {

@@ -5,7 +5,7 @@ import io.ktor.server.application.Application
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.engine.stop
 import io.ktor.server.netty.Netty
-import java.net.URL
+import java.net.URI
 import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
 import no.nav.sokos.pdl.proxy.config.PropertiesConfig
@@ -28,7 +28,7 @@ fun main() {
         ) else null
     val pdlService =
         PdlService(
-            GraphQLKtorClient(URL(applicationConfiguration.pdlConfig.pdlUrl), httpClient),
+            GraphQLKtorClient(URI(applicationConfiguration.pdlConfig.pdlUrl).toURL(), httpClient),
             applicationConfiguration.pdlConfig.pdlUrl,
             accessTokenClient
         )

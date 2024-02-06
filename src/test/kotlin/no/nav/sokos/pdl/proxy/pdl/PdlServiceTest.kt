@@ -8,20 +8,14 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import assertk.assertions.prop
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.mock.MockEngine
-import io.ktor.client.engine.mock.respond
-import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.content.TextContent
-import io.ktor.http.headersOf
 import java.net.URI
 import no.nav.pdl.hentperson.PostadresseIFrittFormat
 import no.nav.sokos.pdl.proxy.api.model.Ident
 import no.nav.sokos.pdl.proxy.config.PdlApiException
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import readFromResource
+import setupMockEngine
 
 private const val pdlUrl = "http://0.0.0.0"
 
@@ -177,28 +171,5 @@ internal class PdlServiceTest {
         assertThat(exception).isNotNull()
         assertThat(exception.feilkode).isEqualTo(500)
         assertThat(exception.feilmelding).contains("Ikke autentisert")
-    }
-}
-
-private fun setupMockEngine(
-    hentIdenterResponseFilNavn: String?,
-    hentPersonResponseFilNavn: String?,
-    statusCode: HttpStatusCode = HttpStatusCode.OK,
-): HttpClient {
-    return HttpClient(MockEngine { request ->
-        val body = request.body as TextContent
-        val content = when {
-            body.text.contains("hentIdenter") -> hentIdenterResponseFilNavn
-            else -> hentPersonResponseFilNavn
-        }?.readFromResource().orEmpty()
-
-        respond(
-            content = content,
-            headers = headersOf("Content-Type", ContentType.Application.Json.toString()),
-            status = statusCode
-        )
-
-    }) {
-        expectSuccess = false
     }
 }
