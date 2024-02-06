@@ -12,10 +12,10 @@ import no.nav.pdl.hentperson.Person
 import no.nav.sokos.pdl.proxy.api.model.Ident
 import no.nav.sokos.pdl.proxy.api.model.IdentifikatorType.Companion.fra
 import no.nav.sokos.pdl.proxy.api.model.PersonDetaljer
-import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
 import no.nav.sokos.pdl.proxy.config.PdlApiException
 import no.nav.sokos.pdl.proxy.config.logger
 import no.nav.sokos.pdl.proxy.config.secureLogger
+import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
 
 class PdlService(
     private val graphQlClient: GraphQLKtorClient,

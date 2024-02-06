@@ -14,8 +14,8 @@ import io.ktor.server.auth.jwt.jwt
 import java.net.URI
 import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.runBlocking
-import no.nav.sokos.pdl.proxy.util.httpClient
 import no.nav.sokos.pdl.proxy.config.PropertiesConfig.AzureAdServerConfig
+import no.nav.sokos.pdl.proxy.util.httpClient
 
 const val AUTHENTICATION_NAME = "azureAd"
 

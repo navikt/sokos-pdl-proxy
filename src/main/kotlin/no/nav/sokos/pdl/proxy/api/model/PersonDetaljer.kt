@@ -1,8 +1,11 @@
 package no.nav.sokos.pdl.proxy.api.model
 
-import no.nav.pdl.hentperson.*
-import no.nav.sokos.pdl.proxy.metrics.Metrics
 import java.time.LocalDateTime
+import no.nav.pdl.hentperson.Bostedsadresse
+import no.nav.pdl.hentperson.Kontaktadresse
+import no.nav.pdl.hentperson.Oppholdsadresse
+import no.nav.pdl.hentperson.Person
+import no.nav.sokos.pdl.proxy.metrics.Metrics
 
 data class PersonDetaljer(
         val identer: List<Ident>,

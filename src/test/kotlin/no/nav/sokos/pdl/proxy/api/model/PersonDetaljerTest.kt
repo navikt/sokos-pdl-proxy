@@ -2,6 +2,7 @@ package no.nav.sokos.pdl.proxy.api.model
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import java.time.format.DateTimeParseException
 import no.nav.pdl.hentperson.Endring
 import no.nav.pdl.hentperson.Metadata
 import no.nav.pdl.hentperson.Navn
@@ -9,7 +10,6 @@ import no.nav.pdl.hentperson.Person
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import java.time.format.DateTimeParseException
 
 class PersonDetaljerTest {
 

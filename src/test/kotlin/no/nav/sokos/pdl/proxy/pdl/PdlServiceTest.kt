@@ -6,7 +6,6 @@ import assertk.assertions.contains
 import assertk.assertions.containsExactlyInAnyOrder
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
-import assertk.assertions.isNull
 import assertk.assertions.prop
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import io.ktor.client.HttpClient
@@ -181,7 +180,7 @@ internal class PdlServiceTest {
     }
 }
 
-fun setupMockEngine(
+private fun setupMockEngine(
     hentIdenterResponseFilNavn: String?,
     hentPersonResponseFilNavn: String?,
     statusCode: HttpStatusCode = HttpStatusCode.OK,

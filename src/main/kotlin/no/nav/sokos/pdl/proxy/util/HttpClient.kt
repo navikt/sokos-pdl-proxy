@@ -7,10 +7,9 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.apache.Apache
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.serialization.jackson.jackson
 import java.net.ProxySelector
 import org.apache.http.impl.conn.SystemDefaultRoutePlanner
-
-import io.ktor.serialization.jackson.jackson
 
 fun ObjectMapper.customConfig() {
     registerModule(JavaTimeModule())
