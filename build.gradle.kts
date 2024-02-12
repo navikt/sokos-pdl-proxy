@@ -8,7 +8,7 @@ import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 plugins {
     kotlin("jvm") version "1.9.22"
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("org.openapi.generator") version "7.2.0"
+    id("org.openapi.generator") version "7.3.0"
     id("com.expediagroup.graphql") version "7.0.2"
 }
 
@@ -26,7 +26,7 @@ val jacksonVersion = "2.16.1"
 val prometheusVersion = "1.12.2"
 val kotlinLoggingVersion = "3.0.5"
 val natpryceVersion = "1.6.10.0"
-val janionVersion = "3.1.11"
+val janionVersion = "3.1.12"
 val junitVersion = "5.10.2"
 val mockkVersion = "1.13.9"
 val graphqlClientVersion = "7.0.2"
