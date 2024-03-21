@@ -16,9 +16,11 @@ import java.time.Instant
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import mu.KotlinLogging
 import no.nav.sokos.pdl.proxy.config.PropertiesConfig.AzureAdClientConfig
-import no.nav.sokos.pdl.proxy.config.logger
 import no.nav.sokos.pdl.proxy.util.retry
+
+private val logger = KotlinLogging.logger {}
 
 class AccessTokenClient(
     private val azureAdClientConfig: AzureAdClientConfig,

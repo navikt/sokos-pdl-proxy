@@ -4,7 +4,10 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.plugins.statuspages.StatusPagesConfig
 import io.ktor.server.response.respond
+import mu.KotlinLogging
 import no.nav.sokos.pdl.proxy.api.model.TjenestefeilResponse
+
+private val logger = KotlinLogging.logger {}
 
 fun StatusPagesConfig.statusPageConfig() {
 

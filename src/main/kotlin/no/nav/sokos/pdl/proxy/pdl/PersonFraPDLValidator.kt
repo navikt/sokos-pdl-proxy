@@ -1,9 +1,10 @@
 package no.nav.sokos.pdl.proxy.pdl
 
+import mu.KotlinLogging
 import no.nav.pdl.hentperson.Person
 import no.nav.sokos.pdl.proxy.config.PdlApiException
-import no.nav.sokos.pdl.proxy.config.logger
 
+private val logger = KotlinLogging.logger {}
 private const val MAKS_ANTALL_KONTAKT_ADRESSER = 3
 private const val MAKS_ANTALL_OPPHOLD_ADRESSER = 2
 

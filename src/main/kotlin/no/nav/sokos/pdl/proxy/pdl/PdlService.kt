@@ -6,6 +6,7 @@ import com.expediagroup.graphql.client.types.GraphQLClientResponse
 import io.ktor.client.request.header
 import io.ktor.client.request.url
 import kotlinx.coroutines.runBlocking
+import mu.KotlinLogging
 import no.nav.pdl.HentIdenter
 import no.nav.pdl.HentPerson
 import no.nav.pdl.hentperson.Person
@@ -13,9 +14,10 @@ import no.nav.sokos.pdl.proxy.api.model.Ident
 import no.nav.sokos.pdl.proxy.api.model.IdentifikatorType.Companion.fra
 import no.nav.sokos.pdl.proxy.api.model.PersonDetaljer
 import no.nav.sokos.pdl.proxy.config.PdlApiException
-import no.nav.sokos.pdl.proxy.config.logger
-import no.nav.sokos.pdl.proxy.config.secureLogger
 import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
+
+private val logger = KotlinLogging.logger {}
+private val secureLogger = KotlinLogging.logger("secureLogger")
 
 class PdlService(
     private val graphQlClient: GraphQLKtorClient,

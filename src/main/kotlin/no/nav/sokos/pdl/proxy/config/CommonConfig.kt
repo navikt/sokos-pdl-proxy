@@ -24,10 +24,7 @@ import mu.KotlinLogging
 import no.nav.sokos.pdl.proxy.metrics.Metrics
 import org.slf4j.event.Level
 
-private const val SECURE_LOGGER = "secureLogger"
-
-val logger = KotlinLogging.logger {}
-val secureLogger = KotlinLogging.logger(SECURE_LOGGER)
+private val log = KotlinLogging.logger {}
 
 fun Application.commonConfig() {
     install(CallId) {
@@ -36,7 +33,7 @@ fun Application.commonConfig() {
         verify { it.isNotEmpty() }
     }
     install(CallLogging) {
-        logger = no.nav.sokos.pdl.proxy.config.logger
+        logger = log
         level = Level.INFO
         callIdMdc(HttpHeaders.XCorrelationId)
         filter { call -> call.request.path().startsWith("/api/pdl-proxy") }
