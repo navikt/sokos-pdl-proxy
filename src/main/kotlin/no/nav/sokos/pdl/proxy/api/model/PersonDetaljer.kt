@@ -15,7 +15,7 @@ data class PersonDetaljer(
         val forkortetNavn: String?,
         val bostedsadresse: Bostedsadresse?,
         val kontaktadresse: List<Kontaktadresse>,
-        val oppholdsadresse: List<Oppholdsadresse>,
+        val oppholdsadresse: List<Oppholdsadresse>
 ) {
     companion object {
         fun fra(identer: List<Ident>, person: Person?): PersonDetaljer {
@@ -28,7 +28,10 @@ data class PersonDetaljer(
             val riktigNavn = navnList
                     .sortedByDescending { it.metadata.endringer.maxOf { endring -> LocalDateTime.parse(endring.registrert) } }
                     .partition { !it.metadata.historisk }.toList()
-                    .flatMap { it.toList() }.firstOrNull()
+                    .flatMap { it.toList() }
+                    .partition { it.metadata.master == "PDL" && !it.metadata.historisk}.toList()
+                    .flatMap { it.toList() }
+                    .firstOrNull()
 
             return PersonDetaljer(
                     identer,
