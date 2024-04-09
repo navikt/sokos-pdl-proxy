@@ -425,9 +425,6 @@
         "opplysningsId": {
           "type": "string"
         },
-        "master": {
-          "type": "string"
-        },
         "endringer": {
           "type": "array",
           "items": {
@@ -436,6 +433,9 @@
         },
         "historisk": {
           "type": "boolean"
+        },
+        "master": {
+          "type": "string"
         }
       }
     },
