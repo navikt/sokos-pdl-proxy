@@ -12,6 +12,9 @@ query($ident: ID!){
                 historisk
             }
         }
+        doedsfall {
+            doedsdato
+        }
         bostedsadresse {
             angittFlyttedato,
             gyldigFraOgMed,
