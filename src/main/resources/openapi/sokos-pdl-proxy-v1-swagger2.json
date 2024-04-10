@@ -149,6 +149,11 @@
             "$ref": "#/definitions/Oppholdsadresse"
           },
           "description": "For å avhjelpe begrensninger på stormaskin, settes en maks her som tilsvarer det som teoretisk kan komme fra PDL"
+        },
+        "doedsfall": {
+          "type": "boolean",
+          "example": true,
+          "description": "Om personen er d&oslash;d."
         }
       },
       "title": "PersonDetaljer",
