@@ -36,8 +36,7 @@ class PdlService(
     private fun hentPerson(ident: String): Result<Person?> {
         val respons: GraphQLClientResponse<HentPerson.Result> = runBlocking {
             val accessToken = accessTokenClient?.hentAccessToken()
-            val request = HentPerson(HentPerson.Variables(ident = ident))
-            graphQlClient.execute(request) {
+            graphQlClient.execute(HentPerson(HentPerson.Variables(ident = ident))) {
                 url(pdlUrl)
                 header("Authorization", "Bearer $accessToken")
                 header("behandlingsnummer", "B154")
