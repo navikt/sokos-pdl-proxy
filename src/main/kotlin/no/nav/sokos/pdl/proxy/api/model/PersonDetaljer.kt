@@ -40,7 +40,7 @@ data class PersonDetaljer(
                 person?.bostedsadresse?.firstOrNull(),
                 person?.kontaktadresse.orEmpty(),
                 person?.oppholdsadresse.orEmpty(),
-                person?.doedsfall?.any(),
+                person?.doedsfall?.any { it.metadata.historisk.not() }
             )
         }
     }

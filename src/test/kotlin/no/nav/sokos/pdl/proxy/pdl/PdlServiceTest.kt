@@ -152,7 +152,48 @@ internal class PdlServiceTest {
     }
 
     @Test
-    fun `Ikke authentisert å hente person identer fra Pdl`() {
+    fun `Skal hente ut og vise om personen er i live`() {
+        assertThat(
+            PdlService(
+                GraphQLKtorClient(
+                    URI(pdlUrl).toURL(),
+                    setupMockEngine(
+                        "hentIdenter_success_response.json",
+                        "hentPerson_flere_bare_historiske_navn.json",
+                        HttpStatusCode.OK
+                    )
+                ),
+                pdlUrl,
+                accessTokenClient = null
+            )
+                .hentPersonDetaljer("22334455667"),
+            "Personen har en ikke-tom liste over dødsfall fra PDL og er derfor død"
+        )
+            .isNotNull()
+            .transform { it.doedsfall }.isEqualTo( true )
+        assertThat(
+            PdlService(
+                GraphQLKtorClient(
+                    URI(pdlUrl).toURL(),
+                    setupMockEngine(
+                        "hentIdenter_success_response.json",
+                        "hentPerson_flere_aktive_navn_noen_nyere_historiske.json",
+                        HttpStatusCode.OK
+                    )
+                ),
+                pdlUrl,
+                accessTokenClient = null
+            )
+                .hentPersonDetaljer("22334455667"),
+            "Personen har en liste over dødsfall fra PDL men bare historiske og er derfor ikke død"
+        )
+            .isNotNull()
+            .transform { it.doedsfall }
+            .isEqualTo( false )
+    }
+
+    @Test
+    fun `Ikke authentisert at hente person identer fra Pdl`() {
         val exception = assertThrows<PdlApiException> {
             PdlService(
                 GraphQLKtorClient(
