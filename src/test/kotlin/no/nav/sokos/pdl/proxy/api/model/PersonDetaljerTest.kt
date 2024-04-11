@@ -59,7 +59,7 @@ class PersonDetaljerTest {
                             etternavn = "Endringer",
                             metadata = Metadata(endringer = emptyList(), AKTIVT)
                         )
-                    ), emptyList(), emptyList(), emptyList()
+                    ), emptyList(), emptyList(), emptyList(), emptyList()
                 )
             )
         }
@@ -79,7 +79,7 @@ class PersonDetaljerTest {
                             etternavn = "Endringer",
                             metadata = Metadata(endringer = emptyList(), AKTIVT)
                         )
-                    ), emptyList(), emptyList(), emptyList()
+                    ), emptyList(), emptyList(), emptyList(), emptyList()
                 )
             )
         }
@@ -131,7 +131,7 @@ class PersonDetaljerTest {
     }
 
     private fun testPersondetaljer(vararg testnavn: TestNavn) = PersonDetaljer.fra(emptyList(), testperson(*testnavn))
-    private fun testperson(vararg navn: TestNavn) = Person(navn.map { navn(it) }, emptyList(), emptyList(), emptyList())
+    private fun testperson(vararg navn: TestNavn) = Person(navn.map { navn(it) }, emptyList(), emptyList(), emptyList(), emptyList())
     private data class TestNavn(val historisk: Boolean, val endret: String, val navn: String)
 
     private fun navn(testNavn: TestNavn) = Navn(

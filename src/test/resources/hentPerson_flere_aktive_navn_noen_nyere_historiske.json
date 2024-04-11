@@ -196,6 +196,14 @@
             "historisk": true
           }
         }
+      ],
+      "doedsfall": [
+        {
+          "doedsdato": "2024-01-25",
+          "metadata": {
+            "historisk": true
+          }
+        }
       ]
     }
   }
