@@ -120,7 +120,7 @@
               }
             ],
             "historisk": false,
-            "master": "FREG"
+            "master": "PDL"
           }
         },
         {
@@ -159,13 +159,13 @@
               }
             ],
             "historisk": true,
-            "master": "FREG"
+            "master": "PDL"
           }
         },
         {
           "fornavn": "Seneste",
-          "mellomnavn": "Aktive",
-          "etternavn": "Navnet",
+          "mellomnavn": "Navn",
+          "etternavn": "Fra PDL",
           "forkortetNavn": null,
           "metadata": {
             "endringer": [
@@ -180,6 +180,30 @@
               },
               {
                 "registrert": "2012-03-14T15:09:26"
+              }
+            ],
+            "historisk": false,
+            "master": "PDL"
+          }
+        },
+        {
+          "fornavn": "Seneste",
+          "mellomnavn": "Navn",
+          "etternavn": "Fra FREG",
+          "forkortetNavn": null,
+          "metadata": {
+            "endringer": [
+              {
+                "registrert": "1980-01-01T01:01:01"
+              },
+              {
+                "registrert": "1982-02-02T02:02:02"
+              },
+              {
+                "registrert": "1983-03-03T03:03:03"
+              },
+              {
+                "registrert": "2021-03-14T15:09:26"
               }
             ],
             "historisk": false,

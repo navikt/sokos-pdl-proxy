@@ -119,8 +119,8 @@ internal class PdlServiceTest {
                 transform { it.identer.map(Ident::ident) }
                     .containsExactlyInAnyOrder("24117920441")
                 transform { it.fornavn }.isEqualTo("Seneste")
-                transform { it.mellomnavn }.isEqualTo("Aktive")
-                transform { it.etternavn }.isEqualTo("Navnet")
+                transform { it.mellomnavn }.isEqualTo("Navn")
+                transform { it.etternavn }.isEqualTo("Fra PDL")
             }
     }
 
