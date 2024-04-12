@@ -14,7 +14,7 @@
               }
             ],
             "historisk": false,
-            "master": "svigermor"
+            "master": "FREG"
           }
         }
       ],
@@ -26,7 +26,7 @@
             "adressenavn": "Adresse 1"
           },
           "metadata": {
-            "master": "Freg",
+            "master": "FREG",
             "endringer": [],
             "historisk": false
           }
@@ -36,7 +36,7 @@
             "adressenavn": "Adresse 2"
           },
           "metadata": {
-            "master": "Freg",
+            "master": "FREG",
             "endringer": [],
             "historisk": false
           }
@@ -46,7 +46,7 @@
             "adressenavn": "Adresse 3"
           },
           "metadata": {
-            "master": "Freg",
+            "master": "FREG",
             "endringer": [],
             "historisk": false
           }
@@ -56,7 +56,7 @@
             "adressenavn": "Adresse 4"
           },
           "metadata": {
-            "master": "Freg",
+            "master": "FREG",
             "endringer": [],
             "historisk": false
           }

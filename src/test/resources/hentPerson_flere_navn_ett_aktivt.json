@@ -147,7 +147,7 @@
               }
             ],
             "historisk": false,
-            "master": "Frodo"
+            "master": "PDL"
           }
         },
         {
@@ -162,7 +162,7 @@
               }
             ],
             "historisk": true,
-            "master" : "cand. scient."
+            "master" : "PDL"
           }
         },
         {
@@ -177,7 +177,7 @@
               }
             ],
             "historisk": true,
-            "master": "Yoda"
+            "master": "PDL"
           }
         }
       ]

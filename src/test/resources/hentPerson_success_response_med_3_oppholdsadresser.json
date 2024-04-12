@@ -14,7 +14,7 @@
               }
             ],
             "historisk": false,
-            "master": "me"
+            "master": "PDL"
           }
         }
       ],
@@ -25,7 +25,7 @@
             "adressenavn": "Oppholdsadresse 1"
           },
           "metadata": {
-            "master": "Freg",
+            "master": "FREG",
             "endringer": [],
             "historisk": false
           }
@@ -35,7 +35,7 @@
             "adressenavn": "Oppholdsadresse 2"
           },
           "metadata": {
-            "master": "Freg",
+            "master": "FREG",
             "endringer": [],
             "historisk": false
           }
@@ -45,7 +45,7 @@
             "adressenavn": "Oppholdsadresse 3"
           },
           "metadata": {
-            "master": "Freg",
+            "master": "FREG",
             "endringer": [],
             "historisk": false
           }
