@@ -9,7 +9,7 @@ plugins {
     kotlin("jvm") version "1.9.23"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.openapi.generator") version "7.4.0"
-    id("com.expediagroup.graphql") version "7.0.2"
+    id("com.expediagroup.graphql") version "7.1.0"
 }
 
 group = "no.nav.sokos"
@@ -19,17 +19,17 @@ repositories {
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") }
 }
 
-val ktorVersion = "2.3.9"
-val logbackVersion = "1.5.3"
+val ktorVersion = "2.3.10"
+val logbackVersion = "1.5.5"
 val logstashVersion = "7.4"
 val jacksonVersion = "2.17.0"
-val prometheusVersion = "1.12.4"
+val prometheusVersion = "1.12.5"
 val kotlinLoggingVersion = "3.0.5"
 val natpryceVersion = "1.6.10.0"
 val janionVersion = "3.1.12"
 val junitVersion = "5.10.2"
 val mockkVersion = "1.13.10"
-val graphqlClientVersion = "7.0.2"
+val graphqlClientVersion = "7.1.0"
 val avroVersion = "1.11.1"
 val restAssuredVersion = "5.4.0"
 val swaggerRequestValidatorVersion = "2.40.0"
