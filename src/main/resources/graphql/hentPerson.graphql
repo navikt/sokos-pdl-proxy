@@ -6,10 +6,6 @@ query($ident: ID!){
             etternavn
             forkortetNavn
             metadata {
-                endringer {
-                    registrert
-                }
-                historisk
                 master
             }
         }
