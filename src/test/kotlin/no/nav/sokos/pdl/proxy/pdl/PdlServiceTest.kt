@@ -6,6 +6,7 @@ import assertk.assertions.contains
 import assertk.assertions.containsExactlyInAnyOrder
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
+import assertk.assertions.isNull
 import assertk.assertions.prop
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import io.ktor.http.HttpStatusCode
@@ -145,9 +146,9 @@ internal class PdlServiceTest {
             .all {
                 transform { it.identer.map(Ident::ident) }
                     .containsExactlyInAnyOrder("24117920441")
-                transform { it.fornavn }.isEqualTo("Seneste")
-                transform { it.mellomnavn }.isEqualTo("Historiske")
-                transform { it.etternavn }.isEqualTo("Navnet")
+                transform { it.fornavn }.isNull()
+                transform { it.mellomnavn }.isNull()
+                transform { it.etternavn }.isNull()
             }
     }
 
