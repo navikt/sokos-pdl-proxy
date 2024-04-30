@@ -8,12 +8,7 @@
           "etternavn": "STAUDE",
           "forkortetNavn": "STAUDE ÅPENHJERTIG",
           "metadata": {
-            "endringer": [
-              {
-                "registrert": "2023-05-12T15:36:15"
-              }
-            ],
-            "historisk": false
+            "master": "PDL"
           }
         }
       ],
@@ -24,7 +19,7 @@
             "adressenavn": "Oppholdsadresse 1"
           },
           "metadata": {
-            "master": "Freg",
+            "master": "FREG",
             "endringer": [],
             "historisk": false
           }
@@ -34,7 +29,7 @@
             "adressenavn": "Oppholdsadresse 2"
           },
           "metadata": {
-            "master": "Freg",
+            "master": "FREG",
             "endringer": [],
             "historisk": false
           }
@@ -44,7 +39,7 @@
             "adressenavn": "Oppholdsadresse 3"
           },
           "metadata": {
-            "master": "Freg",
+            "master": "FREG",
             "endringer": [],
             "historisk": false
           }

@@ -106,94 +106,21 @@
       ],
       "navn": [
         {
-          "fornavn": "Eldre",
-          "mellomnavn": "Aktivt",
-          "etternavn": "Navn",
+          "fornavn": "Seneste",
+          "mellomnavn": "Navn",
+          "etternavn": "Fra PDL",
           "forkortetNavn": null,
           "metadata": {
-            "endringer": [
-              {
-                "registrert": "2001-01-01T01:01:01"
-              },
-              {
-                "registrert": "1990-09-09T15:36:15"
-              }
-            ],
-            "historisk": false
-          }
-        },
-        {
-          "fornavn": "Gal",
-          "mellomnavn": "Sprellende",
-          "etternavn": "Kjørvel",
-          "forkortetNavn": null,
-          "metadata": {
-            "endringer": [
-              {
-                "registrert": "1980-11-06T00:00:15"
-              }
-            ],
-            "historisk": true
-          }
-        },
-        {
-          "fornavn": "Nyere",
-          "mellomnavn": "Men",
-          "etternavn": "Historisk",
-          "forkortetNavn": null,
-          "metadata": {
-            "endringer": [
-              {
-                "registrert": "1990-01-01T01:01:01"
-              },
-              {
-                "registrert": "1995-02-02T02:02:02"
-              },
-              {
-                "registrert": "2000-03-03T03:03:03"
-              },
-              {
-                "registrert": "2023-05-12T15:36:15"
-              }
-            ],
-            "historisk": true
+            "master": "PDL"
           }
         },
         {
           "fornavn": "Seneste",
-          "mellomnavn": "Aktive",
-          "etternavn": "Navnet",
+          "mellomnavn": "Navn",
+          "etternavn": "Fra FREG",
           "forkortetNavn": null,
           "metadata": {
-            "endringer": [
-              {
-                "registrert": "1980-01-01T01:01:01"
-              },
-              {
-                "registrert": "1982-02-02T02:02:02"
-              },
-              {
-                "registrert": "1983-03-03T03:03:03"
-              },
-              {
-                "registrert": "2012-03-14T15:09:26"
-              }
-            ],
-            "historisk": false
-          }
-        },
-        {
-          "fornavn": "Feilaktig",
-          "mellomnavn": "Minkende",
-          "etternavn": "Kjøttdeig",
-          "forkortetNavn": null,
-          "metadata": {
-            "endringer": [
-              {
-                "registrert": "2020-02-22T20:02:02"
-              }
-            ],
-            "historisk": true
+            "master": "FREG"
           }
         }
       ]

@@ -8,12 +8,7 @@
           "etternavn": "STAUDE",
           "forkortetNavn": "STAUDE ÅPENHJERTIG",
           "metadata": {
-            "endringer": [
-              {
-                "registrert": "2023-05-12T15:36:15"
-              }
-            ],
-            "historisk": false
+            "master": "PDL"
           }
         }
       ],
@@ -38,7 +33,7 @@
           "ukjentBosted": null,
           "metadata": {
             "opplysningsId": "b3293355-1cde-4299-a99c-bad2984e694e",
-            "master": "Freg",
+            "master": "FREG",
             "endringer": [
               {
                 "type": "OPPRETT",
@@ -72,7 +67,7 @@
           "matrikkeladresse": null,
           "metadata": {
             "opplysningsId": "e498f445-704a-4b05-8322-7b9fe4e734b2",
-            "master": "Freg",
+            "master": "FREG",
             "endringer": [
               {
                 "type": "OPPRETT",
@@ -113,7 +108,7 @@
           "utenlandskAdresseIFrittFormat": null,
           "metadata": {
             "opplysningsId": "6ae8f985-0763-441e-ad33-59ae9f01ad49",
-            "master": "Freg",
+            "master": "FREG",
             "endringer": [
               {
                 "type": "OPPRETT",
