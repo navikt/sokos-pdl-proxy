@@ -14,10 +14,13 @@ data class PersonDetaljer(
     val forkortetNavn: String?,
     val bostedsadresse: Bostedsadresse?,
     val kontaktadresse: List<Kontaktadresse>,
-    val oppholdsadresse: List<Oppholdsadresse>
+    val oppholdsadresse: List<Oppholdsadresse>,
 ) {
     companion object {
-        fun fra(identer: List<Ident>, person: Person?): PersonDetaljer {
+        fun fra(
+            identer: List<Ident>,
+            person: Person?,
+        ): PersonDetaljer {
             val navnList = person?.navn ?: emptyList()
             when (navnList.count()) {
                 0 -> Metrics.noAktivtNavnCounter.inc()
@@ -40,5 +43,3 @@ data class PersonDetaljer(
         }
     }
 }
-
-

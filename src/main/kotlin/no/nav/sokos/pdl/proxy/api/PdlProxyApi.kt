@@ -1,6 +1,5 @@
 package no.nav.sokos.pdl.proxy.api
 
-
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
 import io.ktor.server.request.receive
@@ -27,5 +26,3 @@ fun Route.pdlProxyApi(
         }
     }
 }
-
-

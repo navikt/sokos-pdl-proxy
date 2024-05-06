@@ -7,7 +7,6 @@ suspend fun <T> retry(
     initialDelayMs: Long = 250,
     block: suspend () -> T,
 ): T {
-
     var throwable: Exception? = null
     for (n in 1..numOfRetries) {
         try {

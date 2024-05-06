@@ -4,7 +4,9 @@ import no.nav.pdl.enums.IdentGruppe
 
 enum class IdentifikatorType {
     FOLKEREGISTERIDENTIFIKATOR,
-    N_PID;
+    N_PID,
+    ;
+
     companion object {
         fun fra(typeFraPDL: IdentGruppe): IdentifikatorType {
             return when (typeFraPDL) {

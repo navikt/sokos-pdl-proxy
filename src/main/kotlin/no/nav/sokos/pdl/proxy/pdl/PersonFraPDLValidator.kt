@@ -22,7 +22,7 @@ object PersonFraPDLValidator {
             logger.warn { feilmelding }
             throw PdlApiException(
                 500,
-                feilmelding
+                feilmelding,
             )
         }
     }
@@ -35,7 +35,7 @@ object PersonFraPDLValidator {
             logger.warn { feilmelding }
             throw PdlApiException(
                 500,
-                feilmelding
+                feilmelding,
             )
         }
     }

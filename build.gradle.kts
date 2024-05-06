@@ -10,6 +10,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.openapi.generator") version "7.5.0"
     id("com.expediagroup.graphql") version "7.1.1"
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
 }
 
 group = "no.nav.sokos"
@@ -35,7 +36,6 @@ val restAssuredVersion = "5.4.0"
 val swaggerRequestValidatorVersion = "2.40.0"
 val assertJvmVersion = "0.28.1"
 
-
 dependencies {
 
     // Ktor server
@@ -49,7 +49,6 @@ dependencies {
     // Ktor client
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-client-apache-jvm:$ktorVersion")
-
 
     // Security
     implementation("io.ktor:ktor-server-auth-jvm:$ktorVersion")
@@ -88,7 +87,6 @@ dependencies {
         exclude("com.expediagroup", "graphql-kotlin-client-serialization")
     }
     runtimeOnly("com.expediagroup:graphql-kotlin-client-jackson:$graphqlClientVersion")
-
 }
 
 sourceSets {
@@ -107,9 +105,26 @@ kotlin {
 
 tasks {
 
-    withType<KotlinCompile>().configureEach {
+    named("runKtlintCheckOverMainSourceSet").configure {
         dependsOn("openApiGenerate")
         dependsOn("graphqlGenerateClient")
+    }
+
+    named("runKtlintFormatOverMainSourceSet").configure {
+        dependsOn("openApiGenerate")
+        dependsOn("graphqlGenerateClient")
+    }
+
+    withType<KotlinCompile>().configureEach {
+        dependsOn("ktlintFormat")
+        dependsOn("openApiGenerate")
+        dependsOn("graphqlGenerateClient")
+    }
+
+    ktlint {
+        filter {
+            exclude { element -> element.file.path.contains("generated/") }
+        }
     }
 
     withType<GenerateTask>().configureEach {
@@ -119,14 +134,14 @@ tasks {
         outputDir.set("${layout.buildDirectory.get()}/resources/main/api")
         globalProperties.set(
             mapOf(
-                "models" to ""
-            )
+                "models" to "",
+            ),
         )
         configOptions.set(
             mapOf(
                 "library" to "jvm-ktor",
-                "serializationLibrary" to "jackson"
-            )
+                "serializationLibrary" to "jackson",
+            ),
         )
     }
 
@@ -161,7 +176,7 @@ tasks {
         queryFileDirectory.set(file("$projectDir/src/main/resources/graphql"))
     }
 
-    withType<Wrapper>() {
+    withType<Wrapper> {
         gradleVersion = "8.7"
     }
 }

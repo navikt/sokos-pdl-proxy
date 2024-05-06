@@ -10,7 +10,6 @@ import no.nav.sokos.pdl.proxy.api.model.TjenestefeilResponse
 private val logger = KotlinLogging.logger {}
 
 fun StatusPagesConfig.statusPageConfig() {
-
     exception<PdlApiException> { call, pdlApiException ->
         val response = TjenestefeilResponse(pdlApiException.feilmelding)
         call.logInfoOgResponder(pdlApiException, HttpStatusCode.fromValue(pdlApiException.feilkode), response)
@@ -30,7 +29,7 @@ data class PdlApiException(
 private suspend inline fun ApplicationCall.logInfoOgResponder(
     pdlApiException: PdlApiException,
     status: HttpStatusCode,
-    response: TjenestefeilResponse
+    response: TjenestefeilResponse,
 ) {
     logger.info(pdlApiException) { response.melding }
 

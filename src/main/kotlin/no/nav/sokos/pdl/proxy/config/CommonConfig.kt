@@ -26,10 +26,10 @@ import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics
 import io.micrometer.core.instrument.binder.system.ProcessorMetrics
 import io.micrometer.core.instrument.binder.system.UptimeMetrics
 import io.prometheus.client.exporter.common.TextFormat
-import java.util.UUID
 import mu.KotlinLogging
 import no.nav.sokos.pdl.proxy.metrics.Metrics
 import org.slf4j.event.Level
+import java.util.UUID
 
 private val log = KotlinLogging.logger {}
 
@@ -60,13 +60,14 @@ fun Application.commonConfig() {
     }
     install(MicrometerMetrics) {
         registry = Metrics.prometheusRegistry
-        meterBinders = listOf(
-            UptimeMetrics(),
-            JvmMemoryMetrics(),
-            JvmGcMetrics(),
-            JvmThreadMetrics(),
-            ProcessorMetrics()
-        )
+        meterBinders =
+            listOf(
+                UptimeMetrics(),
+                JvmMemoryMetrics(),
+                JvmGcMetrics(),
+                JvmThreadMetrics(),
+                ProcessorMetrics(),
+            )
     }
     routing {
         route("internal") {

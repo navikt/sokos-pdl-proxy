@@ -7,7 +7,10 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.route
 
-fun Route.naisApi(alive: () -> Boolean, ready: () -> Boolean) {
+fun Route.naisApi(
+    alive: () -> Boolean,
+    ready: () -> Boolean,
+) {
     route("internal") {
         get("started") {
             call.respondText("Started")
@@ -15,22 +18,22 @@ fun Route.naisApi(alive: () -> Boolean, ready: () -> Boolean) {
         get("is_alive") {
             when (alive()) {
                 true -> call.respondText { "Application is alive" }
-                else -> call.respondText(
-                    text = "Application is not alive",
-                    status = HttpStatusCode.InternalServerError
-                )
+                else ->
+                    call.respondText(
+                        text = "Application is not alive",
+                        status = HttpStatusCode.InternalServerError,
+                    )
             }
         }
         get("is_ready") {
             when (ready()) {
                 true -> call.respondText { "Application is ready" }
-                else -> call.respondText(
-                    text = "Application is not ready",
-                    status = HttpStatusCode.InternalServerError
-                )
+                else ->
+                    call.respondText(
+                        text = "Application is not ready",
+                        status = HttpStatusCode.InternalServerError,
+                    )
             }
         }
     }
-
 }
-

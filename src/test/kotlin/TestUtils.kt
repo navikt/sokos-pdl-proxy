@@ -20,17 +20,19 @@ import no.nav.sokos.pdl.proxy.config.routingConfig
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 
 private fun String.readFromResource() = {}::class.java.classLoader.getResource(this)!!.readText()
+
 fun Any.toJson() = jsonMapper().writeValueAsString(this)!!
 
-private fun jsonMapper(): ObjectMapper = jacksonObjectMapper().apply {
-    configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-    findAndRegisterModules()
-}
+private fun jsonMapper(): ObjectMapper =
+    jacksonObjectMapper().apply {
+        configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        findAndRegisterModules()
+    }
 
 class EmbeddedTestServer(
     private val port: Int = 1100,
     private val pdlService: PdlService,
-    private val applicationState: ApplicationState
+    private val applicationState: ApplicationState,
 ) {
     init {
         embeddedServer(Netty, port, module = {
@@ -47,10 +49,11 @@ class EmbeddedTestServer(
         RestAssured.baseURI = "http://localhost"
         RestAssured.basePath = "/api/pdl-proxy/v1"
         RestAssured.port = port
-        RestAssured.config = RestAssuredConfig.config().objectMapperConfig(
-            ObjectMapperConfig.objectMapperConfig()
-                .jackson2ObjectMapperFactory { _, _ -> no.nav.sokos.pdl.proxy.util.jsonMapper }
-        )
+        RestAssured.config =
+            RestAssuredConfig.config().objectMapperConfig(
+                ObjectMapperConfig.objectMapperConfig()
+                    .jackson2ObjectMapperFactory { _, _ -> no.nav.sokos.pdl.proxy.util.jsonMapper },
+            )
     }
 }
 
@@ -59,20 +62,22 @@ fun setupMockEngine(
     hentPersonResponseFilNavn: String?,
     statusCode: HttpStatusCode = HttpStatusCode.OK,
 ): HttpClient {
-    return HttpClient(MockEngine { request ->
-        val body = request.body as TextContent
-        val content = when {
-            body.text.contains("hentIdenter") -> hentIdenterResponseFilNavn
-            else -> hentPersonResponseFilNavn
-        }?.readFromResource().orEmpty()
+    return HttpClient(
+        MockEngine { request ->
+            val body = request.body as TextContent
+            val content =
+                when {
+                    body.text.contains("hentIdenter") -> hentIdenterResponseFilNavn
+                    else -> hentPersonResponseFilNavn
+                }?.readFromResource().orEmpty()
 
-        respond(
-            content = content,
-            headers = headersOf("Content-Type", ContentType.Application.Json.toString()),
-            status = statusCode
-        )
-
-    }) {
+            respond(
+                content = content,
+                headers = headersOf("Content-Type", ContentType.Application.Json.toString()),
+                status = statusCode,
+            )
+        },
+    ) {
         expectSuccess = false
     }
 }

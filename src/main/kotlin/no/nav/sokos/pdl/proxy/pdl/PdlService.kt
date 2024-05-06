@@ -24,7 +24,6 @@ class PdlService(
     private val pdlUrl: String,
     private val accessTokenClient: AccessTokenClient?,
 ) {
-
     fun hentPersonDetaljer(ident: String): PersonDetaljer {
         val identer = hentIdenterForPerson(ident).getOrThrow()
         val person = hentPerson(ident).getOrThrow()
@@ -33,25 +32,29 @@ class PdlService(
 
     private fun hentIdenterForPerson(ident: String): Result<List<Ident>> {
         logger.info { "Henter identer for person" }
-        val respons: GraphQLClientResponse<HentIdenter.Result> = runBlocking {
-            val accessToken = accessTokenClient?.hentAccessToken()
-            graphQlClient.execute(HentIdenter(HentIdenter.Variables(ident = ident))) {
-                url(pdlUrl)
-                header("Authorization", "Bearer $accessToken")
+        val respons: GraphQLClientResponse<HentIdenter.Result> =
+            runBlocking {
+                val accessToken = accessTokenClient?.hentAccessToken()
+                graphQlClient.execute(HentIdenter(HentIdenter.Variables(ident = ident))) {
+                    url(pdlUrl)
+                    header("Authorization", "Bearer $accessToken")
+                }
             }
-        }
 
         return respons.errors?.let { feilmeldingerFraPdl ->
             håndterFeilFraPdl(feilmeldingerFraPdl, ident)
         } ?: Result.success(hentUtIdenter(respons, ident))
     }
 
-    private fun hentUtIdenter(result: GraphQLClientResponse<HentIdenter.Result>, ident: String): List<Ident> {
+    private fun hentUtIdenter(
+        result: GraphQLClientResponse<HentIdenter.Result>,
+        ident: String,
+    ): List<Ident> {
         return result.data?.hentIdenter?.identer?.map {
             Ident(
                 ident = it.ident,
                 aktiv = !it.historisk,
-                identifikatorType = fra(it.gruppe)
+                identifikatorType = fra(it.gruppe),
             )
         } ?: emptyList<Ident>()
             .also { secureLogger.info { "Henting av Identer for ident: $ident fra PDL vellykket" } }
@@ -59,14 +62,15 @@ class PdlService(
 
     private fun hentPerson(ident: String): Result<Person?> {
         logger.info { "Henter person" }
-        val respons: GraphQLClientResponse<HentPerson.Result> = runBlocking {
-            val accessToken = accessTokenClient?.hentAccessToken()
-            graphQlClient.execute(HentPerson(HentPerson.Variables(ident = ident))) {
-                url(pdlUrl)
-                header("Authorization", "Bearer $accessToken")
-                header("behandlingsnummer", "B154")
+        val respons: GraphQLClientResponse<HentPerson.Result> =
+            runBlocking {
+                val accessToken = accessTokenClient?.hentAccessToken()
+                graphQlClient.execute(HentPerson(HentPerson.Variables(ident = ident))) {
+                    url(pdlUrl)
+                    header("Authorization", "Bearer $accessToken")
+                    header("behandlingsnummer", "B154")
+                }
             }
-        }
 
         return respons.errors?.let { feilmeldingerFraPdl ->
             håndterFeilFraPdl(feilmeldingerFraPdl, ident)
@@ -74,32 +78,36 @@ class PdlService(
     }
 
     @Suppress("FunctionName")
-    private fun <T> håndterFeilFraPdl(errors: List<GraphQLClientError>, ident: String): Result<T> {
+    private fun <T> håndterFeilFraPdl(
+        errors: List<GraphQLClientError>,
+        ident: String,
+    ): Result<T> {
         val metoderSomGirFeil = errors.joinToString { error -> error.path.toString() }
         val feilmeldingerFraPDL = errors.map { it.message }
         val feilkoderFraPDL =
             errors.flatMap { it -> it.extensions?.get("code")?.toString()?.let { listOf(it) } ?: emptyList() }
 
-        val httpFeilkode = when {
-            "not_found" in feilkoderFraPDL -> {
-                secureLogger.info { "Person med ident $ident fra PDL ikke funnet" }
-                logger.info { "Person fra PDL ikke funnet" }
-                404
-            }
+        val httpFeilkode =
+            when {
+                "not_found" in feilkoderFraPDL -> {
+                    secureLogger.info { "Person med ident $ident fra PDL ikke funnet" }
+                    logger.info { "Person fra PDL ikke funnet" }
+                    404
+                }
 
-            else -> {
-                secureLogger.error { "$metoderSomGirFeil kallet feilet. Feilmelding: $feilmeldingerFraPDL" }
-                logger.error { "$metoderSomGirFeil kallet feilet. Feilmelding: $feilmeldingerFraPDL" }
-                500
+                else -> {
+                    secureLogger.error { "$metoderSomGirFeil kallet feilet. Feilmelding: $feilmeldingerFraPDL" }
+                    logger.error { "$metoderSomGirFeil kallet feilet. Feilmelding: $feilmeldingerFraPDL" }
+                    500
+                }
             }
-        }
 
         return Result.failure(PdlApiException(httpFeilkode, feilmeldingerFraPDL.joinToString()))
     }
 
     private fun validerOgBehandleResultat(
         respons: GraphQLClientResponse<HentPerson.Result>,
-        ident: String
+        ident: String,
     ): Result<Person?> {
         respons.data?.hentPerson?.also { person ->
             PersonFraPDLValidator.valider(person)
@@ -108,4 +116,3 @@ class PdlService(
         return Result.success(respons.data?.hentPerson)
     }
 }
-

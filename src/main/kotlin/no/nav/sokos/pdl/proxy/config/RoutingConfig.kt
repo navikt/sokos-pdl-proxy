@@ -13,7 +13,7 @@ import no.nav.sokos.pdl.proxy.pdl.PdlService
 fun Application.routingConfig(
     applicationState: ApplicationState,
     pdlService: PdlService,
-    useAuthentication: Boolean
+    useAuthentication: Boolean,
 ) {
     routing {
         naisApi({ applicationState.initialized }, { applicationState.running })
@@ -22,6 +22,10 @@ fun Application.routingConfig(
     }
 }
 
-fun Route.autentiser(brukAutentisering: Boolean, authenticationProviderId: String? = null, block: Route.() -> Unit) {
+fun Route.autentiser(
+    brukAutentisering: Boolean,
+    authenticationProviderId: String? = null,
+    block: Route.() -> Unit,
+) {
     if (brukAutentisering) authenticate(authenticationProviderId) { block() } else block()
 }

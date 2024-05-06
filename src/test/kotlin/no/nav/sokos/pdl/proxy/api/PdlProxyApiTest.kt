@@ -6,8 +6,6 @@ import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import io.ktor.http.HttpStatusCode
 import io.restassured.RestAssured
 import io.restassured.http.Header
-import java.net.URI
-import kotlin.random.Random
 import no.nav.sokos.pdl.proxy.ApplicationState
 import no.nav.sokos.pdl.proxy.api.model.PersonIdent
 import no.nav.sokos.pdl.proxy.pdl.PdlService
@@ -16,11 +14,13 @@ import org.hamcrest.CoreMatchers.containsStringIgnoringCase
 import org.junit.jupiter.api.Test
 import setupMockEngine
 import toJson
+import java.net.URI
+import kotlin.random.Random
+
+private val validationFilter = OpenApiValidationFilter("openapi/sokos-pdl-proxy-v1-swagger2.json")
+private const val PDL_URL = "http://0.0.0.0"
 
 internal class PdlProxyApiTest {
-    private val validationFilter = OpenApiValidationFilter("openapi/sokos-pdl-proxy-v1-swagger2.json")
-    private val pdlUrl = "http://0.0.0.0"
-
     @Test
     fun `Klient kaller tjeneste med suksess som validerer ok mot swagger-kontrakten`() {
         val port = randomPort()
@@ -28,7 +28,7 @@ internal class PdlProxyApiTest {
         testServerWithResponseFromPDL(
             port,
             "hentIdenter_success_response.json",
-            "hentPerson_success_response.json"
+            "hentPerson_success_response.json",
         )
 
         RestAssured.given()
@@ -50,7 +50,7 @@ internal class PdlProxyApiTest {
         testServerWithResponseFromPDL(
             port,
             "hentIdenter_success_response.json",
-            "hentPerson_tomt_navn_response.json"
+            "hentPerson_tomt_navn_response.json",
         )
 
         RestAssured.given()
@@ -72,7 +72,7 @@ internal class PdlProxyApiTest {
         testServerWithResponseFromPDL(
             port,
             "hentIdenter_fant_ikke_person_response.json",
-            "hentPerson_fant_ikke_person_response.json"
+            "hentPerson_fant_ikke_person_response.json",
         )
 
         RestAssured.given()
@@ -86,7 +86,7 @@ internal class PdlProxyApiTest {
             .assertThat()
             .statusCode(404)
             .body(
-                containsString("Fant ikke person")
+                containsString("Fant ikke person"),
             )
     }
 
@@ -97,7 +97,7 @@ internal class PdlProxyApiTest {
         testServerWithResponseFromPDL(
             port,
             "hentIdenter_success_response.json",
-            "hentPerson_fant_ikke_person_response.json"
+            "hentPerson_fant_ikke_person_response.json",
         )
 
         RestAssured.given()
@@ -111,7 +111,7 @@ internal class PdlProxyApiTest {
             .assertThat()
             .statusCode(404)
             .body(
-                containsString("Fant ikke person")
+                containsString("Fant ikke person"),
             )
     }
 
@@ -122,7 +122,7 @@ internal class PdlProxyApiTest {
         testServerWithResponseFromPDL(
             port,
             "hentIdenter_fant_ikke_person_response.json",
-            "hentPerson_success_response.json"
+            "hentPerson_success_response.json",
         )
 
         RestAssured.given()
@@ -136,7 +136,7 @@ internal class PdlProxyApiTest {
             .assertThat()
             .statusCode(404)
             .body(
-                containsString("Fant ikke person")
+                containsString("Fant ikke person"),
             )
     }
 
@@ -147,7 +147,7 @@ internal class PdlProxyApiTest {
         testServerWithResponseFromPDL(
             port,
             "hentIdenter_ikke_authentisert_response.json",
-            "hentPerson_success_response.json"
+            "hentPerson_success_response.json",
         )
 
         RestAssured.given()
@@ -161,9 +161,8 @@ internal class PdlProxyApiTest {
             .assertThat()
             .statusCode(500)
             .body(
-                containsString("Ikke autentisert")
+                containsString("Ikke autentisert"),
             )
-
     }
 
     @Test
@@ -173,7 +172,7 @@ internal class PdlProxyApiTest {
         testServerWithResponseFromPDL(
             port,
             "hentIdenter_annen_feilmelding_response.json",
-            "hentPerson_success_response.json"
+            "hentPerson_success_response.json",
         )
 
         RestAssured.given()
@@ -197,7 +196,7 @@ internal class PdlProxyApiTest {
             port,
             null,
             null,
-            HttpStatusCode.NotFound
+            HttpStatusCode.NotFound,
         )
 
         RestAssured.given()
@@ -219,7 +218,7 @@ internal class PdlProxyApiTest {
         testServerWithResponseFromPDL(
             port,
             "hentIdenter_success_response.json",
-            "hentPerson_success_response_med_4_kontaktadresser.json"
+            "hentPerson_success_response_med_4_kontaktadresser.json",
         )
 
         RestAssured.given()
@@ -235,9 +234,8 @@ internal class PdlProxyApiTest {
             .body(
                 containsStringIgnoringCase("For mange kontaktadresser"),
                 containsStringIgnoringCase("Personen har 4"),
-                containsStringIgnoringCase("overstiger grensen på 3")
+                containsStringIgnoringCase("overstiger grensen på 3"),
             )
-
     }
 
     @Test
@@ -247,7 +245,7 @@ internal class PdlProxyApiTest {
         testServerWithResponseFromPDL(
             port,
             "hentIdenter_success_response.json",
-            "hentPerson_success_response_med_3_oppholdsadresser.json"
+            "hentPerson_success_response_med_3_oppholdsadresser.json",
         )
 
         RestAssured.given()
@@ -263,9 +261,8 @@ internal class PdlProxyApiTest {
             .body(
                 containsStringIgnoringCase("For mange oppholdsadresser"),
                 containsStringIgnoringCase("Personen har 3"),
-                containsStringIgnoringCase("overstiger grensen på 2")
+                containsStringIgnoringCase("overstiger grensen på 2"),
             )
-
     }
 
     @Test
@@ -275,7 +272,7 @@ internal class PdlProxyApiTest {
         testServerWithResponseFromPDL(
             port,
             "hentIdenter_success_response.json",
-            "hentPerson_success_response.json"
+            "hentPerson_success_response.json",
         )
 
         RestAssured.given()
@@ -295,18 +292,19 @@ internal class PdlProxyApiTest {
         port: Int,
         hentIdenterResponsFilnavn: String?,
         hentPersonResponsFilnavn: String?,
-        httpStatusCode: HttpStatusCode = HttpStatusCode.OK
+        httpStatusCode: HttpStatusCode = HttpStatusCode.OK,
     ) {
-        val mockkGraphQlClient = GraphQLKtorClient(
-            URI(pdlUrl).toURL(),
-            setupMockEngine(
-                hentIdenterResponsFilnavn,
-                hentPersonResponsFilnavn,
-                httpStatusCode
+        val mockkGraphQlClient =
+            GraphQLKtorClient(
+                URI(PDL_URL).toURL(),
+                setupMockEngine(
+                    hentIdenterResponsFilnavn,
+                    hentPersonResponsFilnavn,
+                    httpStatusCode,
+                ),
             )
-        )
 
-        EmbeddedTestServer(port, PdlService(mockkGraphQlClient, pdlUrl, accessTokenClient = null), ApplicationState())
+        EmbeddedTestServer(port, PdlService(mockkGraphQlClient, PDL_URL, accessTokenClient = null), ApplicationState())
     }
 
     private fun randomPort() = Random.nextInt(32000, 42000)

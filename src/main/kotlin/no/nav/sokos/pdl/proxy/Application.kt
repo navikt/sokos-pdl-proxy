@@ -5,9 +5,6 @@ import io.ktor.server.application.Application
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.engine.stop
 import io.ktor.server.netty.Netty
-import java.net.URI
-import java.util.concurrent.TimeUnit
-import kotlin.properties.Delegates
 import no.nav.sokos.pdl.proxy.config.PropertiesConfig
 import no.nav.sokos.pdl.proxy.config.commonConfig
 import no.nav.sokos.pdl.proxy.config.routingConfig
@@ -17,20 +14,27 @@ import no.nav.sokos.pdl.proxy.metrics.Metrics.appStateRunningFalse
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
 import no.nav.sokos.pdl.proxy.util.httpClient
+import java.net.URI
+import java.util.concurrent.TimeUnit
+import kotlin.properties.Delegates
 
 fun main() {
     val applicationState = ApplicationState()
     val applicationConfiguration = PropertiesConfig.Configuration()
     val accessTokenClient =
-        if (applicationConfiguration.useAuthentication) AccessTokenClient(
-            applicationConfiguration.azureAdClientConfig,
-            httpClient
-        ) else null
+        if (applicationConfiguration.useAuthentication) {
+            AccessTokenClient(
+                applicationConfiguration.azureAdClientConfig,
+                httpClient,
+            )
+        } else {
+            null
+        }
     val pdlService =
         PdlService(
             GraphQLKtorClient(URI(applicationConfiguration.pdlConfig.pdlUrl).toURL(), httpClient),
             applicationConfiguration.pdlConfig.pdlUrl,
-            accessTokenClient
+            accessTokenClient,
         )
 
     HttpServer(applicationState, applicationConfiguration, pdlService).start()
@@ -42,16 +46,18 @@ private class HttpServer(
     private val pdlService: PdlService,
     port: Int = 8080,
 ) {
-
     init {
-        Runtime.getRuntime().addShutdownHook(Thread {
-            this.stop()
-        })
+        Runtime.getRuntime().addShutdownHook(
+            Thread {
+                this.stop()
+            },
+        )
     }
 
-    private val embeddedServer = embeddedServer(Netty, port, module = {
-        applicationModule(applicationConfiguration, applicationState, pdlService)
-    })
+    private val embeddedServer =
+        embeddedServer(Netty, port, module = {
+            applicationModule(applicationConfiguration, applicationState, pdlService)
+        })
 
     fun start() {
         applicationState.running = true
@@ -66,7 +72,7 @@ private class HttpServer(
 
 class ApplicationState(
     alive: Boolean = true,
-    ready: Boolean = false
+    ready: Boolean = false,
 ) {
     var initialized: Boolean by Delegates.observable(alive) { _, _, newValue ->
         if (!newValue) appStateReadyFalse.inc()
@@ -76,7 +82,11 @@ class ApplicationState(
     }
 }
 
-fun Application.applicationModule(applicationConfiguration: PropertiesConfig.Configuration, applicationState: ApplicationState, pdlService: PdlService) {
+fun Application.applicationModule(
+    applicationConfiguration: PropertiesConfig.Configuration,
+    applicationState: ApplicationState,
+    pdlService: PdlService,
+) {
     commonConfig()
     securityConfig(applicationConfiguration.azureAdServerConfig, applicationConfiguration.useAuthentication)
     routingConfig(applicationState, pdlService, applicationConfiguration.useAuthentication)
