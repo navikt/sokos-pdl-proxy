@@ -3,7 +3,6 @@ package no.nav.sokos.pdl.proxy.config
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.SerializationFeature
-import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.serialization.jackson.jackson
 import io.ktor.server.application.Application
@@ -25,12 +24,12 @@ import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics
 import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics
 import io.micrometer.core.instrument.binder.system.ProcessorMetrics
 import io.micrometer.core.instrument.binder.system.UptimeMetrics
-import io.prometheus.client.exporter.common.TextFormat
 import mu.KotlinLogging
 import no.nav.sokos.pdl.proxy.metrics.Metrics
 import org.slf4j.event.Level
 import java.util.UUID
 
+const val SECURE_LOGGER = "secureLogger"
 private val log = KotlinLogging.logger {}
 
 fun Application.commonConfig() {
@@ -72,7 +71,7 @@ fun Application.commonConfig() {
     routing {
         route("internal") {
             get("metrics") {
-                call.respondText(ContentType.parse(TextFormat.CONTENT_TYPE_004)) { Metrics.prometheusRegistry.scrape() }
+                call.respondText(Metrics.prometheusRegistry.scrape())
             }
         }
     }

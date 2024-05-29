@@ -18,8 +18,8 @@ object PropertiesConfig {
         )
     private val localDevProperties =
         ConfigurationMap(
-            "USE_AUTHENTICATION" to "true",
             "APPLICATION_PROFILE" to Profile.LOCAL.toString(),
+            "USE_AUTHENTICATION" to "true",
         )
     private val devProperties = ConfigurationMap(mapOf("APPLICATION_PROFILE" to Profile.DEV.toString()))
     private val prodProperties = ConfigurationMap(mapOf("APPLICATION_PROFILE" to Profile.PROD.toString()))
@@ -35,32 +35,33 @@ object PropertiesConfig {
                     ) overriding localDevProperties overriding defaultProperties
         }
 
-    private operator fun get(key: String): String = config[Key(key, stringType)]
+    operator fun get(key: String): String = config[Key(key, stringType)]
+
+    fun getOrEmpty(key: String): String = config.getOrElse(Key(key, stringType), "")
 
     data class Configuration(
         val naisAppName: String = get("NAIS_APP_NAME"),
-        val profile: Profile = Profile.valueOf(this["APPLICATION_PROFILE"]),
+        val profile: Profile = Profile.valueOf(get("APPLICATION_PROFILE")),
         val useAuthentication: Boolean = get("USE_AUTHENTICATION").toBoolean(),
-        val azureAdClientConfig: AzureAdClientConfig = AzureAdClientConfig(),
-        val azureAdServerConfig: AzureAdServerConfig = AzureAdServerConfig(),
-        val pdlConfig: PdlConfig = PdlConfig(),
+        val azureAdProperties: AzureAdProperties = AzureAdProperties(),
     )
 
-    data class AzureAdClientConfig(
-        val clientId: String = get("AZURE_APP_CLIENT_ID"),
-        val wellKnownUrl: String = get("AZURE_APP_WELL_KNOWN_URL"),
-        val tenantId: String = get("AZURE_APP_TENANT_ID"),
-        val clientSecret: String = get("AZURE_APP_CLIENT_SECRET"),
-        val pdlClientId: String = get("PDL_CLIENT_ID"),
+    data class AzureAdProperties(
+        val clientId: String = getOrEmpty("AZURE_APP_CLIENT_ID"),
+        val wellKnownUrl: String = getOrEmpty("AZURE_APP_WELL_KNOWN_URL"),
+        val tenantId: String = getOrEmpty("AZURE_APP_TENANT_ID"),
+        val clientSecret: String = getOrEmpty("AZURE_APP_CLIENT_SECRET"),
+        val pdlClientId: String = getOrEmpty("PDL_CLIENT_ID"),
     )
 
-    data class AzureAdServerConfig(
-        val clientId: String = get("AZURE_APP_CLIENT_ID"),
-        val wellKnownUrl: String = get("AZURE_APP_WELL_KNOWN_URL"),
+    data class AzureAdServerProperties(
+        val clientId: String = getOrEmpty("AZURE_APP_CLIENT_ID"),
+        val wellKnownUrl: String = getOrEmpty("AZURE_APP_WELL_KNOWN_URL"),
     )
 
-    data class PdlConfig(
-        val pdlUrl: String = this["PDL_URL"],
+    data class PdlProperties(
+        val pdlUrl: String = getOrEmpty("PDL_URL"),
+        val pdlScope: String = getOrEmpty("PDL_SCOPE"),
     )
 
     enum class Profile {

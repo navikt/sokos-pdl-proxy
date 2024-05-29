@@ -1,4 +1,4 @@
-package no.nav.sokos.pdl.proxy.util
+package no.nav.sokos.pdl.proxy.config
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -6,10 +6,14 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.apache.Apache
+import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.jackson.jackson
+import mu.KotlinLogging
 import org.apache.http.impl.conn.SystemDefaultRoutePlanner
 import java.net.ProxySelector
+
+private val secureLogger = KotlinLogging.logger(SECURE_LOGGER)
 
 fun ObjectMapper.customConfig() {
     registerModule(JavaTimeModule())
@@ -25,6 +29,13 @@ val httpClient =
             jackson {
                 customConfig()
             }
+        }
+        install(HttpRequestRetry) {
+            retryOnExceptionOrServerErrors(5)
+            modifyRequest { request ->
+                secureLogger.warn { "$retryCount retry feilet mot: ${request.url}" }
+            }
+            exponentialDelay()
         }
 
         engine {

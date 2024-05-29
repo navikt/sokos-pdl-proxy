@@ -10,31 +10,38 @@ import assertk.assertions.isNull
 import assertk.assertions.prop
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import io.ktor.http.HttpStatusCode
+import io.mockk.coEvery
+import io.mockk.mockk
 import no.nav.pdl.hentperson.PostadresseIFrittFormat
 import no.nav.sokos.pdl.proxy.api.model.Ident
 import no.nav.sokos.pdl.proxy.config.PdlApiException
+import no.nav.sokos.pdl.proxy.config.setupMockEngine
+import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import setupMockEngine
 import java.net.URI
 
 private const val PDL_URL = "http://0.0.0.0"
+private val accessTokenClient = mockk<AccessTokenClient>()
 
 internal class PdlServiceTest {
     @Test
     fun `Vellykket hent av en persons identer, navn og adresser fra Pdl`() {
+        coEvery { accessTokenClient.hentAccessToken() } returns "token"
+
         val result =
             PdlService(
-                GraphQLKtorClient(
-                    URI(PDL_URL).toURL(),
-                    setupMockEngine(
-                        "hentIdenter_success_response.json",
-                        "hentPerson_success_response.json",
-                        HttpStatusCode.OK,
+                pdlUrl = PDL_URL,
+                graphQlClient =
+                    GraphQLKtorClient(
+                        URI(PDL_URL).toURL(),
+                        setupMockEngine(
+                            "hentIdenter_success_response.json",
+                            "hentPerson_success_response.json",
+                            HttpStatusCode.OK,
+                        ),
                     ),
-                ),
-                PDL_URL,
-                accessTokenClient = null,
+                accessTokenClient = accessTokenClient,
             )
                 .hentPersonDetaljer("22334455667")
 
@@ -52,18 +59,21 @@ internal class PdlServiceTest {
 
     @Test
     fun `Finnes ikke person identer fra Pdl`() {
+        coEvery { accessTokenClient.hentAccessToken() } returns "token"
+
         val exception =
             assertThrows<PdlApiException> {
                 PdlService(
-                    GraphQLKtorClient(
-                        URI(PDL_URL).toURL(),
-                        setupMockEngine(
-                            "hentIdenter_fant_ikke_person_response.json",
-                            "hentPerson_fant_ikke_person_response.json",
+                    pdlUrl = PDL_URL,
+                    graphQlClient =
+                        GraphQLKtorClient(
+                            URI(PDL_URL).toURL(),
+                            setupMockEngine(
+                                "hentIdenter_fant_ikke_person_response.json",
+                                "hentPerson_fant_ikke_person_response.json",
+                            ),
                         ),
-                    ),
-                    PDL_URL,
-                    accessTokenClient = null,
+                    accessTokenClient = accessTokenClient,
                 )
                     .hentPersonDetaljer("22334455667")
             }
@@ -75,18 +85,21 @@ internal class PdlServiceTest {
 
     @Test
     fun `Benytte eneste aktive navn hvis de andre er historiske`() {
+        coEvery { accessTokenClient.hentAccessToken() } returns "token"
+
         assertThat(
             PdlService(
-                GraphQLKtorClient(
-                    URI(PDL_URL).toURL(),
-                    setupMockEngine(
-                        "hentIdenter_success_response.json",
-                        "hentPerson_flere_navn_ett_aktivt.json",
-                        HttpStatusCode.OK,
+                pdlUrl = PDL_URL,
+                graphQlClient =
+                    GraphQLKtorClient(
+                        URI(PDL_URL).toURL(),
+                        setupMockEngine(
+                            "hentIdenter_success_response.json",
+                            "hentPerson_flere_navn_ett_aktivt.json",
+                            HttpStatusCode.OK,
+                        ),
                     ),
-                ),
-                PDL_URL,
-                accessTokenClient = null,
+                accessTokenClient = accessTokenClient,
             )
                 .hentPersonDetaljer("22334455667"),
         )
@@ -102,18 +115,21 @@ internal class PdlServiceTest {
 
     @Test
     fun `Skal benytte nyeste aktive navn selv om historiske har nyere registreringsdato`() {
+        coEvery { accessTokenClient.hentAccessToken() } returns "token"
+
         assertThat(
             PdlService(
-                GraphQLKtorClient(
-                    URI(PDL_URL).toURL(),
-                    setupMockEngine(
-                        "hentIdenter_success_response.json",
-                        "hentPerson_flere_aktive_navn_noen_nyere_historiske.json",
-                        HttpStatusCode.OK,
+                pdlUrl = PDL_URL,
+                graphQlClient =
+                    GraphQLKtorClient(
+                        URI(PDL_URL).toURL(),
+                        setupMockEngine(
+                            "hentIdenter_success_response.json",
+                            "hentPerson_flere_aktive_navn_noen_nyere_historiske.json",
+                            HttpStatusCode.OK,
+                        ),
                     ),
-                ),
-                PDL_URL,
-                accessTokenClient = null,
+                accessTokenClient = accessTokenClient,
             )
                 .hentPersonDetaljer("22334455667"),
         )
@@ -129,18 +145,21 @@ internal class PdlServiceTest {
 
     @Test
     fun `Skal benytte seneste historiske navn hvis det ikke er noen aktive`() {
+        coEvery { accessTokenClient.hentAccessToken() } returns "token"
+
         assertThat(
             PdlService(
-                GraphQLKtorClient(
-                    URI(PDL_URL).toURL(),
-                    setupMockEngine(
-                        "hentIdenter_success_response.json",
-                        "hentPerson_flere_bare_historiske_navn.json",
-                        HttpStatusCode.OK,
+                pdlUrl = PDL_URL,
+                graphQlClient =
+                    GraphQLKtorClient(
+                        URI(PDL_URL).toURL(),
+                        setupMockEngine(
+                            "hentIdenter_success_response.json",
+                            "hentPerson_flere_bare_historiske_navn.json",
+                            HttpStatusCode.OK,
+                        ),
                     ),
-                ),
-                PDL_URL,
-                accessTokenClient = null,
+                accessTokenClient = accessTokenClient,
             )
                 .hentPersonDetaljer("22334455667"),
         )
@@ -156,18 +175,21 @@ internal class PdlServiceTest {
 
     @Test
     fun `Ikke authentisert å hente person identer fra Pdl`() {
+        coEvery { accessTokenClient.hentAccessToken() } returns "token"
+
         val exception =
             assertThrows<PdlApiException> {
                 PdlService(
-                    GraphQLKtorClient(
-                        URI(PDL_URL).toURL(),
-                        setupMockEngine(
-                            "hentIdenter_ikke_authentisert_response.json",
-                            "hentPerson_ikke_authentisert_response.json",
+                    pdlUrl = PDL_URL,
+                    graphQlClient =
+                        GraphQLKtorClient(
+                            URI(PDL_URL).toURL(),
+                            setupMockEngine(
+                                "hentIdenter_ikke_authentisert_response.json",
+                                "hentPerson_ikke_authentisert_response.json",
+                            ),
                         ),
-                    ),
-                    PDL_URL,
-                    accessTokenClient = null,
+                    accessTokenClient = accessTokenClient,
                 )
                     .hentPersonDetaljer("22334455667")
             }

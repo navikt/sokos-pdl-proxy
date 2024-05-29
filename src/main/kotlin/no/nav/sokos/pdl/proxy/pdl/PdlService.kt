@@ -3,6 +3,7 @@ package no.nav.sokos.pdl.proxy.pdl
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import com.expediagroup.graphql.client.types.GraphQLClientError
 import com.expediagroup.graphql.client.types.GraphQLClientResponse
+import io.ktor.client.HttpClient
 import io.ktor.client.request.header
 import io.ktor.client.request.url
 import kotlinx.coroutines.runBlocking
@@ -14,15 +15,23 @@ import no.nav.sokos.pdl.proxy.api.model.Ident
 import no.nav.sokos.pdl.proxy.api.model.IdentifikatorType.Companion.fra
 import no.nav.sokos.pdl.proxy.api.model.PersonDetaljer
 import no.nav.sokos.pdl.proxy.config.PdlApiException
+import no.nav.sokos.pdl.proxy.config.PropertiesConfig
+import no.nav.sokos.pdl.proxy.config.httpClient
 import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
+import java.net.URI
 
 private val logger = KotlinLogging.logger {}
 private val secureLogger = KotlinLogging.logger("secureLogger")
 
 class PdlService(
-    private val graphQlClient: GraphQLKtorClient,
-    private val pdlUrl: String,
-    private val accessTokenClient: AccessTokenClient?,
+    private val client: HttpClient = httpClient,
+    private val pdlUrl: String = PropertiesConfig.PdlProperties().pdlUrl,
+    private val graphQlClient: GraphQLKtorClient =
+        GraphQLKtorClient(
+            URI(pdlUrl).toURL(),
+            client,
+        ),
+    private val accessTokenClient: AccessTokenClient = AccessTokenClient(),
 ) {
     fun hentPersonDetaljer(ident: String): PersonDetaljer {
         val identer = hentIdenterForPerson(ident).getOrThrow()

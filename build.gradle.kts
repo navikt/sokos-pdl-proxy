@@ -9,7 +9,7 @@ import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 plugins {
     kotlin("jvm") version "2.0.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("org.openapi.generator") version "7.5.0"
+    id("org.openapi.generator") version "7.6.0"
     id("com.expediagroup.graphql") version "7.1.1"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
     id("org.jetbrains.kotlinx.kover") version "0.8.0"
@@ -26,12 +26,12 @@ val ktorVersion = "2.3.11"
 val logbackVersion = "1.5.6"
 val logstashVersion = "7.4"
 val jacksonVersion = "2.17.1"
-val prometheusVersion = "1.12.5"
+val micrometerVersion = "1.13.0"
 val kotlinLoggingVersion = "3.0.5"
 val natpryceVersion = "1.6.10.0"
 val janionVersion = "3.1.12"
 val junitVersion = "5.10.2"
-val mockkVersion = "1.13.10"
+val mockkVersion = "1.13.11"
 val graphqlClientVersion = "7.1.1"
 val avroVersion = "1.11.1"
 val restAssuredVersion = "5.4.0"
@@ -64,7 +64,7 @@ dependencies {
 
     // Monitorering
     implementation("io.ktor:ktor-server-metrics-micrometer-jvm:$ktorVersion")
-    implementation("io.micrometer:micrometer-registry-prometheus:$prometheusVersion")
+    implementation("io.micrometer:micrometer-registry-prometheus:$micrometerVersion")
 
     // Logging
     implementation("io.github.microutils:kotlin-logging-jvm:$kotlinLoggingVersion")

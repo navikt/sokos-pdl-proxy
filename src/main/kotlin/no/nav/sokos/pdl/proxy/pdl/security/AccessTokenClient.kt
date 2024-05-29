@@ -10,22 +10,26 @@ import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
-import io.ktor.http.HttpStatusCode
 import io.ktor.http.Parameters
+import io.ktor.http.isSuccess
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import mu.KotlinLogging
-import no.nav.sokos.pdl.proxy.config.PropertiesConfig.AzureAdClientConfig
-import no.nav.sokos.pdl.proxy.util.retry
+import no.nav.sokos.pdl.proxy.config.PropertiesConfig
+import no.nav.sokos.pdl.proxy.config.httpClient
 import java.time.Instant
 
 private val logger = KotlinLogging.logger {}
 
 class AccessTokenClient(
-    private val azureAdClientConfig: AzureAdClientConfig,
-    private val client: HttpClient,
-    private val aadAccessTokenUrl: String = "https://login.microsoftonline.com/${azureAdClientConfig.tenantId}/oauth2/v2.0/token",
+    private val azureAdProperties: PropertiesConfig.AzureAdProperties = PropertiesConfig.AzureAdProperties(),
+    private val pdlScope: String = PropertiesConfig.PdlProperties().pdlScope,
+    private val client: HttpClient = httpClient,
+    private val aadAccessTokenUrl: String = "https://login.microsoftonline.com/${azureAdProperties.tenantId}/oauth2/v2.0/token",
 ) {
     private val mutex = Mutex()
 
@@ -42,40 +46,43 @@ class AccessTokenClient(
                     token.accessToken
                 }
 
-                else -> token.accessToken
+                else -> token.accessToken.also { logger.info("Henter accesstoken fra cache") }
             }
         }
     }
 
-    private suspend fun hentAccessTokenFraProvider(): AzureAccessToken =
-        retry {
-            val response: HttpResponse =
-                client.post(aadAccessTokenUrl) {
-                    accept(ContentType.Application.Json)
-                    method = HttpMethod.Post
-                    setBody(
-                        FormDataContent(
-                            Parameters.build {
-                                append("tenant", azureAdClientConfig.tenantId)
-                                append("client_id", azureAdClientConfig.clientId)
-                                append("scope", "api://${azureAdClientConfig.pdlClientId}/.default")
-                                append("client_secret", azureAdClientConfig.clientSecret)
-                                append("grant_type", "client_credentials")
-                            },
-                        ),
-                    )
-                }
+    private suspend fun hentAccessTokenFraProvider(): AzureAccessToken {
+        val response: HttpResponse =
+            client.post(aadAccessTokenUrl) {
+                accept(ContentType.Application.Json)
+                method = HttpMethod.Post
+                setBody(
+                    FormDataContent(
+                        Parameters.build {
+                            append("tenant", azureAdProperties.tenantId)
+                            append("client_id", azureAdProperties.clientId)
+                            append("scope", pdlScope)
+                            append("client_secret", azureAdProperties.clientSecret)
+                            append("grant_type", "client_credentials")
+                        },
+                    ),
+                )
+            }
 
-            if (response.status != HttpStatusCode.OK) {
-                val feilmelding =
-                    "Kunne ikke hente accesstoken Azure. Statuskode: ${response.status}"
-                logger.error { feilmelding }
-                throw RuntimeException(feilmelding)
-            } else {
-                response.body()
+        return when {
+            response.status.isSuccess() -> response.body()
+
+            else -> {
+                val errorMessage =
+                    "GetAccessToken returnerte ${response.status} med feilmelding: ${response.errorMessage()}"
+                logger.error { errorMessage }
+                throw RuntimeException(errorMessage)
             }
         }
+    }
 }
+
+suspend fun HttpResponse.errorMessage() = body<JsonElement>().jsonObject["error_description"]?.jsonPrimitive?.content
 
 private data class AzureAccessToken(
     @JsonAlias("access_token")
