@@ -16,12 +16,13 @@ import no.nav.sokos.pdl.proxy.api.model.IdentifikatorType.Companion.fra
 import no.nav.sokos.pdl.proxy.api.model.PersonDetaljer
 import no.nav.sokos.pdl.proxy.config.PdlApiException
 import no.nav.sokos.pdl.proxy.config.PropertiesConfig
+import no.nav.sokos.pdl.proxy.config.SECURE_LOGGER
 import no.nav.sokos.pdl.proxy.config.httpClient
 import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
 import java.net.URI
 
 private val logger = KotlinLogging.logger {}
-private val secureLogger = KotlinLogging.logger("secureLogger")
+private val secureLogger = KotlinLogging.logger(SECURE_LOGGER)
 
 class PdlService(
     private val client: HttpClient = httpClient,

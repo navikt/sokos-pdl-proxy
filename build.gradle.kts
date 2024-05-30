@@ -1,3 +1,4 @@
+import com.expediagroup.graphql.plugin.gradle.config.GraphQLSerializer
 import com.expediagroup.graphql.plugin.gradle.tasks.GraphQLGenerateClientTask
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import kotlinx.kover.gradle.plugin.dsl.tasks.KoverReport
@@ -8,6 +9,7 @@ import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 plugins {
     kotlin("jvm") version "2.0.0"
+    kotlin("plugin.serialization") version "2.0.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.openapi.generator") version "7.6.0"
     id("com.expediagroup.graphql") version "7.1.1"
@@ -23,20 +25,19 @@ repositories {
 }
 
 val ktorVersion = "2.3.11"
+val kotlinxSerializationVersion = "1.6.3"
 val logbackVersion = "1.5.6"
 val logstashVersion = "7.4"
-val jacksonVersion = "2.17.1"
 val micrometerVersion = "1.13.0"
 val kotlinLoggingVersion = "3.0.5"
 val natpryceVersion = "1.6.10.0"
 val janionVersion = "3.1.12"
-val junitVersion = "5.10.2"
 val mockkVersion = "1.13.11"
 val graphqlClientVersion = "7.1.1"
 val avroVersion = "1.11.1"
-val restAssuredVersion = "5.4.0"
 val swaggerRequestValidatorVersion = "2.40.0"
-val assertJvmVersion = "0.28.1"
+val mockOAuth2ServerVersion = "2.1.5"
+val kotestVersion = "5.9.0"
 
 dependencies {
 
@@ -56,11 +57,9 @@ dependencies {
     implementation("io.ktor:ktor-server-auth-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-auth-jwt-jvm:$ktorVersion")
 
-    // Serialization / Jackson
-    implementation("io.ktor:ktor-serialization-jackson-jvm:$ktorVersion")
-    implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
+    // Serialization
+    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktorVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:$kotlinxSerializationVersion")
 
     // Monitorering
     implementation("io.ktor:ktor-server-metrics-micrometer-jvm:$ktorVersion")
@@ -76,19 +75,18 @@ dependencies {
     implementation("com.natpryce:konfig:$natpryceVersion")
 
     // Test
-    testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation("io.ktor:ktor-server-test-host-jvm:$ktorVersion")
     testImplementation("io.ktor:ktor-client-tests:$ktorVersion")
-    testImplementation("com.willowtreeapps.assertk:assertk-jvm:$assertJvmVersion")
-    testImplementation("io.rest-assured:rest-assured:$restAssuredVersion")
+    testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
+    testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+    testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("com.atlassian.oai:swagger-request-validator-restassured:$swaggerRequestValidatorVersion")
+    testImplementation("no.nav.security:mock-oauth2-server:$mockOAuth2ServerVersion")
 
     // GraphQL
     implementation("com.expediagroup:graphql-kotlin-ktor-client:$graphqlClientVersion") {
-        exclude("com.expediagroup", "graphql-kotlin-client-serialization")
+        exclude("com.expediagroup:graphql-kotlin-client-jackson")
     }
-    runtimeOnly("com.expediagroup:graphql-kotlin-client-jackson:$graphqlClientVersion")
 }
 
 sourceSets {
@@ -142,7 +140,7 @@ tasks {
         configOptions.set(
             mapOf(
                 "library" to "jvm-ktor",
-                "serializationLibrary" to "jackson",
+                "serializationLibrary" to "kotlinx_serialization",
             ),
         )
     }
@@ -169,6 +167,12 @@ tasks {
                         enabled = true
                     }
                 }
+                filters {
+                    excludes {
+                        // exclusion rules - classes to exclude from report
+                        classes("no.nav.pdl.*")
+                    }
+                }
             }
         }
     }
@@ -190,6 +194,7 @@ tasks {
         packageName.set("no.nav.pdl")
         schemaFile.set(file("$projectDir/src/main/resources/graphql/schema.graphql"))
         queryFileDirectory.set(file("$projectDir/src/main/resources/graphql"))
+        serializer = GraphQLSerializer.KOTLINX
     }
 
     withType<Wrapper> {

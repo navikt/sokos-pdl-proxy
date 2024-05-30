@@ -9,8 +9,8 @@ import no.nav.sokos.pdl.proxy.api.pdlProxyApi
 import no.nav.sokos.pdl.proxy.api.swaggerApi
 
 fun Application.routingConfig(
-    applicationState: ApplicationState,
     useAuthentication: Boolean,
+    applicationState: ApplicationState,
 ) {
     routing {
         naisApi(applicationState)

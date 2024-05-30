@@ -14,12 +14,13 @@ object PropertiesConfig {
             mapOf(
                 "NAIS_APP_NAME" to "sokos-pdl-proxy",
                 "NAIS_NAMESPACE" to "okonomi",
+                "USE_AUTHENTICATION" to "true",
             ),
         )
     private val localDevProperties =
         ConfigurationMap(
             "APPLICATION_PROFILE" to Profile.LOCAL.toString(),
-            "USE_AUTHENTICATION" to "true",
+            "USE_AUTHENTICATION" to "false",
         )
     private val devProperties = ConfigurationMap(mapOf("APPLICATION_PROFILE" to Profile.DEV.toString()))
     private val prodProperties = ConfigurationMap(mapOf("APPLICATION_PROFILE" to Profile.PROD.toString()))
@@ -52,11 +53,6 @@ object PropertiesConfig {
         val tenantId: String = getOrEmpty("AZURE_APP_TENANT_ID"),
         val clientSecret: String = getOrEmpty("AZURE_APP_CLIENT_SECRET"),
         val pdlClientId: String = getOrEmpty("PDL_CLIENT_ID"),
-    )
-
-    data class AzureAdServerProperties(
-        val clientId: String = getOrEmpty("AZURE_APP_CLIENT_ID"),
-        val wellKnownUrl: String = getOrEmpty("AZURE_APP_WELL_KNOWN_URL"),
     )
 
     data class PdlProperties(

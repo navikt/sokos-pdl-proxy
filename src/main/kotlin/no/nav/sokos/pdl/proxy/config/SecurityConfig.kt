@@ -2,7 +2,6 @@ package no.nav.sokos.pdl.proxy.config
 
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
-import com.fasterxml.jackson.annotation.JsonProperty
 import io.ktor.client.call.body
 import io.ktor.client.engine.ProxyBuilder
 import io.ktor.client.engine.http
@@ -12,6 +11,8 @@ import io.ktor.server.auth.authentication
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import mu.KotlinLogging
 import java.net.URI
 import java.util.concurrent.TimeUnit
@@ -19,9 +20,9 @@ import java.util.concurrent.TimeUnit
 private val logger = KotlinLogging.logger {}
 const val AUTHENTICATION_NAME = "azureAd"
 
-fun Application.configureSecurity(
+fun Application.securityConfig(
+    useAuthentication: Boolean,
     azureAdProperties: PropertiesConfig.AzureAdProperties,
-    useAuthentication: Boolean = true,
 ) {
     logger.info("Use authentication: $useAuthentication")
     if (useAuthentication) {
@@ -72,10 +73,11 @@ private fun cachedJwkProvider(jwksUri: String): JwkProvider {
         .build()
 }
 
+@Serializable
 data class OpenIdMetadata(
-    @JsonProperty("jwks_uri") val jwksUri: String,
-    @JsonProperty("issuer") val issuer: String,
-    @JsonProperty("token_endpoint") val tokenEndpoint: String,
+    @SerialName("jwks_uri") val jwksUri: String,
+    @SerialName("issuer") val issuer: String,
+    @SerialName("token_endpoint") val tokenEndpoint: String,
 )
 
 private fun wellKnowConfig(wellKnownUrl: String): OpenIdMetadata {

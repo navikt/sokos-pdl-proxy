@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" ?>
 <configuration debug="true">
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
@@ -7,7 +6,8 @@
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>%green(%d{HH:mm:ss}) %cyan([%-5.5t]) %boldCyan(%0.-5p) %yellow(%-20.20logger{19}) %cyan(:) %m%n
+            <pattern>
+                %green(%d{HH:mm:ss}) [%X{X-Correlation-ID}] %cyan([%-5.5t]) %boldCyan(%0.-5p) %yellow(%logger{36}) %cyan(:) %m%n
             </pattern>
         </encoder>
     </appender>
@@ -45,5 +45,7 @@
             </root>
         </else>
     </if>
+
+    <logger name="no.nav.sokos.pdl.proxy" level="INFO"/>
 
 </configuration>

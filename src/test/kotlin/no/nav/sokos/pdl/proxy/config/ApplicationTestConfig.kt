@@ -7,48 +7,37 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.TextContent
 import io.ktor.http.headersOf
-import io.ktor.server.application.Application
+import io.ktor.server.config.MapApplicationConfig
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.routing.routing
-import io.restassured.RestAssured
-import io.restassured.config.ObjectMapperConfig
-import io.restassured.config.RestAssuredConfig
+import io.ktor.server.testing.ApplicationTestBuilder
 import no.nav.sokos.pdl.proxy.TestHelper.readFromResource
 import no.nav.sokos.pdl.proxy.api.pdlProxyApi
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 
+const val APPLICATION_JSON = "application/json"
+const val PDL_PROXY_API_PATH = "/api/pdl-proxy/v1/hent-person"
+
 class EmbeddedTestServer(
     private val pdlService: PdlService,
-    private val port: Int = 1100,
+    port: Int = 1100,
 ) {
     init {
         embeddedServer(Netty, port, module = {
-            serverModule()
-        }).start()
-    }
-
-    private fun Application.serverModule() {
-        commonConfig()
-        routing {
-            authenticate(false) {
-                pdlProxyApi(pdlService = pdlService)
+            commonConfig()
+            routing {
+                authenticate(false) {
+                    pdlProxyApi(pdlService = pdlService)
+                }
             }
-        }
-        RestAssured.baseURI = "http://localhost"
-        RestAssured.basePath = "/api/pdl-proxy/v1"
-        RestAssured.port = port
-        RestAssured.config =
-            RestAssuredConfig.config().objectMapperConfig(
-                ObjectMapperConfig.objectMapperConfig()
-                    .jackson2ObjectMapperFactory { _, _ -> jsonMapper },
-            )
+        }).start()
     }
 }
 
 fun setupMockEngine(
-    hentIdenterResponseFilNavn: String?,
-    hentPersonResponseFilNavn: String?,
+    hentIdenterResponseFilNavn: String,
+    hentPersonResponseFilNavn: String,
     statusCode: HttpStatusCode = HttpStatusCode.OK,
 ): HttpClient {
     return HttpClient(
@@ -58,7 +47,7 @@ fun setupMockEngine(
                 when {
                     body.text.contains("hentIdenter") -> hentIdenterResponseFilNavn
                     else -> hentPersonResponseFilNavn
-                }?.readFromResource().orEmpty()
+                }.readFromResource()
 
             respond(
                 content = content,
@@ -68,5 +57,16 @@ fun setupMockEngine(
         },
     ) {
         expectSuccess = false
+    }
+}
+
+fun ApplicationTestBuilder.configureTestApplication() {
+    val mapApplicationConfig = MapApplicationConfig()
+    environment {
+        config = mapApplicationConfig
+    }
+
+    application {
+        commonConfig()
     }
 }

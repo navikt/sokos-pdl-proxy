@@ -1,11 +1,13 @@
 package no.nav.sokos.pdl.proxy.api.model
 
+import kotlinx.serialization.Serializable
 import no.nav.pdl.hentperson.Bostedsadresse
 import no.nav.pdl.hentperson.Kontaktadresse
 import no.nav.pdl.hentperson.Oppholdsadresse
 import no.nav.pdl.hentperson.Person
 import no.nav.sokos.pdl.proxy.metrics.Metrics
 
+@Serializable
 data class PersonDetaljer(
     val identer: List<Ident>,
     val fornavn: String?,

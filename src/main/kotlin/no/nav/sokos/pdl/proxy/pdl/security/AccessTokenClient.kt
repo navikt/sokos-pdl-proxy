@@ -1,6 +1,5 @@
 package no.nav.sokos.pdl.proxy.pdl.security
 
-import com.fasterxml.jackson.annotation.JsonAlias
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.accept
@@ -15,6 +14,8 @@ import io.ktor.http.isSuccess
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -84,10 +85,11 @@ class AccessTokenClient(
 
 suspend fun HttpResponse.errorMessage() = body<JsonElement>().jsonObject["error_description"]?.jsonPrimitive?.content
 
+@Serializable
 private data class AzureAccessToken(
-    @JsonAlias("access_token")
+    @SerialName("access_token")
     val accessToken: String,
-    @JsonAlias("expires_in")
+    @SerialName("expires_in")
     val expiresIn: Long,
 )
 

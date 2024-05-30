@@ -8,8 +8,8 @@ import no.nav.sokos.pdl.proxy.config.ApplicationState
 import no.nav.sokos.pdl.proxy.config.PropertiesConfig
 import no.nav.sokos.pdl.proxy.config.applicationLifecycleConfig
 import no.nav.sokos.pdl.proxy.config.commonConfig
-import no.nav.sokos.pdl.proxy.config.configureSecurity
 import no.nav.sokos.pdl.proxy.config.routingConfig
+import no.nav.sokos.pdl.proxy.config.securityConfig
 import java.util.concurrent.TimeUnit
 
 fun main() {
@@ -22,8 +22,8 @@ fun Application.serverModule() {
 
     commonConfig()
     applicationLifecycleConfig(applicationState)
-    configureSecurity(applicationConfiguration.azureAdProperties, applicationConfiguration.useAuthentication)
-    routingConfig(applicationState, applicationConfiguration.useAuthentication)
+    securityConfig(applicationConfiguration.useAuthentication, applicationConfiguration.azureAdProperties)
+    routingConfig(applicationConfiguration.useAuthentication, applicationState)
 }
 
 private class HttpServer(

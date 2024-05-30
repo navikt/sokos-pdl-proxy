@@ -1,32 +1,26 @@
 package no.nav.sokos.pdl.proxy.pdl
 
-import assertk.all
-import assertk.assertThat
-import assertk.assertions.contains
-import assertk.assertions.containsExactlyInAnyOrder
-import assertk.assertions.isEqualTo
-import assertk.assertions.isNotNull
-import assertk.assertions.isNull
-import assertk.assertions.prop
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
-import io.ktor.http.HttpStatusCode
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.inspectors.forAny
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk
 import no.nav.pdl.hentperson.PostadresseIFrittFormat
-import no.nav.sokos.pdl.proxy.api.model.Ident
 import no.nav.sokos.pdl.proxy.config.PdlApiException
 import no.nav.sokos.pdl.proxy.config.setupMockEngine
 import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.net.URI
 
 private const val PDL_URL = "http://0.0.0.0"
 private val accessTokenClient = mockk<AccessTokenClient>()
 
-internal class PdlServiceTest {
-    @Test
-    fun `Vellykket hent av en persons identer, navn og adresser fra Pdl`() {
+internal class PdlServiceTest : FunSpec({
+
+    test("Vellykket hent av en persons identer, navn og adresser fra Pdl") {
         coEvery { accessTokenClient.hentAccessToken() } returns "token"
 
         val result =
@@ -38,27 +32,25 @@ internal class PdlServiceTest {
                         setupMockEngine(
                             "hentIdenter_success_response.json",
                             "hentPerson_success_response.json",
-                            HttpStatusCode.OK,
                         ),
                     ),
                 accessTokenClient = accessTokenClient,
             )
                 .hentPersonDetaljer("22334455667")
 
-        assertThat(result).isNotNull()
-        assertThat(result.identer.map(Ident::ident)).containsExactlyInAnyOrder("24117920441")
-        assertThat(result.kontaktadresse.first().postadresseIFrittFormat)
-            .isNotNull()
-            .all {
-                prop(PostadresseIFrittFormat::adresselinje1).isEqualTo("adresse 1")
-                prop(PostadresseIFrittFormat::adresselinje2).isEqualTo("adresse 2")
-                prop(PostadresseIFrittFormat::adresselinje3).isEqualTo("adresse 3")
-                prop(PostadresseIFrittFormat::postnummer).isEqualTo("4242")
-            }
+        result.shouldNotBeNull()
+        result.identer.forAny { it.ident shouldBe "24117920441" }
+        result.kontaktadresse.first().postadresseIFrittFormat.shouldNotBeNull()
+        result.kontaktadresse.first().postadresseIFrittFormat shouldBe
+            PostadresseIFrittFormat(
+                adresselinje1 = "adresse 1",
+                adresselinje2 = "adresse 2",
+                adresselinje3 = "adresse 3",
+                postnummer = "4242",
+            )
     }
 
-    @Test
-    fun `Finnes ikke person identer fra Pdl`() {
+    test("Finnes ikke person identer fra Pdl") {
         coEvery { accessTokenClient.hentAccessToken() } returns "token"
 
         val exception =
@@ -77,17 +69,15 @@ internal class PdlServiceTest {
                 )
                     .hentPersonDetaljer("22334455667")
             }
-
-        assertThat(exception).isNotNull()
-        assertThat(exception.feilkode).isEqualTo(404)
-        assertThat(exception.feilmelding).contains("Fant ikke person")
+        exception.shouldNotBeNull()
+        exception.feilkode shouldBe 404
+        exception.feilmelding shouldBe "Fant ikke person"
     }
 
-    @Test
-    fun `Benytte eneste aktive navn hvis de andre er historiske`() {
+    test("Benytte eneste aktive navn hvis de andre er historiske") {
         coEvery { accessTokenClient.hentAccessToken() } returns "token"
 
-        assertThat(
+        val result =
             PdlService(
                 pdlUrl = PDL_URL,
                 graphQlClient =
@@ -96,28 +86,23 @@ internal class PdlServiceTest {
                         setupMockEngine(
                             "hentIdenter_success_response.json",
                             "hentPerson_flere_navn_ett_aktivt.json",
-                            HttpStatusCode.OK,
                         ),
                     ),
                 accessTokenClient = accessTokenClient,
             )
-                .hentPersonDetaljer("22334455667"),
-        )
-            .isNotNull()
-            .all {
-                transform { it.identer.map(Ident::ident) }
-                    .containsExactlyInAnyOrder("24117920441")
-                transform { it.fornavn }.isEqualTo("Eneste")
-                transform { it.mellomnavn }.isEqualTo("Aktive")
-                transform { it.etternavn }.isEqualTo("Navn")
-            }
+                .hentPersonDetaljer("22334455667")
+
+        result.shouldNotBeNull()
+        result.identer.forAny { it.ident shouldBe "24117920441" }
+        result.fornavn shouldBe "Eneste"
+        result.mellomnavn shouldBe "Aktive"
+        result.etternavn shouldBe "Navn"
     }
 
-    @Test
-    fun `Skal benytte nyeste aktive navn selv om historiske har nyere registreringsdato`() {
+    test("Skal benytte nyeste aktive navn selv om historiske har nyere registreringsdato") {
         coEvery { accessTokenClient.hentAccessToken() } returns "token"
 
-        assertThat(
+        val result =
             PdlService(
                 pdlUrl = PDL_URL,
                 graphQlClient =
@@ -126,28 +111,23 @@ internal class PdlServiceTest {
                         setupMockEngine(
                             "hentIdenter_success_response.json",
                             "hentPerson_flere_aktive_navn_noen_nyere_historiske.json",
-                            HttpStatusCode.OK,
                         ),
                     ),
                 accessTokenClient = accessTokenClient,
             )
-                .hentPersonDetaljer("22334455667"),
-        )
-            .isNotNull()
-            .all {
-                transform { it.identer.map(Ident::ident) }
-                    .containsExactlyInAnyOrder("24117920441")
-                transform { it.fornavn }.isEqualTo("Seneste")
-                transform { it.mellomnavn }.isEqualTo("Navn")
-                transform { it.etternavn }.isEqualTo("Fra PDL")
-            }
+                .hentPersonDetaljer("22334455667")
+
+        result.shouldNotBeNull()
+        result.identer.forAny { it.ident shouldBe "24117920441" }
+        result.fornavn shouldBe "Seneste"
+        result.mellomnavn shouldBe "Navn"
+        result.etternavn shouldBe "Fra PDL"
     }
 
-    @Test
-    fun `Skal benytte seneste historiske navn hvis det ikke er noen aktive`() {
+    test("Skal benytte seneste historiske navn hvis det ikke er noen aktive") {
         coEvery { accessTokenClient.hentAccessToken() } returns "token"
 
-        assertThat(
+        val result =
             PdlService(
                 pdlUrl = PDL_URL,
                 graphQlClient =
@@ -156,25 +136,20 @@ internal class PdlServiceTest {
                         setupMockEngine(
                             "hentIdenter_success_response.json",
                             "hentPerson_flere_bare_historiske_navn.json",
-                            HttpStatusCode.OK,
                         ),
                     ),
                 accessTokenClient = accessTokenClient,
             )
-                .hentPersonDetaljer("22334455667"),
-        )
-            .isNotNull()
-            .all {
-                transform { it.identer.map(Ident::ident) }
-                    .containsExactlyInAnyOrder("24117920441")
-                transform { it.fornavn }.isNull()
-                transform { it.mellomnavn }.isNull()
-                transform { it.etternavn }.isNull()
-            }
+                .hentPersonDetaljer("22334455667")
+
+        result.shouldNotBeNull()
+        result.identer.forAny { it.ident shouldBe "24117920441" }
+        result.fornavn.shouldBeNull()
+        result.mellomnavn.shouldBeNull()
+        result.etternavn.shouldBeNull()
     }
 
-    @Test
-    fun `Ikke authentisert å hente person identer fra Pdl`() {
+    test("Ikke authentisert å hente person identer fra Pdl") {
         coEvery { accessTokenClient.hentAccessToken() } returns "token"
 
         val exception =
@@ -194,8 +169,8 @@ internal class PdlServiceTest {
                     .hentPersonDetaljer("22334455667")
             }
 
-        assertThat(exception).isNotNull()
-        assertThat(exception.feilkode).isEqualTo(500)
-        assertThat(exception.feilmelding).contains("Ikke autentisert")
+        exception.shouldNotBeNull()
+        exception.feilkode shouldBe 500
+        exception.feilmelding shouldBe "Ikke autentisert"
     }
-}
+})
