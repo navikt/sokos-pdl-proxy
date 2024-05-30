@@ -19,7 +19,7 @@ import org.hamcrest.CoreMatchers.equalTo
 import java.net.URI
 import kotlin.random.Random
 
-private val validationFilter = OpenApiValidationFilter("openapi/sokos-pdl-proxy-v1-swagger2.json")
+private val validationFilter = OpenApiValidationFilter("openapi/sokos-pdl-proxy-v1-swagger.yaml")
 private val accessTokenClient = mockk<AccessTokenClient>()
 
 internal class PdlProxyApiTest : FunSpec({
