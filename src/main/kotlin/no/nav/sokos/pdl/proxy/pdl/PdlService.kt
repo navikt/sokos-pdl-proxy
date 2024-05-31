@@ -3,7 +3,6 @@ package no.nav.sokos.pdl.proxy.pdl
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import com.expediagroup.graphql.client.types.GraphQLClientError
 import com.expediagroup.graphql.client.types.GraphQLClientResponse
-import io.ktor.client.HttpClient
 import io.ktor.client.request.header
 import io.ktor.client.request.url
 import kotlinx.coroutines.runBlocking
@@ -18,21 +17,21 @@ import no.nav.sokos.pdl.proxy.config.PdlApiException
 import no.nav.sokos.pdl.proxy.config.PropertiesConfig
 import no.nav.sokos.pdl.proxy.config.SECURE_LOGGER
 import no.nav.sokos.pdl.proxy.config.httpClient
-import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
+import no.nav.sokos.pdl.proxy.security.AccessTokenClient
 import java.net.URI
 
 private val logger = KotlinLogging.logger {}
 private val secureLogger = KotlinLogging.logger(SECURE_LOGGER)
 
 class PdlService(
-    private val client: HttpClient = httpClient,
     private val pdlUrl: String = PropertiesConfig.PdlProperties().pdlUrl,
+    private val pdlScope: String = PropertiesConfig.PdlProperties().pdlScope,
     private val graphQlClient: GraphQLKtorClient =
         GraphQLKtorClient(
             URI(pdlUrl).toURL(),
-            client,
+            httpClient,
         ),
-    private val accessTokenClient: AccessTokenClient = AccessTokenClient(),
+    private val accessTokenClient: AccessTokenClient = AccessTokenClient(scope = pdlScope),
 ) {
     fun hentPersonDetaljer(ident: String): PersonDetaljer {
         val identer = hentIdenterForPerson(ident).getOrThrow()
@@ -44,7 +43,7 @@ class PdlService(
         logger.info { "Henter identer for person" }
         val respons: GraphQLClientResponse<HentIdenter.Result> =
             runBlocking {
-                val accessToken = accessTokenClient?.hentAccessToken()
+                val accessToken = accessTokenClient.hentAccessToken()
                 graphQlClient.execute(HentIdenter(HentIdenter.Variables(ident = ident))) {
                     url(pdlUrl)
                     header("Authorization", "Bearer $accessToken")

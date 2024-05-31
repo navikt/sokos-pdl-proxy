@@ -11,7 +11,7 @@ import io.mockk.mockk
 import no.nav.pdl.hentperson.PostadresseIFrittFormat
 import no.nav.sokos.pdl.proxy.config.PdlApiException
 import no.nav.sokos.pdl.proxy.config.setupMockEngine
-import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
+import no.nav.sokos.pdl.proxy.security.AccessTokenClient
 import org.junit.jupiter.api.assertThrows
 import java.net.URI
 
@@ -34,7 +34,6 @@ internal class PdlServiceTest : FunSpec({
                             "hentPerson_success_response.json",
                         ),
                     ),
-                accessTokenClient = accessTokenClient,
             )
                 .hentPersonDetaljer("22334455667")
 
@@ -65,7 +64,6 @@ internal class PdlServiceTest : FunSpec({
                                 "hentPerson_fant_ikke_person_response.json",
                             ),
                         ),
-                    accessTokenClient = accessTokenClient,
                 )
                     .hentPersonDetaljer("22334455667")
             }
@@ -88,7 +86,6 @@ internal class PdlServiceTest : FunSpec({
                             "hentPerson_flere_navn_ett_aktivt.json",
                         ),
                     ),
-                accessTokenClient = accessTokenClient,
             )
                 .hentPersonDetaljer("22334455667")
 
@@ -113,7 +110,6 @@ internal class PdlServiceTest : FunSpec({
                             "hentPerson_flere_aktive_navn_noen_nyere_historiske.json",
                         ),
                     ),
-                accessTokenClient = accessTokenClient,
             )
                 .hentPersonDetaljer("22334455667")
 
@@ -138,7 +134,6 @@ internal class PdlServiceTest : FunSpec({
                             "hentPerson_flere_bare_historiske_navn.json",
                         ),
                     ),
-                accessTokenClient = accessTokenClient,
             )
                 .hentPersonDetaljer("22334455667")
 
@@ -164,7 +159,6 @@ internal class PdlServiceTest : FunSpec({
                                 "hentPerson_ikke_authentisert_response.json",
                             ),
                         ),
-                    accessTokenClient = accessTokenClient,
                 )
                     .hentPersonDetaljer("22334455667")
             }

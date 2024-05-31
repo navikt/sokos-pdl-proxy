@@ -30,7 +30,7 @@ import no.nav.sokos.pdl.proxy.config.configureTestApplication
 import no.nav.sokos.pdl.proxy.config.securityConfig
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 
-val pdlService: PdlService = mockk()
+private val pdlService: PdlService = mockk()
 
 internal class SecurityTest : FunSpec({
 
@@ -54,7 +54,6 @@ internal class SecurityTest : FunSpec({
 
     test("test http GET endepunkt med token bør returnere 200") {
         withMockOAuth2Server {
-            val mockOAuth2Server = this
             testApplication {
                 val client =
                     createClient {

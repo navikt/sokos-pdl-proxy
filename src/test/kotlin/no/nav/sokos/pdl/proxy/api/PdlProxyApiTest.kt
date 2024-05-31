@@ -13,7 +13,7 @@ import no.nav.sokos.pdl.proxy.config.EmbeddedTestServer
 import no.nav.sokos.pdl.proxy.config.PDL_PROXY_API_PATH
 import no.nav.sokos.pdl.proxy.config.setupMockEngine
 import no.nav.sokos.pdl.proxy.pdl.PdlService
-import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
+import no.nav.sokos.pdl.proxy.security.AccessTokenClient
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.equalTo
 import java.net.URI

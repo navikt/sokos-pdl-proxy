@@ -1,4 +1,4 @@
-package no.nav.sokos.pdl.proxy.pdl.security
+package no.nav.sokos.pdl.proxy.security
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -28,7 +28,7 @@ private val logger = KotlinLogging.logger {}
 
 class AccessTokenClient(
     private val azureAdProperties: PropertiesConfig.AzureAdProperties = PropertiesConfig.AzureAdProperties(),
-    private val pdlScope: String = PropertiesConfig.PdlProperties().pdlScope,
+    private val scope: String,
     private val client: HttpClient = httpClient,
     private val aadAccessTokenUrl: String = "https://login.microsoftonline.com/${azureAdProperties.tenantId}/oauth2/v2.0/token",
 ) {
@@ -62,7 +62,7 @@ class AccessTokenClient(
                         Parameters.build {
                             append("tenant", azureAdProperties.tenantId)
                             append("client_id", azureAdProperties.clientId)
-                            append("scope", pdlScope)
+                            append("scope", scope)
                             append("client_secret", azureAdProperties.clientSecret)
                             append("grant_type", "client_credentials")
                         },
