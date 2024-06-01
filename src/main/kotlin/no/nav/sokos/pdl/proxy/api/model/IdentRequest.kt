@@ -3,6 +3,6 @@ package no.nav.sokos.pdl.proxy.api.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PersonIdent(
+data class IdentRequest(
     val ident: String,
 )

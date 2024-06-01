@@ -28,14 +28,14 @@ private val logger = KotlinLogging.logger {}
 
 class AccessTokenClient(
     private val azureAdProperties: PropertiesConfig.AzureAdProperties = PropertiesConfig.AzureAdProperties(),
-    private val scope: String,
+    private val azureAdScope: String,
     private val client: HttpClient = httpClient,
-    private val aadAccessTokenUrl: String = "https://login.microsoftonline.com/${azureAdProperties.tenantId}/oauth2/v2.0/token",
+    private val azureAdAccessTokenUrl: String = "https://login.microsoftonline.com/${azureAdProperties.tenantId}/oauth2/v2.0/token",
 ) {
     private val mutex = Mutex()
 
     @Volatile
-    private var token: AccessToken = runBlocking { AccessToken(hentAccessTokenFraProvider()) }
+    private var token: AccessToken = runBlocking { AccessToken(getAccessToken()) }
 
     suspend fun hentAccessToken(): String {
         val omToMinutter = Instant.now().plusSeconds(120L)
@@ -43,7 +43,7 @@ class AccessTokenClient(
             when {
                 token.expiresAt.isBefore(omToMinutter) -> {
                     logger.info("Henter ny accesstoken")
-                    token = AccessToken(hentAccessTokenFraProvider())
+                    token = AccessToken(getAccessToken())
                     token.accessToken
                 }
 
@@ -52,9 +52,9 @@ class AccessTokenClient(
         }
     }
 
-    private suspend fun hentAccessTokenFraProvider(): AzureAccessToken {
+    private suspend fun getAccessToken(): AzureAccessToken {
         val response: HttpResponse =
-            client.post(aadAccessTokenUrl) {
+            client.post(azureAdAccessTokenUrl) {
                 accept(ContentType.Application.Json)
                 method = HttpMethod.Post
                 setBody(
@@ -62,7 +62,7 @@ class AccessTokenClient(
                         Parameters.build {
                             append("tenant", azureAdProperties.tenantId)
                             append("client_id", azureAdProperties.clientId)
-                            append("scope", scope)
+                            append("scope", azureAdScope)
                             append("client_secret", azureAdProperties.clientSecret)
                             append("grant_type", "client_credentials")
                         },

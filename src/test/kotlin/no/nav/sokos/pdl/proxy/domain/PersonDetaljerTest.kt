@@ -1,4 +1,4 @@
-package no.nav.sokos.pdl.proxy.api.model
+package no.nav.sokos.pdl.proxy.domain
 
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.spec.style.FunSpec
@@ -15,13 +15,13 @@ const val FREG = "FREG"
 
 internal class PersonDetaljerTest : FunSpec({
 
-    test("Bare tomme lister går bra") {
+    test("Hvis liste av identer er tom så skal det ikke kaste exception") {
         shouldNotThrow<Exception> {
             PersonDetaljer.fra(emptyList(), testPerson())
         }
     }
 
-    test("Skal overføre navn til persondetaljer") {
+    test("Teste om navn overførs til Persondetaljer objekt") {
         testPersondetaljer(
             TestNavn(AKTIVT, endret = "2020-02-02T02:02:02", navn = "Aron Åberg"),
         ).fornavn shouldBe "Aron"
@@ -71,16 +71,16 @@ private fun testPersondetaljer(vararg testnavn: TestNavn) = PersonDetaljer.fra(e
 
 private fun testPerson(vararg navn: TestNavn) = Person(navn.map { navn(it) }, emptyList(), emptyList(), emptyList())
 
-private data class TestNavn(
-    val historisk: Boolean,
-    val endret: String,
-    val navn: String,
-    val master: String = FREG,
-)
-
 private fun navn(testNavn: TestNavn) =
     Navn(
         fornavn = testNavn.navn.split(" ").first(),
         etternavn = testNavn.navn.split(" ").last(),
         metadata = Metadata(master = testNavn.master),
     )
+
+private data class TestNavn(
+    val historisk: Boolean,
+    val endret: String,
+    val navn: String,
+    val master: String = FREG,
+)

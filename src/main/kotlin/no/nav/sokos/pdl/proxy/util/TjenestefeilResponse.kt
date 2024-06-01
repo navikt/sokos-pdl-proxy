@@ -1,4 +1,4 @@
-package no.nav.sokos.pdl.proxy.api.model
+package no.nav.sokos.pdl.proxy.util
 
 import kotlinx.serialization.Serializable
 

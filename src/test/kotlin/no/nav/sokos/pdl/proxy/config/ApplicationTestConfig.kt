@@ -3,7 +3,7 @@ package no.nav.sokos.pdl.proxy.config
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
-import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.TextContent
 import io.ktor.http.headersOf
@@ -19,9 +19,20 @@ import no.nav.sokos.pdl.proxy.pdl.PdlService
 const val APPLICATION_JSON = "application/json"
 const val PDL_PROXY_API_PATH = "/api/pdl-proxy/v1/hent-person"
 
+fun ApplicationTestBuilder.configureTestApplication() {
+    val mapApplicationConfig = MapApplicationConfig()
+    environment {
+        config = mapApplicationConfig
+    }
+
+    application {
+        commonConfig()
+    }
+}
+
 class EmbeddedTestServer(
     private val pdlService: PdlService,
-    port: Int = 1100,
+    port: Int = 9100,
 ) {
     init {
         embeddedServer(Netty, port, module = {
@@ -35,38 +46,25 @@ class EmbeddedTestServer(
     }
 }
 
-fun setupMockEngine(
+fun mockedHttpClientEngine(
     hentIdenterResponseFilNavn: String,
     hentPersonResponseFilNavn: String,
     statusCode: HttpStatusCode = HttpStatusCode.OK,
 ): HttpClient {
-    return HttpClient(
-        MockEngine { request ->
-            val body = request.body as TextContent
-            val content =
-                when {
-                    body.text.contains("hentIdenter") -> hentIdenterResponseFilNavn
-                    else -> hentPersonResponseFilNavn
-                }.readFromResource()
-
-            respond(
-                content = content,
-                headers = headersOf("Content-Type", ContentType.Application.Json.toString()),
-                status = statusCode,
-            )
-        },
-    ) {
+    return HttpClient(MockEngine) {
         expectSuccess = false
-    }
-}
+        engine {
+            addHandler { request ->
+                val body = request.body as TextContent
+                val responseFile = if (body.text.contains("hentIdenter")) hentIdenterResponseFilNavn else hentPersonResponseFilNavn
+                val content = responseFile.readFromResource()
 
-fun ApplicationTestBuilder.configureTestApplication() {
-    val mapApplicationConfig = MapApplicationConfig()
-    environment {
-        config = mapApplicationConfig
-    }
-
-    application {
-        commonConfig()
+                respond(
+                    content = content,
+                    status = statusCode,
+                    headers = headersOf(HttpHeaders.ContentType, APPLICATION_JSON),
+                )
+            }
+        }
     }
 }

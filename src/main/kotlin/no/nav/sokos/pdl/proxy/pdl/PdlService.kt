@@ -10,13 +10,13 @@ import mu.KotlinLogging
 import no.nav.pdl.HentIdenter
 import no.nav.pdl.HentPerson
 import no.nav.pdl.hentperson.Person
-import no.nav.sokos.pdl.proxy.api.model.Ident
-import no.nav.sokos.pdl.proxy.api.model.IdentifikatorType.Companion.fra
-import no.nav.sokos.pdl.proxy.api.model.PersonDetaljer
 import no.nav.sokos.pdl.proxy.config.PdlApiException
 import no.nav.sokos.pdl.proxy.config.PropertiesConfig
 import no.nav.sokos.pdl.proxy.config.SECURE_LOGGER
 import no.nav.sokos.pdl.proxy.config.httpClient
+import no.nav.sokos.pdl.proxy.domain.Ident
+import no.nav.sokos.pdl.proxy.domain.IdentifikatorType.Companion.fra
+import no.nav.sokos.pdl.proxy.domain.PersonDetaljer
 import no.nav.sokos.pdl.proxy.security.AccessTokenClient
 import java.net.URI
 
@@ -31,7 +31,7 @@ class PdlService(
             URI(pdlUrl).toURL(),
             httpClient,
         ),
-    private val accessTokenClient: AccessTokenClient = AccessTokenClient(scope = pdlScope),
+    private val accessTokenClient: AccessTokenClient = AccessTokenClient(azureAdScope = pdlScope),
 ) {
     fun hentPersonDetaljer(ident: String): PersonDetaljer {
         val identer = hentIdenterForPerson(ident).getOrThrow()

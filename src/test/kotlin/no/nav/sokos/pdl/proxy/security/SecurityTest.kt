@@ -18,8 +18,7 @@ import kotlinx.serialization.json.Json
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import no.nav.security.mock.oauth2.token.DefaultOAuth2TokenCallback
 import no.nav.security.mock.oauth2.withMockOAuth2Server
-import no.nav.sokos.pdl.proxy.api.model.PersonDetaljer
-import no.nav.sokos.pdl.proxy.api.model.PersonIdent
+import no.nav.sokos.pdl.proxy.api.model.IdentRequest
 import no.nav.sokos.pdl.proxy.api.pdlProxyApi
 import no.nav.sokos.pdl.proxy.config.APPLICATION_JSON
 import no.nav.sokos.pdl.proxy.config.AUTHENTICATION_NAME
@@ -28,6 +27,7 @@ import no.nav.sokos.pdl.proxy.config.PropertiesConfig
 import no.nav.sokos.pdl.proxy.config.authenticate
 import no.nav.sokos.pdl.proxy.config.configureTestApplication
 import no.nav.sokos.pdl.proxy.config.securityConfig
+import no.nav.sokos.pdl.proxy.domain.PersonDetaljer
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 
 private val pdlService: PdlService = mockk()
@@ -38,7 +38,7 @@ internal class SecurityTest : FunSpec({
         withMockOAuth2Server {
             testApplication {
                 configureTestApplication()
-                this.application {
+                application {
                     securityConfig(true, authConfig())
                     routing {
                         authenticate(true, AUTHENTICATION_NAME) {
@@ -71,7 +71,7 @@ internal class SecurityTest : FunSpec({
                         }
                     }
                 configureTestApplication()
-                this.application {
+                application {
                     securityConfig(true, authConfig())
                     routing {
                         authenticate(true, AUTHENTICATION_NAME) {
@@ -96,7 +96,7 @@ internal class SecurityTest : FunSpec({
                     client.post(PDL_PROXY_API_PATH) {
                         header(HttpHeaders.Authorization, "Bearer ${tokenFromDefaultProvider()}")
                         header(HttpHeaders.ContentType, APPLICATION_JSON)
-                        setBody(PersonIdent("12345678901"))
+                        setBody(IdentRequest("12345678901"))
                     }
 
                 response.status shouldBe HttpStatusCode.OK
