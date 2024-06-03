@@ -18,6 +18,7 @@ import no.nav.sokos.pdl.proxy.pdl.PdlService
 
 const val APPLICATION_JSON = "application/json"
 const val PDL_PROXY_API_PATH = "/api/pdl-proxy/v1/hent-person"
+const val PDL_URL = "http://0.0.0.0"
 
 fun ApplicationTestBuilder.configureTestApplication() {
     val mapApplicationConfig = MapApplicationConfig()

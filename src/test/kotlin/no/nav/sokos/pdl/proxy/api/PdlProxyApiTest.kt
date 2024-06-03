@@ -12,6 +12,7 @@ import no.nav.sokos.pdl.proxy.api.model.IdentRequest
 import no.nav.sokos.pdl.proxy.config.APPLICATION_JSON
 import no.nav.sokos.pdl.proxy.config.EmbeddedTestServer
 import no.nav.sokos.pdl.proxy.config.PDL_PROXY_API_PATH
+import no.nav.sokos.pdl.proxy.config.PDL_URL
 import no.nav.sokos.pdl.proxy.config.mockedHttpClientEngine
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 import no.nav.sokos.pdl.proxy.security.AccessTokenClient
@@ -277,11 +278,9 @@ private fun testServerWithResponseFromPDL(
     hentPersonResponsFilnavn: String,
     httpStatusCode: HttpStatusCode = HttpStatusCode.OK,
 ) {
-    val pdlUrl = "http://0.0.0.0"
-
     val mockkGraphQlClient =
         GraphQLKtorClient(
-            URI(pdlUrl).toURL(),
+            URI(PDL_URL).toURL(),
             mockedHttpClientEngine(
                 hentIdenterResponsFilnavn,
                 hentPersonResponsFilnavn,
@@ -289,7 +288,7 @@ private fun testServerWithResponseFromPDL(
             ),
         )
 
-    EmbeddedTestServer(PdlService(pdlUrl = pdlUrl, graphQlClient = mockkGraphQlClient, accessTokenClient = accessTokenClient), port)
+    EmbeddedTestServer(PdlService(pdlUrl = PDL_URL, graphQlClient = mockkGraphQlClient, accessTokenClient = accessTokenClient), port)
 }
 
 private fun randomPort() = Random.nextInt(32000, 42000)

@@ -9,13 +9,13 @@ import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk
 import no.nav.pdl.hentperson.PostadresseIFrittFormat
+import no.nav.sokos.pdl.proxy.config.PDL_URL
 import no.nav.sokos.pdl.proxy.config.PdlApiException
 import no.nav.sokos.pdl.proxy.config.mockedHttpClientEngine
 import no.nav.sokos.pdl.proxy.security.AccessTokenClient
 import org.junit.jupiter.api.assertThrows
 import java.net.URI
 
-private const val PDL_URL = "http://0.0.0.0"
 private val accessTokenClient = mockk<AccessTokenClient>()
 
 internal class PdlServiceTest : FunSpec({
@@ -124,7 +124,6 @@ private fun mockPdlService(
     hentPersonResponseFilNavn: String,
 ): PdlService {
     return PdlService(
-        pdlUrl = PDL_URL,
         graphQlClient =
             GraphQLKtorClient(
                 URI(PDL_URL).toURL(),

@@ -1,15 +1,20 @@
 openapi: 3.0.1
 info:
-  title: Pdl Connect Proxy API
+  version: 1.0.0
+  title: Pdl Proxy API
   description: Proxy tjeneste som lar z/OS Connect kalle Pdl.
   contact:
-    name: TØB
+    name: Team Moby (Motta og Beregne Ytelser)
     email: okonomi@nav.no
-  version: 1.0.0
+    url: https://nav-it.slack.com/archives/CKZADNFBP
+
+tags:
+  - name: pdl-proxy
+    description: Opplysninger fra PDL
+
 servers:
   - url: /api/pdl-proxy
-tags:
-  - name: pdl-proxy.v1
+
 paths:
   /v1/hent-person:
     post:
@@ -29,7 +34,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/HentPerson'
+              $ref: '#/components/schemas/IdentRequest'
         required: true
       responses:
         '200':
@@ -51,10 +56,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/TjenestefeilResponse'
       security:
-        - Bearer: []
+        - Bearer: [ ]
       x-codegen-request-body-name: hentPerson
 components:
   schemas:
+    IdentRequest:
+      type: object
+      required:
+        - ident
+      properties:
+        ident:
+          type: string
+          example: "11 siffer identnummer"
+          description: 11 siffer identnummer
+
     HentPerson:
       required:
         - ident
@@ -64,6 +79,7 @@ components:
           type: string
           description: Ident til person.
           example: '24117920441'
+
     PersonDetaljer:
       title: PersonDetaljer
       type: object
@@ -109,6 +125,7 @@ components:
           items:
             $ref: '#/components/schemas/Oppholdsadresse'
       description: N&oslash;kkelinformasjon for person
+
     Ident:
       type: object
       properties:
@@ -126,6 +143,7 @@ components:
             Hva slags identifikator FOLKEREGISTERIDENTIFIKATOR eller N_PID eller
             AKTOR_ID
           example: FOLKEREGISTERIDENTIFIKATOR
+
     Bostedsadresse:
       type: object
       properties:
@@ -147,6 +165,7 @@ components:
           $ref: '#/components/schemas/UkjentBosted'
         metadata:
           $ref: '#/components/schemas/Metadata'
+
     Oppholdsadresse:
       type: object
       properties:
@@ -166,6 +185,7 @@ components:
           $ref: '#/components/schemas/Matrikkeladresse'
         metadata:
           $ref: '#/components/schemas/Metadata'
+
     Kontaktadresse:
       type: object
       properties:
@@ -189,6 +209,7 @@ components:
           $ref: '#/components/schemas/UtenlandskAdresseIFrittFormat'
         metadata:
           $ref: '#/components/schemas/Metadata'
+
     Vegadresse:
       type: object
       properties:
@@ -208,6 +229,7 @@ components:
           type: string
         postnummer:
           type: string
+
     Matrikkeladresse:
       type: object
       properties:
@@ -219,6 +241,7 @@ components:
           type: string
         kommunenummer:
           type: string
+
     UtenlandskAdresse:
       type: object
       properties:
@@ -236,11 +259,13 @@ components:
           type: string
         landkode:
           type: string
+
     UkjentBosted:
       type: object
       properties:
         bostedskommune:
           type: string
+
     Postboksadresse:
       type: object
       properties:
@@ -250,6 +275,7 @@ components:
           type: string
         postnummer:
           type: string
+
     PostadresseIFrittFormat:
       type: object
       properties:
@@ -261,6 +287,7 @@ components:
           type: string
         postnummer:
           type: string
+
     UtenlandskAdresseIFrittFormat:
       type: object
       properties:
@@ -276,6 +303,7 @@ components:
           type: string
         landkode:
           type: string
+
     Metadata:
       type: object
       properties:
@@ -289,6 +317,7 @@ components:
           type: boolean
         master:
           type: string
+
     Endring:
       type: object
       properties:
@@ -302,6 +331,7 @@ components:
           type: string
         kilde:
           type: string
+
     TjenestefeilResponse:
       title: TjenestefeilResponse
       type: object
@@ -310,6 +340,7 @@ components:
           type: string
           description: Informasjon om hva som er feil
       description: Responsobjekt ved feil i tjeneste
+
   securitySchemes:
     Bearer:
       type: apiKey
