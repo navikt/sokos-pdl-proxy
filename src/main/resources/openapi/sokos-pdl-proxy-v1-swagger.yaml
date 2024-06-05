@@ -1,0 +1,352 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Pdl Proxy API
+  description: Proxy tjeneste som lar z/OS Connect kalle Pdl.
+  contact:
+    name: Team Moby (Motta og Beregne Ytelser)
+    email: okonomi@nav.no
+    url: https://nav-it.slack.com/archives/CKZADNFBP
+
+tags:
+  - name: pdl-proxy
+    description: Opplysninger fra PDL
+
+servers:
+  - url: /api/pdl-proxy
+
+paths:
+  /v1/hent-person:
+    post:
+      tags:
+        - sokos-pdl-proxy.v1
+      summary: Henter identer og et subset av persondata fra PDL
+      operationId: hent-person
+      parameters:
+        - name: x-correlation-id
+          in: header
+          schema:
+            type: string
+      requestBody:
+        description: >-
+          ident som skal hente person fra PDL. Bruk 24117920441 å teste som er
+          skrevet på PDL dokument - https://navikt.github.io/pdl/#_hentperson
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdentRequest'
+        required: true
+      responses:
+        '200':
+          description: Vellykket forespørsel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonDetaljer'
+        '404':
+          description: Fant ikke forespurt(e) entitet(er)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TjenestefeilResponse'
+        '500':
+          description: Noe gikk galt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TjenestefeilResponse'
+      security:
+        - Bearer: [ ]
+      x-codegen-request-body-name: hentPerson
+components:
+  schemas:
+    IdentRequest:
+      type: object
+      required:
+        - ident
+      properties:
+        ident:
+          type: string
+          example: "11 siffer identnummer"
+          description: 11 siffer identnummer
+
+    HentPerson:
+      required:
+        - ident
+      type: object
+      properties:
+        ident:
+          type: string
+          description: Ident til person.
+          example: '24117920441'
+
+    PersonDetaljer:
+      title: PersonDetaljer
+      type: object
+      properties:
+        identer:
+          maxItems: 10
+          type: array
+          description: List av Identer til person.
+          items:
+            $ref: '#/components/schemas/Ident'
+        fornavn:
+          type: string
+          description: Person Fornavn
+          example: ÅPENHJERTIG
+        mellomnavn:
+          type: string
+          description: Person mellomnavn
+          example: ''
+        etternavn:
+          type: string
+          description: Person etternavn
+          example: STAUDE
+        forkortetNavn:
+          type: string
+          description: Person forkortetNavn
+          example: STAUDE ÅPENHJERTIG
+        bostedsadresse:
+          $ref: '#/components/schemas/Bostedsadresse'
+        kontaktadresse:
+          maxItems: 3
+          type: array
+          description: >-
+            For å avhjelpe begrensninger på stormaskin, settes en maks her som
+            tilsvarer det som teoretisk kan komme fra PDL
+          items:
+            $ref: '#/components/schemas/Kontaktadresse'
+        oppholdsadresse:
+          maxItems: 2
+          type: array
+          description: >-
+            For å avhjelpe begrensninger på stormaskin, settes en maks her som
+            tilsvarer det som teoretisk kan komme fra PDL
+          items:
+            $ref: '#/components/schemas/Oppholdsadresse'
+      description: N&oslash;kkelinformasjon for person
+
+    Ident:
+      type: object
+      properties:
+        ident:
+          type: string
+          description: Ident til person.
+          example: '24117920441'
+        aktiv:
+          type: boolean
+          description: Hvis er aktiv ident.
+          example: true
+        identifikatorType:
+          type: string
+          description: >-
+            Hva slags identifikator FOLKEREGISTERIDENTIFIKATOR eller N_PID eller
+            AKTOR_ID
+          example: FOLKEREGISTERIDENTIFIKATOR
+
+    Bostedsadresse:
+      type: object
+      properties:
+        angittFlyttedato:
+          type: string
+        gyldigFraOgMed:
+          type: string
+        gyldigTilOgMed:
+          type: string
+        coAdressenavn:
+          type: string
+        vegadresse:
+          $ref: '#/components/schemas/Vegadresse'
+        matrikkeladresse:
+          $ref: '#/components/schemas/Matrikkeladresse'
+        utenlandskAdresse:
+          $ref: '#/components/schemas/UtenlandskAdresse'
+        ukjentBosted:
+          $ref: '#/components/schemas/UkjentBosted'
+        metadata:
+          $ref: '#/components/schemas/Metadata'
+
+    Oppholdsadresse:
+      type: object
+      properties:
+        oppholdAnnetSted:
+          type: string
+        coAdressenavn:
+          type: string
+        gyldigFraOgMed:
+          type: string
+        gyldigTilOgMed:
+          type: string
+        utenlandskAdresse:
+          $ref: '#/components/schemas/UtenlandskAdresse'
+        vegadresse:
+          $ref: '#/components/schemas/Vegadresse'
+        matrikkeladresse:
+          $ref: '#/components/schemas/Matrikkeladresse'
+        metadata:
+          $ref: '#/components/schemas/Metadata'
+
+    Kontaktadresse:
+      type: object
+      properties:
+        gyldigFraOgMed:
+          type: string
+        gyldigTilOgMed:
+          type: string
+        type:
+          type: string
+        coAdressenavn:
+          type: string
+        postboksadresse:
+          $ref: '#/components/schemas/Postboksadresse'
+        vegadresse:
+          $ref: '#/components/schemas/Vegadresse'
+        postadresseIFrittFormat:
+          $ref: '#/components/schemas/PostadresseIFrittFormat'
+        utenlandskAdresse:
+          $ref: '#/components/schemas/UtenlandskAdresse'
+        utenlandskAdresseIFrittFormat:
+          $ref: '#/components/schemas/UtenlandskAdresseIFrittFormat'
+        metadata:
+          $ref: '#/components/schemas/Metadata'
+
+    Vegadresse:
+      type: object
+      properties:
+        husnummer:
+          type: string
+        husbokstav:
+          type: string
+        bruksenhetsnummer:
+          type: string
+        adressenavn:
+          type: string
+        kommunenummer:
+          type: string
+        bydelsnummer:
+          type: string
+        tilleggsnavn:
+          type: string
+        postnummer:
+          type: string
+
+    Matrikkeladresse:
+      type: object
+      properties:
+        bruksenhetsnummer:
+          type: string
+        tilleggsnavn:
+          type: string
+        postnummer:
+          type: string
+        kommunenummer:
+          type: string
+
+    UtenlandskAdresse:
+      type: object
+      properties:
+        adressenavnNummer:
+          type: string
+        bygningEtasjeLeilighet:
+          type: string
+        postboksNummerNavn:
+          type: string
+        postkode:
+          type: string
+        bySted:
+          type: string
+        regionDistriktOmraade:
+          type: string
+        landkode:
+          type: string
+
+    UkjentBosted:
+      type: object
+      properties:
+        bostedskommune:
+          type: string
+
+    Postboksadresse:
+      type: object
+      properties:
+        postbokseier:
+          type: string
+        postboks:
+          type: string
+        postnummer:
+          type: string
+
+    PostadresseIFrittFormat:
+      type: object
+      properties:
+        adresselinje1:
+          type: string
+        adresselinje2:
+          type: string
+        adresselinje3:
+          type: string
+        postnummer:
+          type: string
+
+    UtenlandskAdresseIFrittFormat:
+      type: object
+      properties:
+        adresselinje1:
+          type: string
+        adresselinje2:
+          type: string
+        adresselinje3:
+          type: string
+        postkode:
+          type: string
+        byEllerStedsnavn:
+          type: string
+        landkode:
+          type: string
+
+    Metadata:
+      type: object
+      properties:
+        opplysningsId:
+          type: string
+        endringer:
+          type: array
+          items:
+            $ref: '#/components/schemas/Endring'
+        historisk:
+          type: boolean
+        master:
+          type: string
+
+    Endring:
+      type: object
+      properties:
+        type:
+          type: string
+        registrert:
+          type: string
+        registrertAv:
+          type: string
+        systemkilde:
+          type: string
+        kilde:
+          type: string
+
+    TjenestefeilResponse:
+      title: TjenestefeilResponse
+      type: object
+      properties:
+        melding:
+          type: string
+          description: Informasjon om hva som er feil
+      description: Responsobjekt ved feil i tjeneste
+
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: |-
+        OIDC-token (JWT via OAuth2.0).
+         Følgende format må brukes i input-feltet "Value" under: <strong>"Bearer {token}"</strong>.
+         Eksempel på verdi i input-felt: <strong>Bearer eYdmifml0ejugm</strong>
+      name: Authorization
+      in: header

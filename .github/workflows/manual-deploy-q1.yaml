@@ -1,4 +1,4 @@
-name: Manuell deploy til dev-q1
+name: Deploy application manually to dev-q1
 
 on:
   workflow_dispatch:

@@ -10,19 +10,28 @@ import mu.KotlinLogging
 import no.nav.pdl.HentIdenter
 import no.nav.pdl.HentPerson
 import no.nav.pdl.hentperson.Person
-import no.nav.sokos.pdl.proxy.api.model.Ident
-import no.nav.sokos.pdl.proxy.api.model.IdentifikatorType.Companion.fra
-import no.nav.sokos.pdl.proxy.api.model.PersonDetaljer
 import no.nav.sokos.pdl.proxy.config.PdlApiException
-import no.nav.sokos.pdl.proxy.pdl.security.AccessTokenClient
+import no.nav.sokos.pdl.proxy.config.PropertiesConfig
+import no.nav.sokos.pdl.proxy.config.SECURE_LOGGER
+import no.nav.sokos.pdl.proxy.config.httpClient
+import no.nav.sokos.pdl.proxy.domain.Ident
+import no.nav.sokos.pdl.proxy.domain.IdentifikatorType.Companion.fra
+import no.nav.sokos.pdl.proxy.domain.PersonDetaljer
+import no.nav.sokos.pdl.proxy.security.AccessTokenClient
+import java.net.URI
 
 private val logger = KotlinLogging.logger {}
-private val secureLogger = KotlinLogging.logger("secureLogger")
+private val secureLogger = KotlinLogging.logger(SECURE_LOGGER)
 
 class PdlService(
-    private val graphQlClient: GraphQLKtorClient,
-    private val pdlUrl: String,
-    private val accessTokenClient: AccessTokenClient?,
+    private val pdlUrl: String = PropertiesConfig.PdlProperties().pdlUrl,
+    private val pdlScope: String = PropertiesConfig.PdlProperties().pdlScope,
+    private val graphQlClient: GraphQLKtorClient =
+        GraphQLKtorClient(
+            URI(pdlUrl).toURL(),
+            httpClient,
+        ),
+    private val accessTokenClient: AccessTokenClient = AccessTokenClient(azureAdScope = pdlScope),
 ) {
     fun hentPersonDetaljer(ident: String): PersonDetaljer {
         val identer = hentIdenterForPerson(ident).getOrThrow()
@@ -34,7 +43,7 @@ class PdlService(
         logger.info { "Henter identer for person" }
         val respons: GraphQLClientResponse<HentIdenter.Result> =
             runBlocking {
-                val accessToken = accessTokenClient?.hentAccessToken()
+                val accessToken = accessTokenClient.hentAccessToken()
                 graphQlClient.execute(HentIdenter(HentIdenter.Variables(ident = ident))) {
                     url(pdlUrl)
                     header("Authorization", "Bearer $accessToken")
