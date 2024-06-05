@@ -4,7 +4,6 @@ import io.ktor.server.application.Application
 import io.ktor.server.auth.authenticate
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.routing
-import no.nav.sokos.pdl.proxy.api.naisApi
 import no.nav.sokos.pdl.proxy.api.pdlProxyApi
 import no.nav.sokos.pdl.proxy.api.swaggerApi
 
@@ -13,7 +12,7 @@ fun Application.routingConfig(
     applicationState: ApplicationState,
 ) {
     routing {
-        naisApi(applicationState)
+        internalNaisRoutes(applicationState)
         swaggerApi()
         authenticate(useAuthentication, AUTHENTICATION_NAME) {
             pdlProxyApi()
