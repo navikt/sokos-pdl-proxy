@@ -18,14 +18,14 @@ import kotlinx.serialization.json.Json
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import no.nav.security.mock.oauth2.token.DefaultOAuth2TokenCallback
 import no.nav.security.mock.oauth2.withMockOAuth2Server
+import no.nav.sokos.pdl.proxy.APPLICATION_JSON
+import no.nav.sokos.pdl.proxy.PDL_PROXY_API_PATH
 import no.nav.sokos.pdl.proxy.api.model.IdentRequest
 import no.nav.sokos.pdl.proxy.api.pdlProxyApi
-import no.nav.sokos.pdl.proxy.config.APPLICATION_JSON
 import no.nav.sokos.pdl.proxy.config.AUTHENTICATION_NAME
-import no.nav.sokos.pdl.proxy.config.PDL_PROXY_API_PATH
 import no.nav.sokos.pdl.proxy.config.PropertiesConfig
 import no.nav.sokos.pdl.proxy.config.authenticate
-import no.nav.sokos.pdl.proxy.config.configureTestApplication
+import no.nav.sokos.pdl.proxy.config.commonConfig
 import no.nav.sokos.pdl.proxy.config.securityConfig
 import no.nav.sokos.pdl.proxy.domain.PersonDetaljer
 import no.nav.sokos.pdl.proxy.pdl.PdlService
@@ -37,7 +37,6 @@ internal class SecurityTest : FunSpec({
     test("test http GET endepunkt uten token bør returnere 401") {
         withMockOAuth2Server {
             testApplication {
-                configureTestApplication()
                 application {
                     securityConfig(true, authConfig())
                     routing {
@@ -70,8 +69,8 @@ internal class SecurityTest : FunSpec({
                             )
                         }
                     }
-                configureTestApplication()
                 application {
+                    commonConfig()
                     securityConfig(true, authConfig())
                     routing {
                         authenticate(true, AUTHENTICATION_NAME) {

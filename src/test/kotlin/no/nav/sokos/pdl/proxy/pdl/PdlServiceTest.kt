@@ -9,9 +9,9 @@ import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk
 import no.nav.pdl.hentperson.PostadresseIFrittFormat
-import no.nav.sokos.pdl.proxy.config.PDL_URL
+import no.nav.sokos.pdl.proxy.PDL_URL
+import no.nav.sokos.pdl.proxy.TestUtil.mockedHttpClientEngine
 import no.nav.sokos.pdl.proxy.config.PdlApiException
-import no.nav.sokos.pdl.proxy.config.mockedHttpClientEngine
 import no.nav.sokos.pdl.proxy.security.AccessTokenClient
 import org.junit.jupiter.api.assertThrows
 import java.net.URI

@@ -8,10 +8,10 @@ import no.nav.pdl.hentperson.Navn
 import no.nav.pdl.hentperson.Person
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 
-const val AKTIVT = false
-const val HISTORISK = true
-const val PDL = "PDL"
-const val FREG = "FREG"
+private const val AKTIVT = false
+private const val HISTORISK = true
+private const val PDL = "PDL"
+private const val FREG = "FREG"
 
 internal class PersonDetaljerTest : FunSpec({
 
