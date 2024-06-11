@@ -52,7 +52,7 @@ spec:
     timeout: 5
   prometheus:
     enabled: true
-    path: /metrics
+    path: /internal/metrics
   ingresses:
     - https://sokos-pdl-proxy.intern.dev.nav.no
   env:
