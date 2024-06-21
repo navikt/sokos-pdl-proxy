@@ -22,7 +22,6 @@ import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics
 import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics
 import io.micrometer.core.instrument.binder.system.ProcessorMetrics
 import io.micrometer.core.instrument.binder.system.UptimeMetrics
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import no.nav.sokos.pdl.proxy.metrics.Metrics
 import org.slf4j.event.Level
@@ -46,9 +45,8 @@ fun Application.commonConfig() {
         json(
             Json {
                 prettyPrint = true
-                isLenient = true
-
-                @OptIn(ExperimentalSerializationApi::class)
+                ignoreUnknownKeys = true
+                encodeDefaults = true
                 explicitNulls = false
             },
         )

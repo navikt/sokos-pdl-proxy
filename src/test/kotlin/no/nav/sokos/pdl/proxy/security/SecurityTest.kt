@@ -13,7 +13,6 @@ import io.ktor.server.routing.routing
 import io.ktor.server.testing.testApplication
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import no.nav.security.mock.oauth2.token.DefaultOAuth2TokenCallback
@@ -62,8 +61,6 @@ internal class SecurityTest : FunSpec({
                                     prettyPrint = true
                                     ignoreUnknownKeys = true
                                     encodeDefaults = true
-
-                                    @OptIn(ExperimentalSerializationApi::class)
                                     explicitNulls = false
                                 },
                             )
