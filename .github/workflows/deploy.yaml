@@ -15,6 +15,7 @@ on:
       - '.github/workflows/security.yaml'
       - '.github/workflows/alerts.yaml'
       - '.nais/alerts-dev.yaml'
+      - '.nais/alerts-dev-q1.yaml'
       - '.nais/alerts-prod.yaml'
       - '.github/dependabot.yaml'
 env:

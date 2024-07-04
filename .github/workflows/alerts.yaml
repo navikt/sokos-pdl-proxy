@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - '.nais/alerts-dev.yaml'
+      - '.nais/alerts-dev-q1.yaml'
       - '.nais/alerts-prod.yaml'
 
 permissions:
@@ -22,6 +23,17 @@ jobs:
         env:
           CLUSTER: dev-gcp
           RESOURCE: .nais/alerts-dev.yaml
+
+  deploy-dev-q1:
+    name: Deploy alerts to dev-q1
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to dev
+        uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/alerts-dev-q1.yaml
 
   deploy-prod:
     name: Deploy alerts to prod
