@@ -71,21 +71,16 @@ Applikasjonen bruker [AzureAD](https://docs.nais.io/security/auth/azure-ad/) aut
 
 ### Logging
 
-Vi logger til https://logs.adeo.no.
+https://logs.adeo.no.
 
-Feilmeldinger og infomeldinger som ikke innheholder sensitive data logges til indeksen `logstash-apps`, mens meldinger
-som inneholder sensitive data logges til indeksen `tjenestekall`.
+Feilmeldinger og infomeldinger som ikke innheholder sensitive data logges til data view `Applikasjonslogger`.  
+Sensetive meldinger logges til data view `Securelogs` [sikker-utvikling/logging](https://sikkerhet.nav.no/docs/sikker-utvikling/logging)).
 
 - Filter for Produksjon
-    * application:sokos-pdl-proxy AND envclass:p
+    * application:sokos-spk-mottak AND envclass:p
 
 - Filter for Dev
-    * application:sokos-pdl-proxy AND envclass:q
-
-[sikker-utvikling/logging](https://sikkerhet.nav.no/docs/sikker-utvikling/logging) - Anbefales å lese
-- Filter for sikkerhet logs på https://logs.adeo.no
-    * Bytte Change index pattern fra: logstash-* til: tjenestekall-*
-    * Bruk samme filter for dev og prod som er vist over
+    * application:sokos-spk-mottak AND envclass:q
 
 ### Kubectl
 
