@@ -11,7 +11,7 @@ spec:
   replicas:
     min: 1
     max: 2
-    cpuThresholdPercentage: 25
+    cpuThresholdPercentage: 75
   secureLogs:
     enabled: true
   azure:
