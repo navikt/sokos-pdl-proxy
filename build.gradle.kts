@@ -12,7 +12,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("com.expediagroup.graphql") version "7.1.4"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
-    id("org.jetbrains.kotlinx.kover") version "0.8.2"
+    id("org.jetbrains.kotlinx.kover") version "0.8.3"
 }
 
 group = "no.nav.sokos"
@@ -30,7 +30,7 @@ val micrometerVersion = "1.13.2"
 val kotlinLoggingVersion = "3.0.5"
 val natpryceVersion = "1.6.10.0"
 val janionVersion = "3.1.12"
-val mockkVersion = "1.13.11"
+val mockkVersion = "1.13.12"
 val graphqlClientVersion = "7.1.4"
 val avroVersion = "1.11.1"
 val swaggerRequestValidatorVersion = "2.41.0"
