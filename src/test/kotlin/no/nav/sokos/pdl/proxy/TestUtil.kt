@@ -7,8 +7,10 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.TextContent
 import io.ktor.http.headersOf
+import io.ktor.server.engine.EmbeddedServer
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import io.ktor.server.netty.NettyApplicationEngine
 import io.ktor.server.routing.routing
 import no.nav.sokos.pdl.proxy.api.pdlProxyApi
 import no.nav.sokos.pdl.proxy.config.authenticate
@@ -25,15 +27,15 @@ object TestUtil {
     fun testEmbeddedServer(
         pdlService: PdlService,
         port: Int = 9100,
-    ) {
-        embeddedServer(Netty, port, module = {
+    ): EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration> {
+        return embeddedServer(Netty, port, module = {
             commonConfig()
             routing {
                 authenticate(false) {
                     pdlProxyApi(pdlService = pdlService)
                 }
             }
-        }).start()
+        })
     }
 
     fun mockedHttpClientEngine(
