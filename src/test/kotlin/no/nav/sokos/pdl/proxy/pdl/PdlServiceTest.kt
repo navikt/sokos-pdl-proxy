@@ -81,15 +81,15 @@ internal class PdlServiceTest : FunSpec({
 
     test("Finnes ikke person identer fra Pdl") {
 
+        val hentIdenter = "hentIdenter_fant_ikke_person_response.json".readFromResource()
+
         wiremock.stubFor(
             post(urlEqualTo("/graphql"))
                 .willReturn(
                     aResponse()
                         .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
                         .withStatus(HttpStatusCode.OK.value)
-                        .withBody(
-                            "hentIdenter_fant_ikke_person_response.json".readFromResource(),
-                        ),
+                        .withBody(hentIdenter),
                 ),
         )
 
@@ -101,6 +101,83 @@ internal class PdlServiceTest : FunSpec({
         exception.shouldNotBeNull()
         exception.feilkode shouldBe 404
         exception.feilmelding shouldBe "Fant ikke person"
+    }
+
+    test("Finner person identer fra Pdl, men ikke person") {
+
+        val hentIdenter = "hentIdenter_success_response.json".readFromResource()
+        val hentPerson = "hentPerson_fant_ikke_person_response.json".readFromResource()
+
+        wiremock.stubFor(
+            post(urlEqualTo("/graphql"))
+                .inScenario("GraphQL Scenario")
+                .whenScenarioStateIs(STARTED)
+                .willReturn(
+                    aResponse()
+                        .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                        .withStatus(HttpStatusCode.OK.value)
+                        .withBody(hentIdenter),
+                )
+                .willSetStateTo("SecondRequest"),
+        )
+
+        // Second state: "SecondRequest"
+        wiremock.stubFor(
+            post(urlEqualTo("/graphql"))
+                .inScenario("GraphQL Scenario")
+                .whenScenarioStateIs("SecondRequest")
+                .willReturn(
+                    aResponse()
+                        .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                        .withStatus(HttpStatusCode.OK.value)
+                        .withBody(hentPerson),
+                ),
+        )
+
+        val exception =
+            assertThrows<PdlApiException> {
+                pdlService.hentPersonDetaljer("22334455667")
+            }
+
+        exception.shouldNotBeNull()
+        exception.feilkode shouldBe 404
+        exception.feilmelding shouldBe "Fant ikke person"
+    }
+
+    test("Finner person identer fra Pdl, finner person men tomt navn respons") {
+
+        val hentIdenter = "hentIdenter_success_response.json".readFromResource()
+        val hentPerson = "hentPerson_tomt_navn_response.json".readFromResource()
+
+        wiremock.stubFor(
+            post(urlEqualTo("/graphql"))
+                .inScenario("GraphQL Scenario")
+                .whenScenarioStateIs(STARTED)
+                .willReturn(
+                    aResponse()
+                        .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                        .withStatus(HttpStatusCode.OK.value)
+                        .withBody(hentIdenter),
+                )
+                .willSetStateTo("SecondRequest"),
+        )
+
+        // Second state: "SecondRequest"
+        wiremock.stubFor(
+            post(urlEqualTo("/graphql"))
+                .inScenario("GraphQL Scenario")
+                .whenScenarioStateIs("SecondRequest")
+                .willReturn(
+                    aResponse()
+                        .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                        .withStatus(HttpStatusCode.OK.value)
+                        .withBody(hentPerson),
+                ),
+        )
+
+        val result = pdlService.hentPersonDetaljer("24117920441")
+
+        result.fornavn shouldBe null
     }
 
     test("Benytte eneste aktive navn hvis de andre er historiske") {
@@ -223,6 +300,88 @@ internal class PdlServiceTest : FunSpec({
         result.etternavn.shouldBeNull()
     }
 
+    test("Finner person men men har flere enn 2 oppholdsadresser, kaster PdlApiException med feilmelding og feilkode") {
+
+        val hentIdenter = "hentIdenter_success_response.json".readFromResource()
+        val hentPerson = "hentPerson_success_response_med_3_oppholdsadresser.json".readFromResource()
+
+        wiremock.stubFor(
+            post(urlEqualTo("/graphql"))
+                .inScenario("GraphQL Scenario")
+                .whenScenarioStateIs(STARTED)
+                .willReturn(
+                    aResponse()
+                        .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                        .withStatus(HttpStatusCode.OK.value)
+                        .withBody(hentIdenter),
+                )
+                .willSetStateTo("SecondRequest"),
+        )
+
+        // Second state: "SecondRequest"
+        wiremock.stubFor(
+            post(urlEqualTo("/graphql"))
+                .inScenario("GraphQL Scenario")
+                .whenScenarioStateIs("SecondRequest")
+                .willReturn(
+                    aResponse()
+                        .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                        .withStatus(HttpStatusCode.OK.value)
+                        .withBody(hentPerson),
+                ),
+        )
+
+        val exception =
+            assertThrows<PdlApiException> {
+                pdlService.hentPersonDetaljer("24117920441")
+            }
+
+        exception.shouldNotBeNull()
+        exception.feilkode shouldBe 500
+        exception.feilmelding shouldBe "For mange oppholdsadresser. Personen har 3 og overstiger grensen på 2"
+    }
+
+    test("Finner person men har flere enn 3 kontaktadresser, kaster PdlApiException med feilmelding og feilkode") {
+
+        val hentIdenter = "hentIdenter_success_response.json".readFromResource()
+        val hentPerson = "hentPerson_success_response_med_4_kontaktadresser.json".readFromResource()
+
+        wiremock.stubFor(
+            post(urlEqualTo("/graphql"))
+                .inScenario("GraphQL Scenario")
+                .whenScenarioStateIs(STARTED)
+                .willReturn(
+                    aResponse()
+                        .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                        .withStatus(HttpStatusCode.OK.value)
+                        .withBody(hentIdenter),
+                )
+                .willSetStateTo("SecondRequest"),
+        )
+
+        // Second state: "SecondRequest"
+        wiremock.stubFor(
+            post(urlEqualTo("/graphql"))
+                .inScenario("GraphQL Scenario")
+                .whenScenarioStateIs("SecondRequest")
+                .willReturn(
+                    aResponse()
+                        .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                        .withStatus(HttpStatusCode.OK.value)
+                        .withBody(hentPerson),
+                ),
+        )
+
+        val exception =
+            assertThrows<PdlApiException> {
+                pdlService.hentPersonDetaljer("24117920441")
+            }
+
+        exception.shouldNotBeNull()
+        exception.feilkode shouldBe 500
+        exception.feilmelding shouldBe "For mange kontaktadresser. Personen har 4 og overstiger grensen på 3"
+    }
+
     test("Ikke authentisert å hente person identer fra Pdl") {
 
         val hentIdenter = "hentIdenter_ikke_authentisert_response.json".readFromResource()
@@ -245,5 +404,29 @@ internal class PdlServiceTest : FunSpec({
         exception.shouldNotBeNull()
         exception.feilkode shouldBe 500
         exception.feilmelding shouldBe "Ikke autentisert"
+    }
+
+    test("Feilkoder fra PDL skal returnere 500 med en beskrivende feilmelding") {
+
+        val hentIdenter = "hentIdenter_annen_feilmelding_response.json".readFromResource()
+
+        wiremock.stubFor(
+            post(urlEqualTo("/graphql"))
+                .willReturn(
+                    aResponse()
+                        .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                        .withStatus(HttpStatusCode.OK.value)
+                        .withBody(hentIdenter),
+                ),
+        )
+
+        val exception =
+            assertThrows<PdlApiException> {
+                pdlService.hentPersonDetaljer("22334455667")
+            }
+
+        exception.shouldNotBeNull()
+        exception.feilkode shouldBe 500
+        exception.feilmelding shouldBe "En annen feilmelding fra PDL"
     }
 })
