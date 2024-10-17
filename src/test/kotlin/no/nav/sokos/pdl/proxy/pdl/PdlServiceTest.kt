@@ -1,36 +1,71 @@
 package no.nav.sokos.pdl.proxy.pdl
 
-import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
+import com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import com.github.tomakehurst.wiremock.client.WireMock.post
+import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
+import com.github.tomakehurst.wiremock.stubbing.Scenario.STARTED
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.inspectors.forAny
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
-import io.mockk.coEvery
-import io.mockk.mockk
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
 import no.nav.pdl.hentperson.PostadresseIFrittFormat
-import no.nav.sokos.pdl.proxy.PDL_URL
-import no.nav.sokos.pdl.proxy.TestUtil.mockedHttpClientEngine
+import no.nav.sokos.pdl.proxy.APPLICATION_JSON
+import no.nav.sokos.pdl.proxy.TestUtil.readFromResource
 import no.nav.sokos.pdl.proxy.config.PdlApiException
-import no.nav.sokos.pdl.proxy.security.AccessTokenClient
+import no.nav.sokos.pdl.proxy.listener.WiremockListener
+import no.nav.sokos.pdl.proxy.listener.WiremockListener.wiremock
 import org.junit.jupiter.api.assertThrows
-import java.net.URI
-
-private val accessTokenClient = mockk<AccessTokenClient>()
 
 internal class PdlServiceTest : FunSpec({
 
-    beforeEach {
-        coEvery { accessTokenClient.hentAccessToken() } returns "token"
+    extensions(listOf(WiremockListener))
+
+    val pdlService: PdlService by lazy {
+        PdlService(
+            pdlUrl = wiremock.baseUrl() + "/graphql",
+            accessTokenClient = WiremockListener.accessTokenClient,
+        )
+    }
+
+    beforeTest {
+        wiremock.resetAll()
     }
 
     test("Vellykket hent av en persons identer, navn og adresser fra Pdl") {
 
-        val result =
-            mockPdlService(
-                "hentIdenter_success_response.json",
-                "hentPerson_success_response.json",
-            ).hentPersonDetaljer("22334455667")
+        val hentIdenter = "hentIdenter_success_response.json".readFromResource()
+        val hentPerson = "hentPerson_success_response.json".readFromResource()
+
+        wiremock.stubFor(
+            post(urlEqualTo("/graphql"))
+                .inScenario("GraphQL Scenario")
+                .whenScenarioStateIs(STARTED)
+                .willReturn(
+                    aResponse()
+                        .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                        .withStatus(HttpStatusCode.OK.value)
+                        .withBody(hentIdenter),
+                )
+                .willSetStateTo("SecondRequest"),
+        )
+
+        // Second state: "SecondRequest"
+        wiremock.stubFor(
+            post(urlEqualTo("/graphql"))
+                .inScenario("GraphQL Scenario")
+                .whenScenarioStateIs("SecondRequest")
+                .willReturn(
+                    aResponse()
+                        .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                        .withStatus(HttpStatusCode.OK.value)
+                        .withBody(hentPerson),
+                ),
+        )
+
+        val result = pdlService.hentPersonDetaljer("22334455667")
 
         result.shouldNotBeNull()
         result.identer.forAny { it.ident shouldBe "24117920441" }
@@ -46,13 +81,23 @@ internal class PdlServiceTest : FunSpec({
 
     test("Finnes ikke person identer fra Pdl") {
 
+        wiremock.stubFor(
+            post(urlEqualTo("/graphql"))
+                .willReturn(
+                    aResponse()
+                        .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                        .withStatus(HttpStatusCode.OK.value)
+                        .withBody(
+                            "hentIdenter_fant_ikke_person_response.json".readFromResource(),
+                        ),
+                ),
+        )
+
         val exception =
             assertThrows<PdlApiException> {
-                mockPdlService(
-                    "hentIdenter_fant_ikke_person_response.json",
-                    "hentPerson_fant_ikke_person_response.json",
-                ).hentPersonDetaljer("22334455667")
+                pdlService.hentPersonDetaljer("22334455667")
             }
+
         exception.shouldNotBeNull()
         exception.feilkode shouldBe 404
         exception.feilmelding shouldBe "Fant ikke person"
@@ -60,11 +105,36 @@ internal class PdlServiceTest : FunSpec({
 
     test("Benytte eneste aktive navn hvis de andre er historiske") {
 
-        val result =
-            mockPdlService(
-                "hentIdenter_success_response.json",
-                "hentPerson_flere_navn_ett_aktivt.json",
-            ).hentPersonDetaljer("22334455667")
+        val hentIdenter = "hentIdenter_success_response.json".readFromResource()
+        val hentPerson = "hentPerson_flere_navn_ett_aktivt.json".readFromResource()
+
+        wiremock.stubFor(
+            post(urlEqualTo("/graphql"))
+                .inScenario("GraphQL Scenario")
+                .whenScenarioStateIs(STARTED)
+                .willReturn(
+                    aResponse()
+                        .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                        .withStatus(HttpStatusCode.OK.value)
+                        .withBody(hentIdenter),
+                )
+                .willSetStateTo("SecondRequest"),
+        )
+
+        // Second state: "SecondRequest"
+        wiremock.stubFor(
+            post(urlEqualTo("/graphql"))
+                .inScenario("GraphQL Scenario")
+                .whenScenarioStateIs("SecondRequest")
+                .willReturn(
+                    aResponse()
+                        .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                        .withStatus(HttpStatusCode.OK.value)
+                        .withBody(hentPerson),
+                ),
+        )
+
+        val result = pdlService.hentPersonDetaljer("24117920441")
 
         result.shouldNotBeNull()
         result.identer.forAny { it.ident shouldBe "24117920441" }
@@ -75,11 +145,36 @@ internal class PdlServiceTest : FunSpec({
 
     test("Skal benytte nyeste aktive navn selv om historiske har nyere registreringsdato") {
 
-        val result =
-            mockPdlService(
-                "hentIdenter_success_response.json",
-                "hentPerson_flere_aktive_navn_noen_nyere_historiske.json",
-            ).hentPersonDetaljer("22334455667")
+        val hentIdenter = "hentIdenter_success_response.json".readFromResource()
+        val hentPerson = "hentPerson_flere_aktive_navn_noen_nyere_historiske.json".readFromResource()
+
+        wiremock.stubFor(
+            post(urlEqualTo("/graphql"))
+                .inScenario("GraphQL Scenario")
+                .whenScenarioStateIs(STARTED)
+                .willReturn(
+                    aResponse()
+                        .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                        .withStatus(HttpStatusCode.OK.value)
+                        .withBody(hentIdenter),
+                )
+                .willSetStateTo("SecondRequest"),
+        )
+
+        // Second state: "SecondRequest"
+        wiremock.stubFor(
+            post(urlEqualTo("/graphql"))
+                .inScenario("GraphQL Scenario")
+                .whenScenarioStateIs("SecondRequest")
+                .willReturn(
+                    aResponse()
+                        .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                        .withStatus(HttpStatusCode.OK.value)
+                        .withBody(hentPerson),
+                ),
+        )
+
+        val result = pdlService.hentPersonDetaljer("24117920441")
 
         result.shouldNotBeNull()
         result.identer.forAny { it.ident shouldBe "24117920441" }
@@ -90,11 +185,36 @@ internal class PdlServiceTest : FunSpec({
 
     test("Skal benytte seneste historiske navn hvis det ikke er noen aktive") {
 
-        val result =
-            mockPdlService(
-                "hentIdenter_success_response.json",
-                "hentPerson_flere_bare_historiske_navn.json",
-            ).hentPersonDetaljer("22334455667")
+        val hentIdenter = "hentIdenter_success_response.json".readFromResource()
+        val hentPerson = "hentPerson_flere_bare_historiske_navn.json".readFromResource()
+
+        wiremock.stubFor(
+            post(urlEqualTo("/graphql"))
+                .inScenario("GraphQL Scenario")
+                .whenScenarioStateIs(STARTED)
+                .willReturn(
+                    aResponse()
+                        .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                        .withStatus(HttpStatusCode.OK.value)
+                        .withBody(hentIdenter),
+                )
+                .willSetStateTo("SecondRequest"),
+        )
+
+        // Second state: "SecondRequest"
+        wiremock.stubFor(
+            post(urlEqualTo("/graphql"))
+                .inScenario("GraphQL Scenario")
+                .whenScenarioStateIs("SecondRequest")
+                .willReturn(
+                    aResponse()
+                        .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                        .withStatus(HttpStatusCode.OK.value)
+                        .withBody(hentPerson),
+                ),
+        )
+
+        val result = pdlService.hentPersonDetaljer("24117920441")
 
         result.shouldNotBeNull()
         result.identer.forAny { it.ident shouldBe "24117920441" }
@@ -105,12 +225,21 @@ internal class PdlServiceTest : FunSpec({
 
     test("Ikke authentisert å hente person identer fra Pdl") {
 
+        val hentIdenter = "hentIdenter_ikke_authentisert_response.json".readFromResource()
+
+        wiremock.stubFor(
+            post(urlEqualTo("/graphql"))
+                .willReturn(
+                    aResponse()
+                        .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                        .withStatus(HttpStatusCode.OK.value)
+                        .withBody(hentIdenter),
+                ),
+        )
+
         val exception =
             assertThrows<PdlApiException> {
-                mockPdlService(
-                    "hentIdenter_ikke_authentisert_response.json",
-                    "hentPerson_ikke_authentisert_response.json",
-                ).hentPersonDetaljer("22334455667")
+                pdlService.hentPersonDetaljer("22334455667")
             }
 
         exception.shouldNotBeNull()
@@ -118,20 +247,3 @@ internal class PdlServiceTest : FunSpec({
         exception.feilmelding shouldBe "Ikke autentisert"
     }
 })
-
-private fun mockPdlService(
-    hentIdenterResponseFilNavn: String,
-    hentPersonResponseFilNavn: String,
-): PdlService {
-    return PdlService(
-        graphQlClient =
-            GraphQLKtorClient(
-                URI(PDL_URL).toURL(),
-                mockedHttpClientEngine(
-                    hentIdenterResponseFilNavn,
-                    hentPersonResponseFilNavn,
-                ),
-            ),
-        accessTokenClient = accessTokenClient,
-    )
-}

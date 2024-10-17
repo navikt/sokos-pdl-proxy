@@ -1,4 +1,4 @@
-package no.nav.sokos.pdl.proxy.pdl
+package no.nav.sokos.pdl.proxy.util
 
 import mu.KotlinLogging
 import no.nav.pdl.hentperson.Person
@@ -8,7 +8,7 @@ private val logger = KotlinLogging.logger {}
 private const val MAKS_ANTALL_KONTAKT_ADRESSER = 3
 private const val MAKS_ANTALL_OPPHOLD_ADRESSER = 2
 
-object PersonFraPDLValidator {
+object KontaktOgOppholdsAdresseValidator {
     fun valider(person: Person) {
         validerAntallKontaktadresser(person)
         validerAntallOppholdsadresser(person)

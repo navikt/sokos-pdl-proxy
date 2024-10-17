@@ -34,7 +34,8 @@ val mockkVersion = "1.13.13"
 val graphqlClientVersion = "8.1.0"
 val swaggerRequestValidatorVersion = "2.43.0"
 val mockOAuth2ServerVersion = "2.1.9"
-val kotestVersion = "5.9.1"
+val kotestVersion = "6.0.0.M1"
+val wiremockVersion = "3.0.1"
 
 dependencies {
 
@@ -79,6 +80,8 @@ dependencies {
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("com.atlassian.oai:swagger-request-validator-restassured:$swaggerRequestValidatorVersion")
     testImplementation("no.nav.security:mock-oauth2-server:$mockOAuth2ServerVersion")
+    testImplementation("com.atlassian.oai:swagger-request-validator-restassured:$swaggerRequestValidatorVersion")
+    testImplementation("com.github.tomakehurst:wiremock:$wiremockVersion")
 
     // GraphQL
     implementation("com.expediagroup:graphql-kotlin-ktor-client:$graphqlClientVersion") {
