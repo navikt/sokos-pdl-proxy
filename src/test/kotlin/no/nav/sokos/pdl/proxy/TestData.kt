@@ -20,16 +20,16 @@ object TestData {
     fun mockPersonDetaljer(): PersonDetaljer {
         return PersonDetaljer(
             identer = listOf(Ident(ident = "24117920441", aktiv = true, identifikatorType = IdentifikatorType.FOLKEREGISTERIDENTIFIKATOR)),
-            fornavn = "ÅPENHJERTIG",
-            mellomnavn = null,
-            etternavn = "STAUDE",
+            fornavn = "Ola",
+            mellomnavn = "mellomnavn",
+            etternavn = "Nordmann",
             forkortetNavn = "STAUDE ÅPENHJERTIG",
             bostedsadresse =
                 Bostedsadresse(
                     angittFlyttedato = "1979-11-24",
                     gyldigFraOgMed = "1979-11-24T00:00",
-                    gyldigTilOgMed = null,
-                    coAdressenavn = null,
+                    gyldigTilOgMed = "2020-11-24T00:00",
+                    coAdressenavn = "null",
                     vegadresse =
                         Vegadresse(
                             husnummer = "55",

@@ -124,7 +124,7 @@ components:
             tilsvarer det som teoretisk kan komme fra PDL
           items:
             $ref: '#/components/schemas/Oppholdsadresse'
-      description: N&oslash;kkelinformasjon for person
+      description: Nøkkelinformasjon om person
 
     Ident:
       type: object
