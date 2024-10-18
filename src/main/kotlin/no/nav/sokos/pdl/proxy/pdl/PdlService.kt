@@ -18,6 +18,7 @@ import no.nav.sokos.pdl.proxy.domain.Ident
 import no.nav.sokos.pdl.proxy.domain.IdentifikatorType.Companion.fra
 import no.nav.sokos.pdl.proxy.domain.PersonDetaljer
 import no.nav.sokos.pdl.proxy.security.AccessTokenClient
+import no.nav.sokos.pdl.proxy.util.KontaktOgOppholdsAdresseValidator
 import java.net.URI
 
 private val logger = KotlinLogging.logger {}
@@ -51,7 +52,7 @@ class PdlService(
             }
 
         return respons.errors?.let { feilmeldingerFraPdl ->
-            håndterFeilFraPdl(feilmeldingerFraPdl, ident)
+            handleError(feilmeldingerFraPdl, ident)
         } ?: Result.success(hentUtIdenter(respons, ident))
     }
 
@@ -82,12 +83,11 @@ class PdlService(
             }
 
         return respons.errors?.let { feilmeldingerFraPdl ->
-            håndterFeilFraPdl(feilmeldingerFraPdl, ident)
+            handleError(feilmeldingerFraPdl, ident)
         } ?: validerOgBehandleResultat(respons, ident)
     }
 
-    @Suppress("FunctionName")
-    private fun <T> håndterFeilFraPdl(
+    private fun <T> handleError(
         errors: List<GraphQLClientError>,
         ident: String,
     ): Result<T> {
@@ -119,7 +119,7 @@ class PdlService(
         ident: String,
     ): Result<Person?> {
         respons.data?.hentPerson?.also { person ->
-            PersonFraPDLValidator.valider(person)
+            KontaktOgOppholdsAdresseValidator.valider(person)
         }
         secureLogger.info { "Henting av Person med ident $ident fra PDL vellykket" }
         return Result.success(respons.data?.hentPerson)

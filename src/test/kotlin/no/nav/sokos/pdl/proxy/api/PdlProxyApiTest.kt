@@ -1,329 +1,125 @@
 package no.nav.sokos.pdl.proxy.api
 
 import com.atlassian.oai.validator.restassured.OpenApiValidationFilter
-import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.shouldBe
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.Application
 import io.ktor.server.engine.EmbeddedServer
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
 import io.ktor.server.netty.NettyApplicationEngine
-import io.mockk.coEvery
+import io.ktor.server.routing.routing
+import io.mockk.every
 import io.mockk.mockk
 import io.restassured.RestAssured
+import kotlinx.serialization.json.Json
 import no.nav.sokos.pdl.proxy.APPLICATION_JSON
 import no.nav.sokos.pdl.proxy.PDL_PROXY_API_PATH
-import no.nav.sokos.pdl.proxy.PDL_URL
-import no.nav.sokos.pdl.proxy.TestUtil.mockedHttpClientEngine
-import no.nav.sokos.pdl.proxy.TestUtil.testEmbeddedServer
+import no.nav.sokos.pdl.proxy.TestData.mockPersonDetaljer
 import no.nav.sokos.pdl.proxy.api.model.IdentRequest
+import no.nav.sokos.pdl.proxy.config.AUTHENTICATION_NAME
+import no.nav.sokos.pdl.proxy.config.PdlApiException
+import no.nav.sokos.pdl.proxy.config.authenticate
+import no.nav.sokos.pdl.proxy.config.commonConfig
+import no.nav.sokos.pdl.proxy.domain.PersonDetaljer
 import no.nav.sokos.pdl.proxy.pdl.PdlService
-import no.nav.sokos.pdl.proxy.security.AccessTokenClient
+import no.nav.sokos.pdl.proxy.util.TjenestefeilResponse
 import org.hamcrest.CoreMatchers.containsString
-import org.hamcrest.CoreMatchers.equalTo
-import java.net.URI
-import kotlin.random.Random
+
+private const val PORT = 9090
+
+private lateinit var server: EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration>
 
 private val validationFilter = OpenApiValidationFilter("openapi/sokos-pdl-proxy-v1-swagger.yaml")
-private val accessTokenClient = mockk<AccessTokenClient>()
+private val pdlService = mockk<PdlService>()
 
 internal class PdlProxyApiTest : FunSpec({
 
-    beforeEach {
-        coEvery { accessTokenClient.hentAccessToken() } returns "token"
+    beforeTest {
+        server = embeddedServer(Netty, PORT, module = Application::applicationTestModule).start()
+    }
+
+    afterTest {
+        server.stop(5, 5)
     }
 
     test("Klient kaller PDL med suksess") {
-        val port = randomPort()
 
-        val server =
-            testServerWithResponseFromPDL(
-                port,
-                "hentIdenter_success_response.json",
-                "hentPerson_success_response.json",
-            ).start()
+        every { pdlService.hentPersonDetaljer(any()) } returns mockPersonDetaljer()
 
-        RestAssured.given()
-            .filter(validationFilter)
-            .header(HttpHeaders.ContentType, APPLICATION_JSON)
-            .header(HttpHeaders.Authorization, "Bearer dummytoken")
-            .body(IdentRequest("123456789"))
-            .port(port)
-            .post(PDL_PROXY_API_PATH)
-            .then()
-            .assertThat()
-            .statusCode(200)
+        val response =
+            RestAssured.given()
+                .filter(validationFilter)
+                .header(HttpHeaders.ContentType, APPLICATION_JSON)
+                .header(HttpHeaders.Authorization, "Bearer dummytoken")
+                .body(IdentRequest("123456789"))
+                .port(PORT)
+                .post(PDL_PROXY_API_PATH)
+                .then().assertThat()
+                .statusCode(HttpStatusCode.OK.value)
+                .extract()
+                .response()
 
-        server.stop()
+        Json.decodeFromString<PersonDetaljer>(response.asString()) shouldBe mockPersonDetaljer()
     }
 
-    test("Klient kaller PDL med suksess, men ingen navn på person") {
-        val port = randomPort()
+    test("Klient kaller PDL, ingen person finnes, skal returnere 404 med feilmelding") {
 
-        val server =
-            testServerWithResponseFromPDL(
-                port,
-                "hentIdenter_success_response.json",
-                "hentPerson_tomt_navn_response.json",
-            ).start()
+        every { pdlService.hentPersonDetaljer(any()) } throws PdlApiException(404, "Fant ikke person")
 
-        RestAssured.given()
-            .filter(validationFilter)
-            .header(HttpHeaders.ContentType, APPLICATION_JSON)
-            .header(HttpHeaders.Authorization, "Bearer dummytoken")
-            .body(IdentRequest("123456789"))
-            .port(port)
-            .post(PDL_PROXY_API_PATH)
-            .then()
-            .assertThat()
-            .statusCode(200)
+        val response =
+            RestAssured.given()
+                .filter(validationFilter)
+                .header(HttpHeaders.ContentType, APPLICATION_JSON)
+                .header(HttpHeaders.Authorization, "Bearer dummytoken")
+                .body(IdentRequest("123456789"))
+                .port(PORT)
+                .post(PDL_PROXY_API_PATH)
+                .then()
+                .assertThat()
+                .statusCode(404)
+                .extract()
+                .response()
 
-        server.stop()
+        Json.decodeFromString<TjenestefeilResponse>(response.asString()) shouldBe
+            TjenestefeilResponse(
+                "Fant ikke person",
+            )
     }
 
-    test("Finner ikke data for hverken (hentIdenter) eller (hentPerson), skal returnere 404 med feilmelding") {
-        val port = randomPort()
+    test("Klient ikke ikke autentisert mot PDL, skal returnere 500 med feilmelding") {
 
-        val server =
-            testServerWithResponseFromPDL(
-                port,
-                "hentIdenter_fant_ikke_person_response.json",
-                "hentPerson_fant_ikke_person_response.json",
-            ).start()
+        every { pdlService.hentPersonDetaljer(any()) } throws PdlApiException(500, "Ikke autentisert")
 
-        RestAssured.given()
-            .filter(validationFilter)
-            .header(HttpHeaders.ContentType, APPLICATION_JSON)
-            .header(HttpHeaders.Authorization, "Bearer dummytoken")
-            .body(IdentRequest("123456789"))
-            .port(port)
-            .post(PDL_PROXY_API_PATH)
-            .then()
-            .assertThat()
-            .statusCode(404)
-            .body(containsString("Fant ikke person"))
+        val response =
+            RestAssured.given()
+                .filter(validationFilter)
+                .header(HttpHeaders.ContentType, APPLICATION_JSON)
+                .header(HttpHeaders.Authorization, "Bearer dummytoken")
+                .body(IdentRequest("123456789"))
+                .port(PORT)
+                .post(PDL_PROXY_API_PATH)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatusCode.InternalServerError.value)
+                .body(containsString("Ikke autentisert"))
+                .extract()
+                .response()
 
-        server.stop()
-    }
-
-    test("Finner ikke data for (hentPerson), skal returnere 404 med feilmelding") {
-        val port = randomPort()
-
-        val server =
-            testServerWithResponseFromPDL(
-                port,
-                "hentIdenter_success_response.json",
-                "hentPerson_fant_ikke_person_response.json",
-            ).start()
-
-        RestAssured.given()
-            .filter(validationFilter)
-            .header(HttpHeaders.ContentType, APPLICATION_JSON)
-            .header(HttpHeaders.Authorization, "Bearer dummytoken")
-            .body(IdentRequest("123456789"))
-            .port(port)
-            .post(PDL_PROXY_API_PATH)
-            .then()
-            .assertThat()
-            .statusCode(404)
-            .body(containsString("Fant ikke person"))
-
-        server.stop()
-    }
-
-    test("Finner ikke data for (hentIdenter), skal returnere 404 med feilmelding") {
-        val port = randomPort()
-
-        val server =
-            testServerWithResponseFromPDL(
-                port,
-                "hentIdenter_fant_ikke_person_response.json",
-                "hentPerson_success_response.json",
-            ).start()
-
-        RestAssured.given()
-            .filter(validationFilter)
-            .header(HttpHeaders.ContentType, APPLICATION_JSON)
-            .header(HttpHeaders.Authorization, "Bearer dummytoken")
-            .body(IdentRequest("123456789"))
-            .port(port)
-            .post(PDL_PROXY_API_PATH)
-            .then()
-            .assertThat()
-            .statusCode(404)
-            .body(containsString("Fant ikke person"))
-
-        server.stop()
-    }
-
-    test("Klient ikke ikke autentisert mot tjeneste, skal returnere 500 med feilmelding") {
-        val port = randomPort()
-
-        val server =
-            testServerWithResponseFromPDL(
-                port,
-                "hentIdenter_ikke_authentisert_response.json",
-                "hentPerson_success_response.json",
-            ).start()
-
-        RestAssured.given()
-            .filter(validationFilter)
-            .header(HttpHeaders.ContentType, APPLICATION_JSON)
-            .header(HttpHeaders.Authorization, "Bearer dummytoken")
-            .body(IdentRequest("123456789"))
-            .port(port)
-            .post(PDL_PROXY_API_PATH)
-            .then()
-            .assertThat()
-            .statusCode(500)
-            .body(containsString("Ikke autentisert"))
-
-        server.stop()
-    }
-
-    test("Feilkoder fra PDL skal returnere 500 med en beskrivende feilmelding") {
-        val port = randomPort()
-
-        val server =
-            testServerWithResponseFromPDL(
-                port,
-                "hentIdenter_annen_feilmelding_response.json",
-                "hentPerson_success_response.json",
-            ).start()
-
-        RestAssured.given()
-            .filter(validationFilter)
-            .header(HttpHeaders.ContentType, APPLICATION_JSON)
-            .header(HttpHeaders.Authorization, "Bearer dummytoken")
-            .body(IdentRequest("123456789"))
-            .port(port)
-            .post(PDL_PROXY_API_PATH)
-            .then()
-            .assertThat()
-            .statusCode(500)
-            .body(containsString("En annen feilmelding fra PDL"))
-
-        server.stop()
-    }
-
-    test("Klient får ikke svar fra PDL, skal returnere 500 med en beskrivende feilmelding") {
-        val port = randomPort()
-
-        val server =
-            testServerWithResponseFromPDL(
-                port,
-                "",
-                "",
-                HttpStatusCode.NotFound,
-            ).start()
-
-        RestAssured.given()
-            .filter(validationFilter)
-            .header(HttpHeaders.ContentType, APPLICATION_JSON)
-            .header(HttpHeaders.Authorization, "Bearer dummytoken")
-            .body(IdentRequest("123456789"))
-            .port(port)
-            .post(PDL_PROXY_API_PATH)
-            .then()
-            .assertThat()
-            .statusCode(500)
-            .body(containsString("En teknisk feil har oppstått. Ta kontakt med utviklerne"))
-
-        server.stop()
-    }
-
-    test("Klient tillater maks 3 stk kontaktadresser, og skal gi feil dersom dette overstiges") {
-        val port = randomPort()
-
-        val server =
-            testServerWithResponseFromPDL(
-                port,
-                "hentIdenter_success_response.json",
-                "hentPerson_success_response_med_4_kontaktadresser.json",
-            ).start()
-
-        RestAssured.given()
-            .filter(validationFilter)
-            .header(HttpHeaders.ContentType, APPLICATION_JSON)
-            .header(HttpHeaders.Authorization, "Bearer dummytoken")
-            .body(IdentRequest("123456789"))
-            .port(port)
-            .post(PDL_PROXY_API_PATH)
-            .then()
-            .assertThat()
-            .statusCode(500)
-            .body("melding", equalTo("For mange kontaktadresser. Personen har 4 og overstiger grensen på 3"))
-
-        server.stop()
-    }
-
-    test("Klient tillater maks 2 stk oppholdsadresse, og skal gi feil dersom dette overstiges") {
-        val port = randomPort()
-
-        val server =
-            testServerWithResponseFromPDL(
-                port,
-                "hentIdenter_success_response.json",
-                "hentPerson_success_response_med_3_oppholdsadresser.json",
-            ).start()
-
-        RestAssured.given()
-            .filter(validationFilter)
-            .header(HttpHeaders.ContentType, APPLICATION_JSON)
-            .header(HttpHeaders.Authorization, "Bearer dummytoken")
-            .body(IdentRequest("123456789"))
-            .port(port)
-            .post(PDL_PROXY_API_PATH)
-            .then()
-            .assertThat()
-            .statusCode(500)
-            .body("melding", equalTo("For mange oppholdsadresser. Personen har 3 og overstiger grensen på 2"))
-
-        server.stop()
-    }
-
-    test("X-Correlation-Id fra request skal følge med tilbake i respons") {
-        val port = randomPort()
-
-        val server =
-            testServerWithResponseFromPDL(
-                port,
-                "hentIdenter_success_response.json",
-                "hentPerson_success_response.json",
-            ).start()
-
-        RestAssured.given()
-            .filter(validationFilter)
-            .header(HttpHeaders.ContentType, APPLICATION_JSON)
-            .header(HttpHeaders.Authorization, "Bearer dummytoken")
-            .header(HttpHeaders.XCorrelationId, "enId123")
-            .body(IdentRequest("123456789"))
-            .port(port)
-            .post(PDL_PROXY_API_PATH)
-            .then()
-            .assertThat()
-            .header(HttpHeaders.XCorrelationId, "enId123")
-
-        server.stop()
+        Json.decodeFromString<TjenestefeilResponse>(response.asString()) shouldBe
+            TjenestefeilResponse(
+                "Ikke autentisert",
+            )
     }
 })
 
-private fun testServerWithResponseFromPDL(
-    port: Int,
-    hentIdenterResponsFilnavn: String,
-    hentPersonResponsFilnavn: String,
-    httpStatusCode: HttpStatusCode = HttpStatusCode.OK,
-): EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration> {
-    val mockkGraphQlClient =
-        GraphQLKtorClient(
-            URI(PDL_URL).toURL(),
-            mockedHttpClientEngine(
-                hentIdenterResponsFilnavn,
-                hentPersonResponsFilnavn,
-                httpStatusCode,
-            ),
-        )
-
-    return testEmbeddedServer(PdlService(pdlUrl = PDL_URL, graphQlClient = mockkGraphQlClient, accessTokenClient = accessTokenClient), port)
+private fun Application.applicationTestModule() {
+    commonConfig()
+    routing {
+        authenticate(false, AUTHENTICATION_NAME) {
+            pdlProxyApi(pdlService)
+        }
+    }
 }
-
-private fun randomPort() = Random.nextInt(32000, 42000)
