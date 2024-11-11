@@ -10,7 +10,7 @@ plugins {
     kotlin("jvm") version "2.0.21"
     kotlin("plugin.serialization") version "2.0.21"
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("com.expediagroup.graphql") version "8.2.0"
+    id("com.expediagroup.graphql") version "8.2.1"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
     id("org.jetbrains.kotlinx.kover") version "0.8.3"
 }
@@ -22,18 +22,18 @@ repositories {
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") }
 }
 
-val ktorVersion = "3.0.0"
+val ktorVersion = "3.0.1"
 val kotlinxSerializationVersion = "1.7.3"
-val logbackVersion = "1.5.11"
+val logbackVersion = "1.5.12"
 val logstashVersion = "8.0"
 val micrometerVersion = "1.13.6"
 val kotlinLoggingVersion = "3.0.5"
 val natpryceVersion = "1.6.10.0"
 val janionVersion = "3.1.12"
 val mockkVersion = "1.13.13"
-val graphqlClientVersion = "8.2.0"
+val graphqlClientVersion = "8.2.1"
 val swaggerRequestValidatorVersion = "2.43.0"
-val mockOAuth2ServerVersion = "2.1.9"
+val mockOAuth2ServerVersion = "2.1.10"
 val kotestVersion = "6.0.0.M1"
 val wiremockVersion = "3.0.1"
 
