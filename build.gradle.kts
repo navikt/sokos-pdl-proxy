@@ -35,7 +35,10 @@ val graphqlClientVersion = "8.2.1"
 val swaggerRequestValidatorVersion = "2.43.0"
 val mockOAuth2ServerVersion = "2.1.10"
 val kotestVersion = "6.0.0.M1"
-val wiremockVersion = "3.0.1"
+val wiremockVersion = "3.9.2"
+
+// Due to vulnerabilities
+val nettyCommonVersion = "4.1.115.Final"
 
 dependencies {
 
@@ -43,6 +46,11 @@ dependencies {
     implementation("io.ktor:ktor-server-call-logging-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-call-id-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-netty-jvm:$ktorVersion")
+    constraints {
+        implementation("io.netty:netty-common:$nettyCommonVersion") {
+            because("override transient from io.ktor:ktor-server-netty-jvm")
+        }
+    }
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
     implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-swagger:$ktorVersion")
@@ -81,12 +89,17 @@ dependencies {
     testImplementation("com.atlassian.oai:swagger-request-validator-restassured:$swaggerRequestValidatorVersion")
     testImplementation("no.nav.security:mock-oauth2-server:$mockOAuth2ServerVersion")
     testImplementation("com.atlassian.oai:swagger-request-validator-restassured:$swaggerRequestValidatorVersion")
-    testImplementation("com.github.tomakehurst:wiremock:$wiremockVersion")
+    testImplementation("org.wiremock:wiremock:$wiremockVersion")
 
     // GraphQL
     implementation("com.expediagroup:graphql-kotlin-ktor-client:$graphqlClientVersion") {
         exclude("com.expediagroup:graphql-kotlin-client-jackson")
     }
+}
+
+// Vulnerability fix because of id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
+configurations.ktlint {
+    resolutionStrategy.force("ch.qos.logback:logback-classic:$logbackVersion")
 }
 
 sourceSets {
