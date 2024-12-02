@@ -7,11 +7,11 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "2.0.21"
-    kotlin("plugin.serialization") version "2.0.21"
+    kotlin("jvm") version "2.1.0"
+    kotlin("plugin.serialization") version "2.1.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("com.expediagroup.graphql") version "8.2.1"
-    id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
     id("org.jetbrains.kotlinx.kover") version "0.8.3"
 }
 
@@ -35,7 +35,7 @@ val graphqlClientVersion = "8.2.1"
 val swaggerRequestValidatorVersion = "2.43.0"
 val mockOAuth2ServerVersion = "2.1.10"
 val kotestVersion = "6.0.0.M1"
-val wiremockVersion = "3.9.2"
+val wiremockVersion = "3.10.0"
 
 // Due to vulnerabilities
 val nettyCommonVersion = "4.1.115.Final"
