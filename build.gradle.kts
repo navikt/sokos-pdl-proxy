@@ -12,7 +12,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("com.expediagroup.graphql") version "8.2.1"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
-    id("org.jetbrains.kotlinx.kover") version "0.8.3"
+    id("org.jetbrains.kotlinx.kover") version "0.9.0"
 }
 
 group = "no.nav.sokos"
@@ -26,7 +26,7 @@ val ktorVersion = "3.0.2"
 val kotlinxSerializationVersion = "1.7.3"
 val logbackVersion = "1.5.12"
 val logstashVersion = "8.0"
-val micrometerVersion = "1.14.1"
+val micrometerVersion = "1.14.2"
 val kotlinLoggingVersion = "3.0.5"
 val natpryceVersion = "1.6.10.0"
 val janionVersion = "3.1.12"
