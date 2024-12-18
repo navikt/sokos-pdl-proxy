@@ -102,8 +102,9 @@ kubectl logs -f sokos-pdl-proxy-<POD-ID> --namespace okonomi -c sokos-pdl-proxy
 
 ### Alarmer
 
-Vi bruker [nais-alerts](https://doc.nais.io/observability/alerts) for å sette opp alarmer. 
-Disse finner man konfigurert i 
+Vi bruker [nais-alerts](https://doc.nais.io/observability/alerts) for å sette opp alarmer.
+Disse finner man konfigurert i [.nais/alerts-dev.yaml](.nais/alerts-dev.yaml) filen og [.nais/alerts-prod.yaml](.nais/alerts-prod.yaml)
+Alarmene blir publisert i Slack kanalen [#team-moby-alerts-dev](https://nav-it.slack.com/archives/C0707TP7JEN) og [#team-moby-alerts-prod](https://nav-it.slack.com/archives/C0707TQQT0S).
 
 - [Prod-miljø](.nais/alerts-prod.yaml)
 - [Dev- og Q1-miljø](.nais/alerts-dev.yaml)
@@ -125,4 +126,4 @@ Disse dukker opp i `#team-mob-alerts-dev` og `#team-mob-alers-prod` kanalene på
 # 8. Henvendelser
 
 Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på Github.
-Interne henvendelser kan sendes via Slack i kanalen `#po-utbetaling`
+Interne henvendelser kan sendes via Slack i kanalen [#po-utbetaling](https://nav-it.slack.com/archives/CKZADNFBP)
