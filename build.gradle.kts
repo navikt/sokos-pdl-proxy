@@ -37,20 +37,12 @@ val mockOAuth2ServerVersion = "2.1.10"
 val kotestVersion = "6.0.0.M1"
 val wiremockVersion = "3.10.0"
 
-// Due to vulnerabilities
-val nettyCommonVersion = "4.1.116.Final"
-
 dependencies {
 
     // Ktor server
     implementation("io.ktor:ktor-server-call-logging-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-call-id-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-netty-jvm:$ktorVersion")
-    constraints {
-        implementation("io.netty:netty-common:$nettyCommonVersion") {
-            because("override transient from io.ktor:ktor-server-netty-jvm")
-        }
-    }
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
     implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-swagger:$ktorVersion")
@@ -82,7 +74,7 @@ dependencies {
 
     // Test
     testImplementation("io.ktor:ktor-server-test-host-jvm:$ktorVersion")
-    testImplementation("io.ktor:ktor-client-tests:$ktorVersion")
+    testImplementation("io.ktor:ktor-client-tests:3.0.2") // TODO: Update to 3.0.3 when io.ktor:ktor-junit:3.0.3 is available in Maven Central
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
@@ -97,7 +89,7 @@ dependencies {
     }
 }
 
-// Vulnerability fix because of id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
+// Vulnerability fix because of id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
 configurations.ktlint {
     resolutionStrategy.force("ch.qos.logback:logback-classic:$logbackVersion")
 }
