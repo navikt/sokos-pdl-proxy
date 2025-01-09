@@ -12,7 +12,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("com.expediagroup.graphql") version "8.2.1"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
-    id("org.jetbrains.kotlinx.kover") version "0.9.0"
+    id("org.jetbrains.kotlinx.kover") version "0.9.1"
 }
 
 group = "no.nav.sokos"
@@ -172,7 +172,7 @@ tasks {
     }
 
     withType<Wrapper> {
-        gradleVersion = "8.11"
+        gradleVersion = "8.12"
     }
 
     ("jar") {
