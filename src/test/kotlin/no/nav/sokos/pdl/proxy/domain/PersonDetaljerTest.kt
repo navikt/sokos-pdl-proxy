@@ -3,10 +3,11 @@ package no.nav.sokos.pdl.proxy.domain
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
+import org.junit.jupiter.api.Assertions.assertDoesNotThrow
+
 import no.nav.pdl.hentperson.Metadata
 import no.nav.pdl.hentperson.Navn
 import no.nav.pdl.hentperson.Person
-import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 
 private const val AKTIVT = false
 private const val HISTORISK = true

@@ -5,6 +5,7 @@ import io.ktor.server.application.ApplicationCall
 import io.ktor.server.plugins.statuspages.StatusPagesConfig
 import io.ktor.server.response.respond
 import mu.KotlinLogging
+
 import no.nav.sokos.pdl.proxy.util.TjenestefeilResponse
 
 private val logger = KotlinLogging.logger {}

@@ -3,6 +3,7 @@ package no.nav.sokos.pdl.proxy
 import io.ktor.server.application.Application
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+
 import no.nav.sokos.pdl.proxy.config.ApplicationState
 import no.nav.sokos.pdl.proxy.config.PropertiesConfig
 import no.nav.sokos.pdl.proxy.config.applicationLifecycleConfig

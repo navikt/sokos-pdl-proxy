@@ -4,6 +4,7 @@ import io.ktor.server.application.Application
 import io.ktor.server.auth.authenticate
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.routing
+
 import no.nav.sokos.pdl.proxy.api.pdlProxyApi
 import no.nav.sokos.pdl.proxy.api.swaggerApi
 

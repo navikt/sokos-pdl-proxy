@@ -1,6 +1,7 @@
 package no.nav.sokos.pdl.proxy.util
 
 import mu.KotlinLogging
+
 import no.nav.pdl.hentperson.Person
 import no.nav.sokos.pdl.proxy.config.PdlApiException
 

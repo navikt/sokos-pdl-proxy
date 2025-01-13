@@ -1,6 +1,7 @@
 package no.nav.sokos.pdl.proxy.domain
 
 import kotlinx.serialization.Serializable
+
 import no.nav.pdl.hentperson.Bostedsadresse
 import no.nav.pdl.hentperson.Kontaktadresse
 import no.nav.pdl.hentperson.Oppholdsadresse

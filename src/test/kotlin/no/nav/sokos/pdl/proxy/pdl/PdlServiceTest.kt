@@ -11,13 +11,14 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
+import org.junit.jupiter.api.assertThrows
+
 import no.nav.pdl.hentperson.PostadresseIFrittFormat
 import no.nav.sokos.pdl.proxy.APPLICATION_JSON
 import no.nav.sokos.pdl.proxy.TestUtil.readFromResource
 import no.nav.sokos.pdl.proxy.config.PdlApiException
 import no.nav.sokos.pdl.proxy.listener.WiremockListener
 import no.nav.sokos.pdl.proxy.listener.WiremockListener.wiremock
-import org.junit.jupiter.api.assertThrows
 
 internal class PdlServiceTest : FunSpec({
 
