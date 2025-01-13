@@ -1,12 +1,16 @@
 package no.nav.sokos.pdl.proxy.pdl
 
+import java.net.URI
+
+import kotlinx.coroutines.runBlocking
+
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import com.expediagroup.graphql.client.types.GraphQLClientError
 import com.expediagroup.graphql.client.types.GraphQLClientResponse
 import io.ktor.client.request.header
 import io.ktor.client.request.url
-import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
+
 import no.nav.pdl.HentIdenter
 import no.nav.pdl.HentPerson
 import no.nav.pdl.hentperson.Person
@@ -19,7 +23,6 @@ import no.nav.sokos.pdl.proxy.domain.IdentifikatorType.Companion.fra
 import no.nav.sokos.pdl.proxy.domain.PersonDetaljer
 import no.nav.sokos.pdl.proxy.security.AccessTokenClient
 import no.nav.sokos.pdl.proxy.util.KontaktOgOppholdsAdresseValidator
-import java.net.URI
 
 private val logger = KotlinLogging.logger {}
 private val secureLogger = KotlinLogging.logger(SECURE_LOGGER)

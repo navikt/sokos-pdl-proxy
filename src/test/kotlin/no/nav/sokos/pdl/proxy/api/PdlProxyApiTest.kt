@@ -1,5 +1,7 @@
 package no.nav.sokos.pdl.proxy.api
 
+import kotlinx.serialization.json.Json
+
 import com.atlassian.oai.validator.restassured.OpenApiValidationFilter
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
@@ -14,7 +16,8 @@ import io.ktor.server.routing.routing
 import io.mockk.every
 import io.mockk.mockk
 import io.restassured.RestAssured
-import kotlinx.serialization.json.Json
+import org.hamcrest.CoreMatchers.containsString
+
 import no.nav.sokos.pdl.proxy.APPLICATION_JSON
 import no.nav.sokos.pdl.proxy.PDL_PROXY_API_PATH
 import no.nav.sokos.pdl.proxy.TestData.mockPersonDetaljer
@@ -26,7 +29,6 @@ import no.nav.sokos.pdl.proxy.config.commonConfig
 import no.nav.sokos.pdl.proxy.domain.PersonDetaljer
 import no.nav.sokos.pdl.proxy.pdl.PdlService
 import no.nav.sokos.pdl.proxy.util.TjenestefeilResponse
-import org.hamcrest.CoreMatchers.containsString
 
 private const val PORT = 9090
 

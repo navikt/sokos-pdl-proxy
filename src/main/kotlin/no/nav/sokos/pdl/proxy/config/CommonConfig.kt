@@ -1,5 +1,9 @@
 package no.nav.sokos.pdl.proxy.config
 
+import java.util.UUID
+
+import kotlinx.serialization.json.Json
+
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
@@ -21,10 +25,9 @@ import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics
 import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics
 import io.micrometer.core.instrument.binder.system.ProcessorMetrics
 import io.micrometer.core.instrument.binder.system.UptimeMetrics
-import kotlinx.serialization.json.Json
-import no.nav.sokos.pdl.proxy.metrics.Metrics
 import org.slf4j.event.Level
-import java.util.UUID
+
+import no.nav.sokos.pdl.proxy.metrics.Metrics
 
 const val SECURE_LOGGER = "secureLogger"
 

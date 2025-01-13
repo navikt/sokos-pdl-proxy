@@ -1,14 +1,16 @@
 package no.nav.sokos.pdl.proxy.config
 
+import java.net.ProxySelector
+
+import kotlinx.serialization.json.Json
+
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.apache.Apache
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 import org.apache.http.impl.conn.SystemDefaultRoutePlanner
-import java.net.ProxySelector
 
 private val logger = KotlinLogging.logger {}
 

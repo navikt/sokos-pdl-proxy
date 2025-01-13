@@ -3,6 +3,7 @@ package no.nav.sokos.pdl.proxy.util
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
+
 import no.nav.sokos.pdl.proxy.TestData.mockKontaktAdresser
 import no.nav.sokos.pdl.proxy.TestData.mockOppholdsAdresser
 import no.nav.sokos.pdl.proxy.TestData.mockPerson
