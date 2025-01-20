@@ -11,7 +11,7 @@ plugins {
     kotlin("jvm") version "2.1.0"
     kotlin("plugin.serialization") version "2.1.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("com.expediagroup.graphql") version "8.2.1"
+    id("com.expediagroup.graphql") version "8.3.0"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
     id("org.jetbrains.kotlinx.kover") version "0.9.1"
 }
@@ -27,12 +27,12 @@ val ktorVersion = "3.0.3"
 val kotlinxSerializationVersion = "1.8.0"
 val logbackVersion = "1.5.16"
 val logstashVersion = "8.0"
-val micrometerVersion = "1.14.2"
+val micrometerVersion = "1.14.3"
 val kotlinLoggingVersion = "3.0.5"
 val natpryceVersion = "1.6.10.0"
 val janionVersion = "3.1.12"
 val mockkVersion = "1.13.16"
-val graphqlClientVersion = "8.2.1"
+val graphqlClientVersion = "8.3.0"
 val swaggerRequestValidatorVersion = "2.44.1"
 val mockOAuth2ServerVersion = "2.1.10"
 val kotestVersion = "6.0.0.M1"
@@ -75,7 +75,7 @@ dependencies {
 
     // Test
     testImplementation("io.ktor:ktor-server-test-host-jvm:$ktorVersion")
-    testImplementation("io.ktor:ktor-client-tests:3.0.2") // TODO: Update to 3.0.3 when io.ktor:ktor-junit:3.0.3 is available in Maven Central
+    testImplementation("io.ktor:ktor-client-tests:3.0.3") // TODO: Update to 3.0.3 when io.ktor:ktor-junit:3.0.3 is available in Maven Central
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
