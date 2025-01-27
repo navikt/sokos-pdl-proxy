@@ -108,7 +108,7 @@ spec:
         - apiURL:
             key: apiUrl
             name: slack-webhook
-          channel: '#team-moby-alerts-dev'
+          channel: '#team-mob-alerts-dev'
           iconEmoji: ':alert:'
           username: 'Alert dev-gcp-q1 (sokos-pdl-proxy-q1)'
           sendResolved: true

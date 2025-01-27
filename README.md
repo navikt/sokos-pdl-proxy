@@ -104,7 +104,7 @@ kubectl logs -f sokos-pdl-proxy-<POD-ID> --namespace okonomi -c sokos-pdl-proxy
 
 Vi bruker [nais-alerts](https://doc.nais.io/observability/alerts) for å sette opp alarmer.
 Disse finner man konfigurert i [.nais/alerts-dev.yaml](.nais/alerts-dev.yaml) filen og [.nais/alerts-prod.yaml](.nais/alerts-prod.yaml)
-Alarmene blir publisert i Slack kanalen [#team-moby-alerts-dev](https://nav-it.slack.com/archives/C0707TP7JEN) og [#team-moby-alerts-prod](https://nav-it.slack.com/archives/C0707TQQT0S).
+Alarmene blir publisert i Slack kanalen [#team-mob-alerts-dev](https://nav-it.slack.com/archives/C042SF2FEQM) og [#team-mob-alerts-prod](https://nav-it.slack.com/archives/C042ESY71GX).
 
 - [Prod-miljø](.nais/alerts-prod.yaml)
 - [Dev- og Q1-miljø](.nais/alerts-dev.yaml)
