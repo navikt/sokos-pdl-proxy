@@ -122,12 +122,6 @@ tasks {
         dependsOn("graphqlGenerateClient")
     }
 
-    ktlint {
-        filter {
-            exclude { element -> element.file.path.contains("generated/") }
-        }
-    }
-
     withType<ShadowJar>().configureEach {
         enabled = true
         archiveFileName.set("app.jar")
