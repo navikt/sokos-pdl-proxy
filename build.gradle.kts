@@ -36,7 +36,7 @@ val graphqlClientVersion = "8.3.0"
 val swaggerRequestValidatorVersion = "2.44.1"
 val mockOAuth2ServerVersion = "2.1.10"
 val kotestVersion = "6.0.0.M2"
-val wiremockVersion = "3.12.0"
+val wiremockVersion = "3.12.1"
 
 dependencies {
 
