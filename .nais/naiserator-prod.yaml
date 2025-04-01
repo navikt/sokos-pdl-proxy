@@ -52,6 +52,10 @@ spec:
   ingresses:
     - https://sokos-pdl-proxy.intern.nav.no
   env:
+    - name: USE_AUTHENTICATION
+      value: "true"
+
+    # PDL
     - name: PDL_URL
       value: https://pdl-api.prod-fss-pub.nais.io/graphql
     - name: PDL_SCOPE

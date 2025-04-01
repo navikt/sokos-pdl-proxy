@@ -10,6 +10,7 @@ import com.expediagroup.graphql.client.types.GraphQLClientResponse
 import io.ktor.client.request.header
 import io.ktor.client.request.url
 import mu.KotlinLogging
+import org.slf4j.MDC
 
 import no.nav.pdl.HentIdenter
 import no.nav.pdl.HentPerson
@@ -82,6 +83,7 @@ class PdlService(
                     url(pdlUrl)
                     header("Authorization", "Bearer $accessToken")
                     header("behandlingsnummer", "B154")
+                    header("Nav-Call-Id", MDC.get("x-correlation-id"))
                 }
             }
 

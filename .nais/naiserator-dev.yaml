@@ -59,8 +59,8 @@ spec:
     - name: USE_AUTHENTICATION
       value: "true"
 
+    # PDL
     - name: PDL_URL
       value: https://pdl-api.dev-fss-pub.nais.io/graphql
-
     - name: PDL_SCOPE
       value: "api://dev-fss.pdl.pdl-api/.default"
