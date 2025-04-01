@@ -27,7 +27,7 @@ import no.nav.sokos.pdl.proxy.config.PdlApiException
 import no.nav.sokos.pdl.proxy.config.authenticate
 import no.nav.sokos.pdl.proxy.config.commonConfig
 import no.nav.sokos.pdl.proxy.domain.PersonDetaljer
-import no.nav.sokos.pdl.proxy.pdl.PdlService
+import no.nav.sokos.pdl.proxy.pdl.PdlClientService
 import no.nav.sokos.pdl.proxy.util.TjenestefeilResponse
 
 private const val PORT = 9090
@@ -35,7 +35,7 @@ private const val PORT = 9090
 private lateinit var server: EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration>
 
 private val validationFilter = OpenApiValidationFilter("openapi/sokos-pdl-proxy-v1-swagger.yaml")
-private val pdlService = mockk<PdlService>()
+private val pdlClientService = mockk<PdlClientService>()
 
 internal class PdlProxyApiTest : FunSpec({
 
@@ -49,7 +49,7 @@ internal class PdlProxyApiTest : FunSpec({
 
     test("Klient kaller PDL med suksess") {
 
-        every { pdlService.hentPersonDetaljer(any()) } returns mockPersonDetaljer()
+        every { pdlClientService.hentPersonDetaljer(any()) } returns mockPersonDetaljer()
 
         val response =
             RestAssured.given()
@@ -69,7 +69,7 @@ internal class PdlProxyApiTest : FunSpec({
 
     test("Klient kaller PDL, ingen person finnes, skal returnere 404 med feilmelding") {
 
-        every { pdlService.hentPersonDetaljer(any()) } throws PdlApiException(404, "Fant ikke person")
+        every { pdlClientService.hentPersonDetaljer(any()) } throws PdlApiException(404, "Fant ikke person")
 
         val response =
             RestAssured.given()
@@ -93,7 +93,7 @@ internal class PdlProxyApiTest : FunSpec({
 
     test("Klient ikke ikke autentisert mot PDL, skal returnere 500 med feilmelding") {
 
-        every { pdlService.hentPersonDetaljer(any()) } throws PdlApiException(500, "Ikke autentisert")
+        every { pdlClientService.hentPersonDetaljer(any()) } throws PdlApiException(500, "Ikke autentisert")
 
         val response =
             RestAssured.given()
@@ -121,7 +121,7 @@ private fun Application.applicationTestModule() {
     commonConfig()
     routing {
         authenticate(false, AUTHENTICATION_NAME) {
-            pdlProxyApi(pdlService)
+            pdlProxyApi(pdlClientService)
         }
     }
 }

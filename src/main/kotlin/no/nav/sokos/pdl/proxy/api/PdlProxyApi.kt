@@ -8,13 +8,13 @@ import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 
 import no.nav.sokos.pdl.proxy.api.model.IdentRequest
-import no.nav.sokos.pdl.proxy.pdl.PdlService
+import no.nav.sokos.pdl.proxy.pdl.PdlClientService
 
-fun Route.pdlProxyApi(pdlService: PdlService = PdlService()) {
+fun Route.pdlProxyApi(pdlClientService: PdlClientService = PdlClientService()) {
     route("/api/pdl-proxy/v1") {
         post("hent-person") {
             val identRequest: IdentRequest = call.receive()
-            val person = pdlService.hentPersonDetaljer(identRequest.ident)
+            val person = pdlClientService.hentPersonDetaljer(identRequest.ident)
             call.respond(HttpStatusCode.OK, person)
         }
     }

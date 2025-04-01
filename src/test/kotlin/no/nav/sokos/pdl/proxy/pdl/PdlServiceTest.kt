@@ -24,8 +24,8 @@ internal class PdlServiceTest : FunSpec({
 
     extensions(listOf(WiremockListener))
 
-    val pdlService: PdlService by lazy {
-        PdlService(
+    val pdlClientService: PdlClientService by lazy {
+        PdlClientService(
             pdlUrl = wiremock.baseUrl() + "/graphql",
             accessTokenClient = WiremockListener.accessTokenClient,
         )
@@ -66,7 +66,7 @@ internal class PdlServiceTest : FunSpec({
                 ),
         )
 
-        val result = pdlService.hentPersonDetaljer("22334455667")
+        val result = pdlClientService.hentPersonDetaljer("22334455667")
 
         result.shouldNotBeNull()
         result.identer.forAny { it.ident shouldBe "24117920441" }
@@ -96,7 +96,7 @@ internal class PdlServiceTest : FunSpec({
 
         val exception =
             assertThrows<PdlApiException> {
-                pdlService.hentPersonDetaljer("22334455667")
+                pdlClientService.hentPersonDetaljer("22334455667")
             }
 
         exception.shouldNotBeNull()
@@ -137,7 +137,7 @@ internal class PdlServiceTest : FunSpec({
 
         val exception =
             assertThrows<PdlApiException> {
-                pdlService.hentPersonDetaljer("22334455667")
+                pdlClientService.hentPersonDetaljer("22334455667")
             }
 
         exception.shouldNotBeNull()
@@ -176,7 +176,7 @@ internal class PdlServiceTest : FunSpec({
                 ),
         )
 
-        val result = pdlService.hentPersonDetaljer("24117920441")
+        val result = pdlClientService.hentPersonDetaljer("24117920441")
 
         result.fornavn shouldBe null
     }
@@ -212,7 +212,7 @@ internal class PdlServiceTest : FunSpec({
                 ),
         )
 
-        val result = pdlService.hentPersonDetaljer("24117920441")
+        val result = pdlClientService.hentPersonDetaljer("24117920441")
 
         result.shouldNotBeNull()
         result.identer.forAny { it.ident shouldBe "24117920441" }
@@ -252,7 +252,7 @@ internal class PdlServiceTest : FunSpec({
                 ),
         )
 
-        val result = pdlService.hentPersonDetaljer("24117920441")
+        val result = pdlClientService.hentPersonDetaljer("24117920441")
 
         result.shouldNotBeNull()
         result.identer.forAny { it.ident shouldBe "24117920441" }
@@ -292,7 +292,7 @@ internal class PdlServiceTest : FunSpec({
                 ),
         )
 
-        val result = pdlService.hentPersonDetaljer("24117920441")
+        val result = pdlClientService.hentPersonDetaljer("24117920441")
 
         result.shouldNotBeNull()
         result.identer.forAny { it.ident shouldBe "24117920441" }
@@ -334,7 +334,7 @@ internal class PdlServiceTest : FunSpec({
 
         val exception =
             assertThrows<PdlApiException> {
-                pdlService.hentPersonDetaljer("24117920441")
+                pdlClientService.hentPersonDetaljer("24117920441")
             }
 
         exception.shouldNotBeNull()
@@ -375,7 +375,7 @@ internal class PdlServiceTest : FunSpec({
 
         val exception =
             assertThrows<PdlApiException> {
-                pdlService.hentPersonDetaljer("24117920441")
+                pdlClientService.hentPersonDetaljer("24117920441")
             }
 
         exception.shouldNotBeNull()
@@ -399,7 +399,7 @@ internal class PdlServiceTest : FunSpec({
 
         val exception =
             assertThrows<PdlApiException> {
-                pdlService.hentPersonDetaljer("22334455667")
+                pdlClientService.hentPersonDetaljer("22334455667")
             }
 
         exception.shouldNotBeNull()
@@ -423,7 +423,7 @@ internal class PdlServiceTest : FunSpec({
 
         val exception =
             assertThrows<PdlApiException> {
-                pdlService.hentPersonDetaljer("22334455667")
+                pdlClientService.hentPersonDetaljer("22334455667")
             }
 
         exception.shouldNotBeNull()

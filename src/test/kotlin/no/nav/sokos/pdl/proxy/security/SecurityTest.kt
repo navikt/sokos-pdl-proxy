@@ -29,9 +29,9 @@ import no.nav.sokos.pdl.proxy.config.authenticate
 import no.nav.sokos.pdl.proxy.config.commonConfig
 import no.nav.sokos.pdl.proxy.config.securityConfig
 import no.nav.sokos.pdl.proxy.domain.PersonDetaljer
-import no.nav.sokos.pdl.proxy.pdl.PdlService
+import no.nav.sokos.pdl.proxy.pdl.PdlClientService
 
-private val pdlService: PdlService = mockk()
+private val pdlClientService: PdlClientService = mockk()
 
 internal class SecurityTest : FunSpec({
 
@@ -42,7 +42,7 @@ internal class SecurityTest : FunSpec({
                     securityConfig(true, authConfig())
                     routing {
                         authenticate(true, AUTHENTICATION_NAME) {
-                            pdlProxyApi(pdlService)
+                            pdlProxyApi(pdlClientService)
                         }
                     }
                 }
@@ -73,12 +73,12 @@ internal class SecurityTest : FunSpec({
                     securityConfig(true, authConfig())
                     routing {
                         authenticate(true, AUTHENTICATION_NAME) {
-                            pdlProxyApi(pdlService)
+                            pdlProxyApi(pdlClientService)
                         }
                     }
                 }
 
-                every { pdlService.hentPersonDetaljer(any()) } returns
+                every { pdlClientService.hentPersonDetaljer(any()) } returns
                     PersonDetaljer(
                         emptyList(),
                         "Ola",

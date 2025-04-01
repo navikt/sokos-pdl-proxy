@@ -28,7 +28,7 @@ import no.nav.sokos.pdl.proxy.util.KontaktOgOppholdsAdresseValidator
 private val logger = KotlinLogging.logger {}
 private val secureLogger = KotlinLogging.logger(SECURE_LOGGER)
 
-class PdlService(
+class PdlClientService(
     private val pdlUrl: String = PropertiesConfig.PdlProperties().pdlUrl,
     private val pdlScope: String = PropertiesConfig.PdlProperties().pdlScope,
     private val graphQlClient: GraphQLKtorClient =
