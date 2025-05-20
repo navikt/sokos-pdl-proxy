@@ -34,13 +34,14 @@ import org.slf4j.event.Level
 import no.nav.sokos.pdl.proxy.metrics.Metrics
 
 const val SECURE_LOGGER = "secureLogger"
-const val X_KALLENDE_SYSTEM = "x-kallende-system"
+private const val X_KALLENDE_SYSTEM = "x-kallende-system"
+private const val TRACE_ID_HEADER = "trace_id"
 
 private val logger = KotlinLogging.logger {}
 
 fun Application.commonConfig() {
     install(CallId) {
-        header(HttpHeaders.XCorrelationId)
+        header(TRACE_ID_HEADER)
         generate { UUID.randomUUID().toString() }
         verify { it.isNotEmpty() }
     }
@@ -48,7 +49,7 @@ fun Application.commonConfig() {
         logger = no.nav.sokos.pdl.proxy.config.logger
         level = Level.INFO
         mdc(X_KALLENDE_SYSTEM) { it.extractCallingSystemFromJwtToken() }
-        callIdMdc(HttpHeaders.XCorrelationId)
+        callIdMdc(TRACE_ID_HEADER)
         filter { call -> call.request.path().startsWith("/api/pdl-proxy") }
         disableDefaultColors()
     }
