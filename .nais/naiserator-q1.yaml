@@ -50,6 +50,10 @@ spec:
   prometheus:
     enabled: true
     path: /internal/metrics
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: java
   ingresses:
     - https://sokos-pdl-proxy-q1.intern.dev.nav.no
   env:
