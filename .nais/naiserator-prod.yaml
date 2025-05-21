@@ -55,6 +55,7 @@ spec:
       runtime: java
   ingresses:
     - https://sokos-pdl-proxy.intern.nav.no
+
   env:
     - name: USE_AUTHENTICATION
       value: "true"
