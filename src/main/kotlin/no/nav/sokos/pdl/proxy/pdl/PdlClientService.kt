@@ -17,7 +17,7 @@ import no.nav.pdl.HentPerson
 import no.nav.pdl.hentperson.Person
 import no.nav.sokos.pdl.proxy.config.PdlApiException
 import no.nav.sokos.pdl.proxy.config.PropertiesConfig
-import no.nav.sokos.pdl.proxy.config.SECURE_LOGGER
+import no.nav.sokos.pdl.proxy.config.TEAM_LOGS_MARKER
 import no.nav.sokos.pdl.proxy.config.httpClient
 import no.nav.sokos.pdl.proxy.domain.Ident
 import no.nav.sokos.pdl.proxy.domain.IdentifikatorType.Companion.fra
@@ -26,7 +26,6 @@ import no.nav.sokos.pdl.proxy.security.AccessTokenClient
 import no.nav.sokos.pdl.proxy.util.KontaktOgOppholdsAdresseValidator
 
 private val logger = KotlinLogging.logger {}
-private val secureLogger = KotlinLogging.logger(SECURE_LOGGER)
 
 class PdlClientService(
     private val pdlUrl: String = PropertiesConfig.PdlProperties().pdlUrl,
@@ -71,7 +70,7 @@ class PdlClientService(
                 identifikatorType = fra(it.gruppe),
             )
         } ?: emptyList<Ident>()
-            .also { secureLogger.info { "Henting av Identer for ident: $ident fra PDL vellykket" } }
+            .also { logger.info(marker = TEAM_LOGS_MARKER) { "Henting av Identer for ident: $ident fra PDL vellykket" } }
     }
 
     private fun hentPerson(ident: String): Result<Person?> {
@@ -104,14 +103,14 @@ class PdlClientService(
         val httpFeilkode =
             when {
                 "not_found" in feilkoderFraPDL -> {
-                    secureLogger.info { "Person med ident $ident fra PDL ikke funnet" }
-                    logger.info { "Person fra PDL ikke funnet" }
+                    logger.info(marker = TEAM_LOGS_MARKER) { "Person med ident $ident fra PDL ikke funnet" }
+                    logger.info { "Person fra PDL ikke funnet, sjekk Team Logs" }
                     404
                 }
 
                 else -> {
-                    secureLogger.error { "$metoderSomGirFeil kallet feilet. Feilmelding: $feilmeldingerFraPDL" }
-                    logger.error { "$metoderSomGirFeil kallet feilet. Feilmelding: $feilmeldingerFraPDL" }
+                    logger.error(marker = TEAM_LOGS_MARKER) { "$metoderSomGirFeil kallet feilet. Feilmelding: $feilmeldingerFraPDL" }
+                    logger.error { "$metoderSomGirFeil kallet feilet. sjekk Team Logs" }
                     500
                 }
             }
@@ -126,7 +125,7 @@ class PdlClientService(
         respons.data?.hentPerson?.also { person ->
             KontaktOgOppholdsAdresseValidator.valider(person)
         }
-        secureLogger.info { "Henting av Person med ident $ident fra PDL vellykket" }
+        logger.info(marker = TEAM_LOGS_MARKER) { "Henting av Person med ident $ident fra PDL vellykket" }
         return Result.success(respons.data?.hentPerson)
     }
 }
