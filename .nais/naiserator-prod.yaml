@@ -12,8 +12,6 @@ spec:
     min: 2
     max: 2
     cpuThresholdPercentage: 75
-  secureLogs:
-    enabled: true
   azure:
     application:
       enabled: true
@@ -29,6 +27,9 @@ spec:
     outbound:
       external:
         - host: pdl-api.prod-fss-pub.nais.io
+      rules:
+        - application: logging
+          namespace: nais-system
   resources:
     limits:
       memory: 4096Mi
