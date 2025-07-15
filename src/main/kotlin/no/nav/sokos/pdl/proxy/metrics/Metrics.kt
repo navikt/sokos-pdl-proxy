@@ -13,14 +13,16 @@ object Metrics {
     val prometheusRegistry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
 
     var multipleAktiveNavnCounter: Counter =
-        Counter.builder()
+        Counter
+            .builder()
             .name(MULTIPLE_AKTIVE_NAVN_COUNTER)
             .help("Antall personer som har flere aktive navn")
             .withoutExemplars()
             .register(prometheusRegistry.prometheusRegistry)
 
     var noAktivtNavnCounter: Counter =
-        Counter.builder()
+        Counter
+            .builder()
             .name(NO_AKTIVT_NAVN_COUNTER)
             .help("Antall personer som har kun historiske navn")
             .withoutExemplars()

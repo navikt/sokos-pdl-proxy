@@ -33,75 +33,76 @@ import no.nav.sokos.pdl.proxy.pdl.PdlClientService
 
 private val pdlClientService: PdlClientService = mockk()
 
-internal class SecurityTest : FunSpec({
+internal class SecurityTest :
+    FunSpec({
 
-    test("test http GET endepunkt uten token bør returnere 401") {
-        withMockOAuth2Server {
-            testApplication {
-                application {
-                    securityConfig(true, authConfig())
-                    routing {
-                        authenticate(true, AUTHENTICATION_NAME) {
-                            pdlProxyApi(pdlClientService)
+        test("test http GET endepunkt uten token bør returnere 401") {
+            withMockOAuth2Server {
+                testApplication {
+                    application {
+                        securityConfig(true, authConfig())
+                        routing {
+                            authenticate(true, AUTHENTICATION_NAME) {
+                                pdlProxyApi(pdlClientService)
+                            }
                         }
                     }
+                    val response = client.post(PDL_PROXY_API_PATH)
+                    response.status shouldBe HttpStatusCode.Unauthorized
                 }
-                val response = client.post(PDL_PROXY_API_PATH)
-                response.status shouldBe HttpStatusCode.Unauthorized
             }
         }
-    }
 
-    test("test http GET endepunkt med token bør returnere 200") {
-        withMockOAuth2Server {
-            testApplication {
-                val client =
-                    createClient {
-                        install(ContentNegotiation) {
-                            json(
-                                Json {
-                                    prettyPrint = true
-                                    ignoreUnknownKeys = true
-                                    encodeDefaults = true
-                                    explicitNulls = false
-                                },
-                            )
+        test("test http GET endepunkt med token bør returnere 200") {
+            withMockOAuth2Server {
+                testApplication {
+                    val client =
+                        createClient {
+                            install(ContentNegotiation) {
+                                json(
+                                    Json {
+                                        prettyPrint = true
+                                        ignoreUnknownKeys = true
+                                        encodeDefaults = true
+                                        explicitNulls = false
+                                    },
+                                )
+                            }
+                        }
+                    application {
+                        commonConfig()
+                        securityConfig(true, authConfig())
+                        routing {
+                            authenticate(true, AUTHENTICATION_NAME) {
+                                pdlProxyApi(pdlClientService)
+                            }
                         }
                     }
-                application {
-                    commonConfig()
-                    securityConfig(true, authConfig())
-                    routing {
-                        authenticate(true, AUTHENTICATION_NAME) {
-                            pdlProxyApi(pdlClientService)
+
+                    every { pdlClientService.hentPersonDetaljer(any()) } returns
+                        PersonDetaljer(
+                            emptyList(),
+                            "Ola",
+                            "Nordmann",
+                            "Nordmann",
+                            "Ola",
+                            null,
+                            emptyList(),
+                            emptyList(),
+                        )
+
+                    val response =
+                        client.post(PDL_PROXY_API_PATH) {
+                            header(HttpHeaders.Authorization, "Bearer ${tokenFromDefaultProvider()}")
+                            header(HttpHeaders.ContentType, APPLICATION_JSON)
+                            setBody(IdentRequest("12345678901"))
                         }
-                    }
+
+                    response.status shouldBe HttpStatusCode.OK
                 }
-
-                every { pdlClientService.hentPersonDetaljer(any()) } returns
-                    PersonDetaljer(
-                        emptyList(),
-                        "Ola",
-                        "Nordmann",
-                        "Nordmann",
-                        "Ola",
-                        null,
-                        emptyList(),
-                        emptyList(),
-                    )
-
-                val response =
-                    client.post(PDL_PROXY_API_PATH) {
-                        header(HttpHeaders.Authorization, "Bearer ${tokenFromDefaultProvider()}")
-                        header(HttpHeaders.ContentType, APPLICATION_JSON)
-                        setBody(IdentRequest("12345678901"))
-                    }
-
-                response.status shouldBe HttpStatusCode.OK
             }
         }
-    }
-})
+    })
 
 private fun MockOAuth2Server.authConfig() =
     PropertiesConfig.AzureAdProperties(

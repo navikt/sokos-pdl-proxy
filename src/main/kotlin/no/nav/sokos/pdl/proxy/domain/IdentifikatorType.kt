@@ -8,14 +8,13 @@ enum class IdentifikatorType {
     ;
 
     companion object {
-        fun fra(typeFraPDL: IdentGruppe): IdentifikatorType {
-            return when (typeFraPDL) {
+        fun fra(typeFraPDL: IdentGruppe): IdentifikatorType =
+            when (typeFraPDL) {
                 IdentGruppe.FOLKEREGISTERIDENT -> FOLKEREGISTERIDENTIFIKATOR
                 IdentGruppe.NPID -> N_PID
                 else -> {
                     throw IllegalArgumentException("Finner ingen mapping for IdentGruppe $typeFraPDL i pdl proxy")
                 }
             }
-        }
     }
 }
