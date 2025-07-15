@@ -76,7 +76,10 @@ private fun ApplicationCall.extractCallingSystemFromJwtToken(): String {
             JWT.decode(it)
         }.onFailure {
             logger.warn("Failed to decode token: ", it)
-        }.getOrNull()?.let { it.claims["azp_name"]?.asString() ?: it.claims["client_id"]?.asString() }?.split(":")?.last()
+        }.getOrNull()
+            ?.let { it.claims["azp_name"]?.asString() ?: it.claims["client_id"]?.asString() }
+            ?.split(":")
+            ?.last()
     } ?: "Ukjent"
 }
 

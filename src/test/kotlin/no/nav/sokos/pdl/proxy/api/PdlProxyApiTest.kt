@@ -37,85 +37,90 @@ private lateinit var server: EmbeddedServer<NettyApplicationEngine, NettyApplica
 private val validationFilter = OpenApiValidationFilter("openapi/sokos-pdl-proxy-v1-swagger.yaml")
 private val pdlClientService = mockk<PdlClientService>()
 
-internal class PdlProxyApiTest : FunSpec({
+internal class PdlProxyApiTest :
+    FunSpec({
 
-    beforeTest {
-        server = embeddedServer(Netty, PORT, module = Application::applicationTestModule).start()
-    }
+        beforeTest {
+            server = embeddedServer(Netty, PORT, module = Application::applicationTestModule).start()
+        }
 
-    afterTest {
-        server.stop(5, 5)
-    }
+        afterTest {
+            server.stop(5, 5)
+        }
 
-    test("Klient kaller PDL med suksess") {
+        test("Klient kaller PDL med suksess") {
 
-        every { pdlClientService.hentPersonDetaljer(any()) } returns mockPersonDetaljer()
+            every { pdlClientService.hentPersonDetaljer(any()) } returns mockPersonDetaljer()
 
-        val response =
-            RestAssured.given()
-                .filter(validationFilter)
-                .header(HttpHeaders.ContentType, APPLICATION_JSON)
-                .header(HttpHeaders.Authorization, "Bearer dummytoken")
-                .body(IdentRequest("123456789"))
-                .port(PORT)
-                .post(PDL_PROXY_API_PATH)
-                .then().assertThat()
-                .statusCode(HttpStatusCode.OK.value)
-                .extract()
-                .response()
+            val response =
+                RestAssured
+                    .given()
+                    .filter(validationFilter)
+                    .header(HttpHeaders.ContentType, APPLICATION_JSON)
+                    .header(HttpHeaders.Authorization, "Bearer dummytoken")
+                    .body(IdentRequest("123456789"))
+                    .port(PORT)
+                    .post(PDL_PROXY_API_PATH)
+                    .then()
+                    .assertThat()
+                    .statusCode(HttpStatusCode.OK.value)
+                    .extract()
+                    .response()
 
-        Json.decodeFromString<PersonDetaljer>(response.asString()) shouldBe mockPersonDetaljer()
-    }
+            Json.decodeFromString<PersonDetaljer>(response.asString()) shouldBe mockPersonDetaljer()
+        }
 
-    test("Klient kaller PDL, ingen person finnes, skal returnere 404 med feilmelding") {
+        test("Klient kaller PDL, ingen person finnes, skal returnere 404 med feilmelding") {
 
-        every { pdlClientService.hentPersonDetaljer(any()) } throws PdlApiException(404, "Fant ikke person")
+            every { pdlClientService.hentPersonDetaljer(any()) } throws PdlApiException(404, "Fant ikke person")
 
-        val response =
-            RestAssured.given()
-                .filter(validationFilter)
-                .header(HttpHeaders.ContentType, APPLICATION_JSON)
-                .header(HttpHeaders.Authorization, "Bearer dummytoken")
-                .body(IdentRequest("123456789"))
-                .port(PORT)
-                .post(PDL_PROXY_API_PATH)
-                .then()
-                .assertThat()
-                .statusCode(404)
-                .extract()
-                .response()
+            val response =
+                RestAssured
+                    .given()
+                    .filter(validationFilter)
+                    .header(HttpHeaders.ContentType, APPLICATION_JSON)
+                    .header(HttpHeaders.Authorization, "Bearer dummytoken")
+                    .body(IdentRequest("123456789"))
+                    .port(PORT)
+                    .post(PDL_PROXY_API_PATH)
+                    .then()
+                    .assertThat()
+                    .statusCode(404)
+                    .extract()
+                    .response()
 
-        Json.decodeFromString<TjenestefeilResponse>(response.asString()) shouldBe
-            TjenestefeilResponse(
-                "Fant ikke person",
-            )
-    }
+            Json.decodeFromString<TjenestefeilResponse>(response.asString()) shouldBe
+                TjenestefeilResponse(
+                    "Fant ikke person",
+                )
+        }
 
-    test("Klient ikke ikke autentisert mot PDL, skal returnere 500 med feilmelding") {
+        test("Klient ikke ikke autentisert mot PDL, skal returnere 500 med feilmelding") {
 
-        every { pdlClientService.hentPersonDetaljer(any()) } throws PdlApiException(500, "Ikke autentisert")
+            every { pdlClientService.hentPersonDetaljer(any()) } throws PdlApiException(500, "Ikke autentisert")
 
-        val response =
-            RestAssured.given()
-                .filter(validationFilter)
-                .header(HttpHeaders.ContentType, APPLICATION_JSON)
-                .header(HttpHeaders.Authorization, "Bearer dummytoken")
-                .body(IdentRequest("123456789"))
-                .port(PORT)
-                .post(PDL_PROXY_API_PATH)
-                .then()
-                .assertThat()
-                .statusCode(HttpStatusCode.InternalServerError.value)
-                .body(containsString("Ikke autentisert"))
-                .extract()
-                .response()
+            val response =
+                RestAssured
+                    .given()
+                    .filter(validationFilter)
+                    .header(HttpHeaders.ContentType, APPLICATION_JSON)
+                    .header(HttpHeaders.Authorization, "Bearer dummytoken")
+                    .body(IdentRequest("123456789"))
+                    .port(PORT)
+                    .post(PDL_PROXY_API_PATH)
+                    .then()
+                    .assertThat()
+                    .statusCode(HttpStatusCode.InternalServerError.value)
+                    .body(containsString("Ikke autentisert"))
+                    .extract()
+                    .response()
 
-        Json.decodeFromString<TjenestefeilResponse>(response.asString()) shouldBe
-            TjenestefeilResponse(
-                "Ikke autentisert",
-            )
-    }
-})
+            Json.decodeFromString<TjenestefeilResponse>(response.asString()) shouldBe
+                TjenestefeilResponse(
+                    "Ikke autentisert",
+                )
+        }
+    })
 
 private fun Application.applicationTestModule() {
     commonConfig()

@@ -62,8 +62,8 @@ class PdlClientService(
     private fun hentUtIdenter(
         result: GraphQLClientResponse<HentIdenter.Result>,
         ident: String,
-    ): List<Ident> {
-        return result.data?.hentIdenter?.identer?.map {
+    ): List<Ident> =
+        result.data?.hentIdenter?.identer?.map {
             Ident(
                 ident = it.ident,
                 aktiv = !it.historisk,
@@ -71,7 +71,6 @@ class PdlClientService(
             )
         } ?: emptyList<Ident>()
             .also { logger.info(marker = TEAM_LOGS_MARKER) { "Henting av Identer for ident: $ident fra PDL vellykket" } }
-    }
 
     private fun hentPerson(ident: String): Result<Person?> {
         logger.info { "Henter person" }
@@ -98,7 +97,12 @@ class PdlClientService(
         val metoderSomGirFeil = errors.joinToString { error -> error.path.toString() }
         val feilmeldingerFraPDL = errors.map { it.message }
         val feilkoderFraPDL =
-            errors.flatMap { it -> it.extensions?.get("code")?.toString()?.let { listOf(it) } ?: emptyList() }
+            errors.flatMap { it ->
+                it.extensions
+                    ?.get("code")
+                    ?.toString()
+                    ?.let { listOf(it) } ?: emptyList()
+            }
 
         val httpFeilkode =
             when {

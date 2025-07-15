@@ -4,5 +4,8 @@ const val APPLICATION_JSON = "application/json"
 const val PDL_PROXY_API_PATH = "/api/pdl-proxy/v1/hent-person"
 
 object TestUtil {
-    fun String.readFromResource() = {}::class.java.classLoader.getResource(this)!!.readText()
+    fun String.readFromResource() =
+        TestUtil::class.java.classLoader
+            .getResource(this)!!
+            .readText()
 }
