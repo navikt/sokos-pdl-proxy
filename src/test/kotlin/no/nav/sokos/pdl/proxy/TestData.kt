@@ -17,8 +17,8 @@ import no.nav.sokos.pdl.proxy.domain.IdentifikatorType
 import no.nav.sokos.pdl.proxy.domain.PersonDetaljer
 
 object TestData {
-    fun mockPersonDetaljer(): PersonDetaljer {
-        return PersonDetaljer(
+    fun mockPersonDetaljer(): PersonDetaljer =
+        PersonDetaljer(
             identer = listOf(Ident(ident = "24117920441", aktiv = true, identifikatorType = IdentifikatorType.FOLKEREGISTERIDENTIFIKATOR)),
             fornavn = "Ola",
             mellomnavn = "mellomnavn",
@@ -64,10 +64,9 @@ object TestData {
             kontaktadresse = mockKontaktAdresser(1),
             oppholdsadresse = mockOppholdsAdresser(1),
         )
-    }
 
-    fun mockPerson(): Person {
-        return Person(
+    fun mockPerson(): Person =
+        Person(
             navn =
                 listOf(
                     Navn(
@@ -84,10 +83,9 @@ object TestData {
             oppholdsadresse = emptyList(),
             kontaktadresse = emptyList(),
         )
-    }
 
-    fun mockKontaktAdresser(antallKontaktadresse: Int): List<Kontaktadresse> {
-        return List(antallKontaktadresse) {
+    fun mockKontaktAdresser(antallKontaktadresse: Int): List<Kontaktadresse> =
+        List(antallKontaktadresse) {
             Kontaktadresse(
                 gyldigFraOgMed = "1979-11-24T00:00",
                 gyldigTilOgMed = null,
@@ -132,10 +130,9 @@ object TestData {
                     ),
             )
         }
-    }
 
-    fun mockOppholdsAdresser(antallOppholdsadresse: Int): List<Oppholdsadresse> {
-        return List(antallOppholdsadresse) {
+    fun mockOppholdsAdresser(antallOppholdsadresse: Int): List<Oppholdsadresse> =
+        List(antallOppholdsadresse) {
             Oppholdsadresse(
                 oppholdAnnetSted = null,
                 coAdressenavn = null,
@@ -172,5 +169,4 @@ object TestData {
                     ),
             )
         }
-    }
 }
