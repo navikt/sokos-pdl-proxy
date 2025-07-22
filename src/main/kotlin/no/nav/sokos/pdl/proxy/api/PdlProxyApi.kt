@@ -1,10 +1,11 @@
 package no.nav.sokos.pdl.proxy.api
 
+import kotlinx.serialization.Serializable
+
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
-import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 import mu.KotlinLogging
@@ -22,14 +23,21 @@ fun Route.pdlProxyApi(pdlClientService: PdlClientService = PdlClientService()) {
             call.respond(HttpStatusCode.OK, person)
         }
 
-        get("error") {
-            logger.error { "Feil oppstod under henting av data" }
-            call.respond(HttpStatusCode.InternalServerError, "Feil oppstod under henting av data")
+        post("error") {
+            val messageRequest: MessageRequest = call.receive()
+            logger.error { "Feil oppstod under henting av data - ${messageRequest.message}" }
+            call.respond(HttpStatusCode.InternalServerError, "Feil oppstod under henting av data - ${messageRequest.message}")
         }
 
-        get("warn") {
-            logger.warn { "Ingen data blir funnet" }
-            call.respond(HttpStatusCode.NoContent, "Ingen data blir funnet")
+        post("warn") {
+            val messageRequest: MessageRequest = call.receive()
+            logger.warn { "Ingen data blir funnet - ${messageRequest.message}" }
+            call.respond(HttpStatusCode.NoContent, "Ingen data blir funnet - ${messageRequest.message}")
         }
     }
 }
+
+@Serializable
+data class MessageRequest(
+    val message: String,
+)
