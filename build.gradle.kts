@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "2.2.0"
     kotlin("plugin.serialization") version "2.2.0"
-    id("com.gradleup.shadow") version "8.3.8"
+    id("com.gradleup.shadow") version "9.0.1"
     id("com.expediagroup.graphql") version "8.8.1"
     id("org.jlleitschuh.gradle.ktlint") version "13.0.0"
     id("org.jetbrains.kotlinx.kover") version "0.9.1"
@@ -32,9 +32,9 @@ val natpryceVersion = "1.6.10.0"
 val janionVersion = "3.1.12"
 val mockkVersion = "1.14.5"
 val graphqlClientVersion = "8.8.1"
-val swaggerRequestValidatorVersion = "2.44.9"
+val swaggerRequestValidatorVersion = "2.45.1"
 val mockOAuth2ServerVersion = "2.2.1"
-val kotestVersion = "6.0.0.M10"
+val kotestVersion = "6.0.0.M15"
 val wiremockVersion = "3.13.1"
 
 dependencies {
@@ -163,7 +163,7 @@ tasks {
     }
 
     withType<Wrapper> {
-        gradleVersion = "8.14"
+        gradleVersion = "9.0.0"
     }
 
     ("jar") {
