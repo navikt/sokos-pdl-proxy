@@ -10,6 +10,7 @@
 * [6. Drift og støtte](#6-drift-og-støtte)
 * [7. Swagger](#7-swagger)
 * [8. Henvendelser](#8-henvendelser)
+
 ---
 
 # 1. Funksjonelle Krav
@@ -102,14 +103,18 @@ kubectl logs -f sokos-pdl-proxy-<POD-ID> --namespace okonomi -c sokos-pdl-proxy
 
 ### Alarmer
 
-Vi bruker [nais-alerts](https://doc.nais.io/observability/alerts) for å sette opp alarmer.
-Disse finner man konfigurert i [.nais/alerts-dev.yaml](.nais/alerts-dev.yaml) filen og [.nais/alerts-prod.yaml](.nais/alerts-prod.yaml)
-Alarmene blir publisert i Slack kanalen [#team-mob-alerts-dev](https://nav-it.slack.com/archives/C042SF2FEQM) og [#team-mob-alerts-prod](https://nav-it.slack.com/archives/C042ESY71GX).
+Applikasjonen bruker [Grafana Alerting](https://grafana.nav.cloud.nais.io/alerting/) for overvåkning og varsling.
+Dette er konfigurert via NAIS sin [alerting-integrasjon](https://doc.nais.io/observability/alerts).
 
-- [Prod-miljø](.nais/alerts-prod.yaml)
-- [Dev- og Q1-miljø](.nais/alerts-dev.yaml)
+Alarmene overvåker metrics som:
 
-Disse dukker opp i `#team-mob-alerts-dev` og `#team-mob-alers-prod` kanalene på Slack
+- HTTP-feilrater
+- JVM-metrikker
+
+Varsler blir sendt til følgende Slack-kanaler:
+
+- Dev-miljø: [#team-mob-alerts-dev](https://nav-it.slack.com/archives/C042SF2FEQM)
+- Prod-miljø: [#team-mob-alerts-prod](https://nav-it.slack.com/archives/C042ESY71GX)
 
 ### Grafana
 
