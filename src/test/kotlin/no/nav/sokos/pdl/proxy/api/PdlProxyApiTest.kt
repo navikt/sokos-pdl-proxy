@@ -13,7 +13,7 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.netty.NettyApplicationEngine
 import io.ktor.server.routing.routing
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.mockk
 import io.restassured.RestAssured
 import org.hamcrest.CoreMatchers.containsString
@@ -50,7 +50,7 @@ internal class PdlProxyApiTest :
 
         test("Klient kaller PDL med suksess") {
 
-            every { pdlClientService.hentPersonDetaljer(any()) } returns mockPersonDetaljer()
+            coEvery { pdlClientService.hentPersonDetaljer(any()) } returns mockPersonDetaljer()
 
             val response =
                 RestAssured
@@ -72,7 +72,7 @@ internal class PdlProxyApiTest :
 
         test("Klient kaller PDL, ingen person finnes, skal returnere 404 med feilmelding") {
 
-            every { pdlClientService.hentPersonDetaljer(any()) } throws PdlApiException(404, "Fant ikke person")
+            coEvery { pdlClientService.hentPersonDetaljer(any()) } throws PdlApiException(404, "Fant ikke person")
 
             val response =
                 RestAssured
@@ -97,7 +97,7 @@ internal class PdlProxyApiTest :
 
         test("Klient ikke ikke autentisert mot PDL, skal returnere 500 med feilmelding") {
 
-            every { pdlClientService.hentPersonDetaljer(any()) } throws PdlApiException(500, "Ikke autentisert")
+            coEvery { pdlClientService.hentPersonDetaljer(any()) } throws PdlApiException(500, "Ikke autentisert")
 
             val response =
                 RestAssured

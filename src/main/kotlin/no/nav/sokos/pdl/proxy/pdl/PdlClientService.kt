@@ -2,8 +2,6 @@ package no.nav.sokos.pdl.proxy.pdl
 
 import java.net.URI
 
-import kotlinx.coroutines.runBlocking
-
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import com.expediagroup.graphql.client.types.GraphQLClientError
 import com.expediagroup.graphql.client.types.GraphQLClientResponse
@@ -36,22 +34,20 @@ class PdlClientService(
             httpClient,
         ),
     private val accessTokenClient: AccessTokenClient = AccessTokenClient(azureAdScope = pdlScope),
-) {
-    fun hentPersonDetaljer(ident: String): PersonDetaljer {
+) : AutoCloseable {
+    suspend fun hentPersonDetaljer(ident: String): PersonDetaljer {
         val identer = hentIdenterForPerson(ident).getOrThrow()
         val person = hentPerson(ident).getOrThrow()
         return PersonDetaljer.fra(identer, person)
     }
 
-    private fun hentIdenterForPerson(ident: String): Result<List<Ident>> {
+    private suspend fun hentIdenterForPerson(ident: String): Result<List<Ident>> {
         logger.info { "Henter identer for person" }
+        val accessToken = accessTokenClient.hentAccessToken()
         val respons: GraphQLClientResponse<HentIdenter.Result> =
-            runBlocking {
-                val accessToken = accessTokenClient.hentAccessToken()
-                graphQlClient.execute(HentIdenter(HentIdenter.Variables(ident = ident))) {
-                    url(pdlUrl)
-                    header("Authorization", "Bearer $accessToken")
-                }
+            graphQlClient.execute(HentIdenter(HentIdenter.Variables(ident = ident))) {
+                url(pdlUrl)
+                header("Authorization", "Bearer $accessToken")
             }
 
         return respons.errors?.let { feilmeldingerFraPdl ->
@@ -72,17 +68,15 @@ class PdlClientService(
         } ?: emptyList<Ident>()
             .also { logger.info(marker = TEAM_LOGS_MARKER) { "Henting av Identer for ident: $ident fra PDL vellykket" } }
 
-    private fun hentPerson(ident: String): Result<Person?> {
+    private suspend fun hentPerson(ident: String): Result<Person?> {
         logger.info { "Henter person" }
+        val accessToken = accessTokenClient.hentAccessToken() // Removed unnecessary ? operator
         val respons: GraphQLClientResponse<HentPerson.Result> =
-            runBlocking {
-                val accessToken = accessTokenClient?.hentAccessToken()
-                graphQlClient.execute(HentPerson(HentPerson.Variables(ident = ident))) {
-                    url(pdlUrl)
-                    header("Authorization", "Bearer $accessToken")
-                    header("behandlingsnummer", "B154")
-                    header("Nav-Call-Id", MDC.get("x-correlation-id"))
-                }
+            graphQlClient.execute(HentPerson(HentPerson.Variables(ident = ident))) {
+                url(pdlUrl)
+                header("Authorization", "Bearer $accessToken")
+                header("behandlingsnummer", "B154")
+                header("Nav-Call-Id", MDC.get("x-correlation-id"))
             }
 
         return respons.errors?.let { feilmeldingerFraPdl ->
@@ -131,5 +125,13 @@ class PdlClientService(
         }
         logger.info(marker = TEAM_LOGS_MARKER) { "Henting av Person med ident $ident fra PDL vellykket" }
         return Result.success(respons.data?.hentPerson)
+    }
+
+    override fun close() {
+        try {
+            graphQlClient.close()
+        } catch (e: Exception) {
+            logger.warn { "Error closing GraphQL client: ${e.message}" }
+        }
     }
 }
