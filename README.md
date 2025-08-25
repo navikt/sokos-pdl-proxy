@@ -29,7 +29,8 @@ API tilbyr følgende:
 ### Forutsetninger
 
 * Java 21
-* Gradle
+* [Gradle](https://gradle.org/)
+* [Kotest IntelliJ Plugin](https://plugins.jetbrains.com/plugin/14080-kotest)
 
 ### Bygge prosjekt
 
