@@ -12,7 +12,7 @@ plugins {
     kotlin("plugin.serialization") version "2.2.10"
     id("com.gradleup.shadow") version "9.0.2"
     id("com.expediagroup.graphql") version "8.8.1"
-    id("org.jlleitschuh.gradle.ktlint") version "13.0.0"
+    id("org.jlleitschuh.gradle.ktlint") version "13.1.0"
     id("org.jetbrains.kotlinx.kover") version "0.9.1"
 }
 
@@ -34,7 +34,7 @@ val mockkVersion = "1.14.5"
 val graphqlClientVersion = "8.8.1"
 val swaggerRequestValidatorVersion = "2.45.1"
 val mockOAuth2ServerVersion = "2.2.1"
-val kotestVersion = "6.0.0.M17"
+val kotestVersion = "6.0.1"
 val wiremockVersion = "3.13.1"
 
 dependencies {
