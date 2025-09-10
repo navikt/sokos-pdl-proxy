@@ -7,7 +7,6 @@ import kotlinx.serialization.json.Json
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.apache.Apache
 import io.ktor.client.plugins.HttpRequestRetry
-import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import mu.KotlinLogging
@@ -34,12 +33,6 @@ val httpClient =
                 logger.warn { "$retryCount retry feilet mot: ${request.url}" }
             }
             exponentialDelay()
-        }
-
-        install(HttpTimeout) {
-            requestTimeoutMillis = 60_000
-            connectTimeoutMillis = 5_000
-            socketTimeoutMillis = 30_000
         }
 
         engine {
