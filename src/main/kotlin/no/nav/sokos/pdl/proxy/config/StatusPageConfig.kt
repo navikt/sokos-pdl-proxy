@@ -1,5 +1,6 @@
 package no.nav.sokos.pdl.proxy.config
 
+import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.plugins.statuspages.StatusPagesConfig
@@ -14,6 +15,11 @@ fun StatusPagesConfig.statusPageConfig() {
     exception<PdlApiException> { call, pdlApiException ->
         val response = TjenestefeilResponse(pdlApiException.feilmelding)
         call.logInfoOgResponder(pdlApiException, HttpStatusCode.fromValue(pdlApiException.feilkode), response)
+    }
+
+    exception<ConnectTimeoutException> { call, throwable ->
+        val response = TjenestefeilResponse(throwable.message ?: "Connection timed out")
+        call.logErrorOgResponder(throwable, response)
     }
 
     exception<Throwable> { call, throwable ->
