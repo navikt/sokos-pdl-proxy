@@ -38,6 +38,7 @@ val httpClient =
         engine {
             customizeClient {
                 setRoutePlanner(SystemDefaultRoutePlanner(ProxySelector.getDefault()))
+                setConnectionReuseStrategy { _, _ -> false }
             }
         }
     }
