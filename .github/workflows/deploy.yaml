@@ -37,19 +37,19 @@ jobs:
 
   deploy-dev:
     needs: [ assemble-build-push-image-dev ]
-    name: Deploy to dev-fss
+    name: Deploy to dev-gcp
     uses: navikt/mob-gha-workflows/.github/workflows/nais-app-deploy.yaml@main
     with:
-      cluster: dev-fss
+      cluster: dev-gcp
       resource: .nais/dev/naiserator-dev.yaml
       image: ${{ needs.assemble-build-push-image-dev.outputs.image }}
 
   deploy-dev-q1:
     needs: [ assemble-build-push-image-dev ]
-    name: Deploy to dev-fss-q1
+    name: Deploy to dev-gcp-q1
     uses: navikt/mob-gha-workflows/.github/workflows/nais-app-deploy.yaml@main
     with:
-      cluster: dev-fss
+      cluster: dev-gcp
       resource: .nais/dev/naiserator-q1.yaml
       image: ${{ needs.assemble-build-push-image-dev.outputs.image }}
 
@@ -63,9 +63,9 @@ jobs:
 
   deploy-prod:
     needs: [ assemble-build-push-image-prod ]
-    name: Deploy to prod-fss
+    name: Deploy to prod-gcp
     uses: navikt/mob-gha-workflows/.github/workflows/nais-app-deploy.yaml@main
     with:
-      cluster: prod-fss
+      cluster: prod-gcp
       resource: .nais/prod/naiserator-prod.yaml
       image: ${{ needs.assemble-build-push-image-prod.outputs.image }}
