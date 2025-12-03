@@ -48,7 +48,7 @@ dependencies {
 
     // Ktor client
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-    implementation("io.ktor:ktor-client-cio-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-client-apache5-jvm:$ktorVersion")
 
     // Security
     implementation("io.ktor:ktor-server-auth-jvm:$ktorVersion")
