@@ -1,22 +1,19 @@
 package no.nav.sokos.pdl.proxy.config
 
-import java.net.ProxySelector
-
 import kotlinx.serialization.json.Json
 
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.apache.Apache
+import io.ktor.client.engine.apache5.Apache5
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import mu.KotlinLogging
-import org.apache.http.impl.conn.SystemDefaultRoutePlanner
 
 private val logger = KotlinLogging.logger {}
 
 val httpClient =
-    HttpClient(Apache) {
-        expectSuccess = false
+    HttpClient(Apache5) {
+        expectSuccess = true
         install(ContentNegotiation) {
             json(
                 Json {
@@ -33,12 +30,5 @@ val httpClient =
                 logger.warn { "$retryCount retry feilet mot: ${request.url}" }
             }
             exponentialDelay()
-        }
-
-        engine {
-            customizeClient {
-                setRoutePlanner(SystemDefaultRoutePlanner(ProxySelector.getDefault()))
-                setConnectionReuseStrategy { _, _ -> false }
-            }
         }
     }
