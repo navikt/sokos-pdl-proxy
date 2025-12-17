@@ -1,19 +1,18 @@
 # sokos-pdl-proxy
 
-# Innholdsoversikt
-
-* [1. Funksjonelle krav](#1-funksjonelle-krav)
-* [2. Utviklingsmiljø](#2-utviklingsmiljø)
-* [3. Programvarearkitektur](#3-programvarearkitektur)
-* [4. Deployment](#4-deployment)
-* [5. Autentisering](#5-autentisering)
-* [6. Drift og støtte](#6-drift-og-støtte)
-* [7. Swagger](#7-swagger)
-* [8. Henvendelser](#8-henvendelser)
+* [1. Dokumentasjon](dokumentasjon/dokumentasjon.md)
+* [2. Funksjonelle krav](#2-funksjonelle-krav)
+* [3. Utviklingsmiljø](#3-utviklingsmiljø)
+* [4. Programvarearkitektur](#4-programvarearkitektur)
+* [5. Deployment](#5-deployment)
+* [6. Autentisering](#6-autentisering)
+* [7. Drift og støtte](#7-drift-og-støtte)
+* [8. Swagger](#8-swagger)
+* [9. Henvendelser](#9-henvendelser)
 
 ---
 
-# 1. Funksjonelle Krav
+# 2. Funksjonelle Krav
 
 Applikasjonen er et bindeledd mellom stormaskin og PDL (Persondataløsningen). Stormaskin har ikke mulighet til å gjøre
 GraphQL rest-kall men ved hjelp av denne proxy har vi mulighet til å hente et lite subset av persondata og identer fra
@@ -24,7 +23,7 @@ API tilbyr følgende:
 - Person identer, fornavn, mellomnavn, etternavn, forkortet navn, bostedsadresse, martikkeladresse, utenlandskadresse,
   ukjent bosted, metdata, kontaktadresse, oppholdsadresse
 
-# 2. Utviklingsmiljø
+# 3. Utviklingsmiljø
 
 ### Forutsetninger
 
@@ -53,11 +52,23 @@ For å kjøre applikasjonen må du gjøre følgende:
   koden `"USE_AUTHENTICATION" to "true"` i
   filen [PropertiesConfig](src/main/kotlin/no/nav/sokos/pdl/proxy/config/PropertiesConfig.kt).
 
-# 3. Programvarearkitektur
+# 4. Programvarearkitektur
 
-[System diagram](./dokumentasjon/system-diagram.md)
+```mermaid
+flowchart TB
 
-# 4. Deployment
+subgraph k1 [Stormaskin]
+  direction TB
+  OS     
+  UR     
+end
+
+
+k1 --> |REST| SPP
+SPP[sokos-pdl-proxy] --> |GraphQL| PDL
+```
+
+# 5. Deployment
 
 Distribusjon av tjenesten er gjort med bruk av Github Actions.
 [sokos-pdl-proxy CI / CD](https://github.com/navikt/sokos-pdl-proxy/actions)
@@ -65,11 +76,11 @@ Distribusjon av tjenesten er gjort med bruk av Github Actions.
 Push/merge til main branch vil teste, bygge og deploye til produksjonsmiljø og testmiljø.
 Det foreligger også mulighet for manuell deploy.
 
-# 5. Autentisering
+# 6. Autentisering
 
 Applikasjonen bruker [AzureAD](https://docs.nais.io/security/auth/azure-ad/) autentisering
 
-# 6. Drift og støtte
+# 7. Drift og støtte
 
 ### Logging
 
@@ -115,13 +126,13 @@ Varsler blir sendt til følgende Slack-kanaler:
 
 ---
 
-# 7. Swagger
+# 8. Swagger
 
 - [Prod-gcp](https://sokos-pdl-proxy.intern.nav.no/api/pdl-proxy/v1/docs)
 - [Dev-gcp](https://sokos-pdl-proxy.intern.dev.nav.no/api/pdl-proxy/v1/docs)
 - [Lokalt](http://0.0.0.0:8080/api/pdl-proxy/v1/docs)
 
-# 8. Henvendelser
+# 9. Henvendelser
 
 Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på Github.
 Interne henvendelser kan sendes via Slack i kanalen [#utbetaling](https://nav-it.slack.com/archives/CKZADNFBP)
