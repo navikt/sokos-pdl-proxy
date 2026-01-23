@@ -26,7 +26,7 @@ val ktorVersion = "3.3.3"
 val kotlinxSerializationVersion = "1.9.0"
 val logbackVersion = "1.5.24"
 val logstashVersion = "9.0"
-val micrometerVersion = "1.16.1"
+val micrometerVersion = "1.16.2"
 val kotlinLoggingVersion = "3.0.5"
 val natpryceVersion = "1.6.10.0"
 val janionVersion = "3.1.12"
@@ -76,7 +76,7 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
-    testImplementation("net.bytebuddy:byte-buddy:1.18.3") // TEMP: Needed for mockk 1.14.6 with java25. Remove when Mockk is updated and bytebuddy is no longer needed.
+    testImplementation("net.bytebuddy:byte-buddy:1.18.4") // TEMP: Needed for mockk 1.14.6 with java25. Remove when Mockk is updated and bytebuddy is no longer needed.
     testImplementation("no.nav.security:mock-oauth2-server:$mockOAuth2ServerVersion")
     testImplementation("com.atlassian.oai:swagger-request-validator-restassured:$swaggerRequestValidatorVersion")
     testImplementation("org.wiremock:wiremock:$wiremockVersion")
