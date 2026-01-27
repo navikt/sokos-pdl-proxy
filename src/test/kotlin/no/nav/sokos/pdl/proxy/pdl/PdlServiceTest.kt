@@ -3,6 +3,7 @@ package no.nav.sokos.pdl.proxy.pdl
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
+import com.github.tomakehurst.wiremock.common.ContentTypes
 import com.github.tomakehurst.wiremock.stubbing.Scenario.STARTED
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
@@ -14,7 +15,6 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 
 import no.nav.pdl.hentperson.PostadresseIFrittFormat
-import no.nav.sokos.pdl.proxy.APPLICATION_JSON
 import no.nav.sokos.pdl.proxy.TestUtil.readFromResource
 import no.nav.sokos.pdl.proxy.config.PdlApiException
 import no.nav.sokos.pdl.proxy.listener.WiremockListener
@@ -47,7 +47,7 @@ internal class PdlServiceTest :
                     .whenScenarioStateIs(STARTED)
                     .willReturn(
                         aResponse()
-                            .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                            .withHeader(HttpHeaders.ContentType, ContentTypes.APPLICATION_JSON)
                             .withStatus(HttpStatusCode.OK.value)
                             .withBody(hentIdenter),
                     ).willSetStateTo("SecondRequest"),
@@ -60,7 +60,7 @@ internal class PdlServiceTest :
                     .whenScenarioStateIs("SecondRequest")
                     .willReturn(
                         aResponse()
-                            .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                            .withHeader(HttpHeaders.ContentType, ContentTypes.APPLICATION_JSON)
                             .withStatus(HttpStatusCode.OK.value)
                             .withBody(hentPerson),
                     ),
@@ -91,7 +91,7 @@ internal class PdlServiceTest :
                 post(urlEqualTo("/graphql"))
                     .willReturn(
                         aResponse()
-                            .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                            .withHeader(HttpHeaders.ContentType, ContentTypes.APPLICATION_JSON)
                             .withStatus(HttpStatusCode.OK.value)
                             .withBody(hentIdenter),
                     ),
@@ -118,7 +118,7 @@ internal class PdlServiceTest :
                     .whenScenarioStateIs(STARTED)
                     .willReturn(
                         aResponse()
-                            .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                            .withHeader(HttpHeaders.ContentType, ContentTypes.APPLICATION_JSON)
                             .withStatus(HttpStatusCode.OK.value)
                             .withBody(hentIdenter),
                     ).willSetStateTo("SecondRequest"),
@@ -131,7 +131,7 @@ internal class PdlServiceTest :
                     .whenScenarioStateIs("SecondRequest")
                     .willReturn(
                         aResponse()
-                            .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                            .withHeader(HttpHeaders.ContentType, ContentTypes.APPLICATION_JSON)
                             .withStatus(HttpStatusCode.OK.value)
                             .withBody(hentPerson),
                     ),
@@ -158,7 +158,7 @@ internal class PdlServiceTest :
                     .whenScenarioStateIs(STARTED)
                     .willReturn(
                         aResponse()
-                            .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                            .withHeader(HttpHeaders.ContentType, ContentTypes.APPLICATION_JSON)
                             .withStatus(HttpStatusCode.OK.value)
                             .withBody(hentIdenter),
                     ).willSetStateTo("SecondRequest"),
@@ -171,7 +171,7 @@ internal class PdlServiceTest :
                     .whenScenarioStateIs("SecondRequest")
                     .willReturn(
                         aResponse()
-                            .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                            .withHeader(HttpHeaders.ContentType, ContentTypes.APPLICATION_JSON)
                             .withStatus(HttpStatusCode.OK.value)
                             .withBody(hentPerson),
                     ),
@@ -193,7 +193,7 @@ internal class PdlServiceTest :
                     .whenScenarioStateIs(STARTED)
                     .willReturn(
                         aResponse()
-                            .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                            .withHeader(HttpHeaders.ContentType, ContentTypes.APPLICATION_JSON)
                             .withStatus(HttpStatusCode.OK.value)
                             .withBody(hentIdenter),
                     ).willSetStateTo("SecondRequest"),
@@ -206,7 +206,7 @@ internal class PdlServiceTest :
                     .whenScenarioStateIs("SecondRequest")
                     .willReturn(
                         aResponse()
-                            .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                            .withHeader(HttpHeaders.ContentType, ContentTypes.APPLICATION_JSON)
                             .withStatus(HttpStatusCode.OK.value)
                             .withBody(hentPerson),
                     ),
@@ -232,7 +232,7 @@ internal class PdlServiceTest :
                     .whenScenarioStateIs(STARTED)
                     .willReturn(
                         aResponse()
-                            .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                            .withHeader(HttpHeaders.ContentType, ContentTypes.APPLICATION_JSON)
                             .withStatus(HttpStatusCode.OK.value)
                             .withBody(hentIdenter),
                     ).willSetStateTo("SecondRequest"),
@@ -245,7 +245,7 @@ internal class PdlServiceTest :
                     .whenScenarioStateIs("SecondRequest")
                     .willReturn(
                         aResponse()
-                            .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                            .withHeader(HttpHeaders.ContentType, ContentTypes.APPLICATION_JSON)
                             .withStatus(HttpStatusCode.OK.value)
                             .withBody(hentPerson),
                     ),
@@ -271,7 +271,7 @@ internal class PdlServiceTest :
                     .whenScenarioStateIs(STARTED)
                     .willReturn(
                         aResponse()
-                            .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                            .withHeader(HttpHeaders.ContentType, ContentTypes.APPLICATION_JSON)
                             .withStatus(HttpStatusCode.OK.value)
                             .withBody(hentIdenter),
                     ).willSetStateTo("SecondRequest"),
@@ -284,7 +284,7 @@ internal class PdlServiceTest :
                     .whenScenarioStateIs("SecondRequest")
                     .willReturn(
                         aResponse()
-                            .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                            .withHeader(HttpHeaders.ContentType, ContentTypes.APPLICATION_JSON)
                             .withStatus(HttpStatusCode.OK.value)
                             .withBody(hentPerson),
                     ),
@@ -310,7 +310,7 @@ internal class PdlServiceTest :
                     .whenScenarioStateIs(STARTED)
                     .willReturn(
                         aResponse()
-                            .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                            .withHeader(HttpHeaders.ContentType, ContentTypes.APPLICATION_JSON)
                             .withStatus(HttpStatusCode.OK.value)
                             .withBody(hentIdenter),
                     ).willSetStateTo("SecondRequest"),
@@ -323,7 +323,7 @@ internal class PdlServiceTest :
                     .whenScenarioStateIs("SecondRequest")
                     .willReturn(
                         aResponse()
-                            .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                            .withHeader(HttpHeaders.ContentType, ContentTypes.APPLICATION_JSON)
                             .withStatus(HttpStatusCode.OK.value)
                             .withBody(hentPerson),
                     ),
@@ -350,7 +350,7 @@ internal class PdlServiceTest :
                     .whenScenarioStateIs(STARTED)
                     .willReturn(
                         aResponse()
-                            .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                            .withHeader(HttpHeaders.ContentType, ContentTypes.APPLICATION_JSON)
                             .withStatus(HttpStatusCode.OK.value)
                             .withBody(hentIdenter),
                     ).willSetStateTo("SecondRequest"),
@@ -363,7 +363,7 @@ internal class PdlServiceTest :
                     .whenScenarioStateIs("SecondRequest")
                     .willReturn(
                         aResponse()
-                            .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                            .withHeader(HttpHeaders.ContentType, ContentTypes.APPLICATION_JSON)
                             .withStatus(HttpStatusCode.OK.value)
                             .withBody(hentPerson),
                     ),
@@ -387,7 +387,7 @@ internal class PdlServiceTest :
                 post(urlEqualTo("/graphql"))
                     .willReturn(
                         aResponse()
-                            .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                            .withHeader(HttpHeaders.ContentType, ContentTypes.APPLICATION_JSON)
                             .withStatus(HttpStatusCode.OK.value)
                             .withBody(hentIdenter),
                     ),
@@ -411,7 +411,7 @@ internal class PdlServiceTest :
                 post(urlEqualTo("/graphql"))
                     .willReturn(
                         aResponse()
-                            .withHeader(HttpHeaders.ContentType, APPLICATION_JSON)
+                            .withHeader(HttpHeaders.ContentType, ContentTypes.APPLICATION_JSON)
                             .withStatus(HttpStatusCode.OK.value)
                             .withBody(hentIdenter),
                     ),

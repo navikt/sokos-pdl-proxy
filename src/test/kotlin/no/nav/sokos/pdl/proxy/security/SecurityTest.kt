@@ -8,6 +8,7 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
@@ -19,7 +20,6 @@ import io.mockk.mockk
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import no.nav.security.mock.oauth2.token.DefaultOAuth2TokenCallback
 import no.nav.security.mock.oauth2.withMockOAuth2Server
-import no.nav.sokos.pdl.proxy.APPLICATION_JSON
 import no.nav.sokos.pdl.proxy.PDL_PROXY_API_PATH
 import no.nav.sokos.pdl.proxy.api.model.IdentRequest
 import no.nav.sokos.pdl.proxy.api.pdlProxyApi
@@ -94,7 +94,7 @@ internal class SecurityTest :
                     val response =
                         client.post(PDL_PROXY_API_PATH) {
                             header(HttpHeaders.Authorization, "Bearer ${tokenFromDefaultProvider()}")
-                            header(HttpHeaders.ContentType, APPLICATION_JSON)
+                            header(HttpHeaders.ContentType, ContentType.Application.Json)
                             setBody(IdentRequest("12345678901"))
                         }
 

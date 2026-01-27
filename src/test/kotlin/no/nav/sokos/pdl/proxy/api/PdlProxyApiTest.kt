@@ -5,6 +5,7 @@ import kotlinx.serialization.json.Json
 import com.atlassian.oai.validator.restassured.OpenApiValidationFilter
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
+import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
@@ -18,7 +19,6 @@ import io.mockk.mockk
 import io.restassured.RestAssured
 import org.hamcrest.CoreMatchers.containsString
 
-import no.nav.sokos.pdl.proxy.APPLICATION_JSON
 import no.nav.sokos.pdl.proxy.PDL_PROXY_API_PATH
 import no.nav.sokos.pdl.proxy.TestData.mockPersonDetaljer
 import no.nav.sokos.pdl.proxy.api.model.IdentRequest
@@ -56,7 +56,7 @@ internal class PdlProxyApiTest :
                 RestAssured
                     .given()
                     .filter(validationFilter)
-                    .header(HttpHeaders.ContentType, APPLICATION_JSON)
+                    .header(HttpHeaders.ContentType, ContentType.Application.Json.toString())
                     .header(HttpHeaders.Authorization, "Bearer dummytoken")
                     .body(IdentRequest("123456789"))
                     .port(PORT)
@@ -78,7 +78,7 @@ internal class PdlProxyApiTest :
                 RestAssured
                     .given()
                     .filter(validationFilter)
-                    .header(HttpHeaders.ContentType, APPLICATION_JSON)
+                    .header(HttpHeaders.ContentType, ContentType.Application.Json.toString())
                     .header(HttpHeaders.Authorization, "Bearer dummytoken")
                     .body(IdentRequest("123456789"))
                     .port(PORT)
@@ -103,7 +103,7 @@ internal class PdlProxyApiTest :
                 RestAssured
                     .given()
                     .filter(validationFilter)
-                    .header(HttpHeaders.ContentType, APPLICATION_JSON)
+                    .header(HttpHeaders.ContentType, ContentType.Application.Json.toString())
                     .header(HttpHeaders.Authorization, "Bearer dummytoken")
                     .body(IdentRequest("123456789"))
                     .port(PORT)
