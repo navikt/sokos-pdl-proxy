@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import com.github.tomakehurst.wiremock.stubbing.Scenario.STARTED
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.inspectors.forAny
 import io.kotest.matchers.nulls.shouldBeNull
@@ -11,7 +12,6 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
-import org.junit.jupiter.api.assertThrows
 
 import no.nav.pdl.hentperson.PostadresseIFrittFormat
 import no.nav.sokos.pdl.proxy.APPLICATION_JSON
@@ -98,7 +98,7 @@ internal class PdlServiceTest :
             )
 
             val exception =
-                assertThrows<PdlApiException> {
+                shouldThrow<PdlApiException> {
                     pdlClientService.hentPersonDetaljer("22334455667")
                 }
 
@@ -138,7 +138,7 @@ internal class PdlServiceTest :
             )
 
             val exception =
-                assertThrows<PdlApiException> {
+                shouldThrow<PdlApiException> {
                     pdlClientService.hentPersonDetaljer("22334455667")
                 }
 
@@ -330,7 +330,7 @@ internal class PdlServiceTest :
             )
 
             val exception =
-                assertThrows<PdlApiException> {
+                shouldThrow<PdlApiException> {
                     pdlClientService.hentPersonDetaljer("24117920441")
                 }
 
@@ -370,7 +370,7 @@ internal class PdlServiceTest :
             )
 
             val exception =
-                assertThrows<PdlApiException> {
+                shouldThrow<PdlApiException> {
                     pdlClientService.hentPersonDetaljer("24117920441")
                 }
 
@@ -394,7 +394,7 @@ internal class PdlServiceTest :
             )
 
             val exception =
-                assertThrows<PdlApiException> {
+                shouldThrow<PdlApiException> {
                     pdlClientService.hentPersonDetaljer("22334455667")
                 }
 
@@ -418,7 +418,7 @@ internal class PdlServiceTest :
             )
 
             val exception =
-                assertThrows<PdlApiException> {
+                shouldThrow<PdlApiException> {
                     pdlClientService.hentPersonDetaljer("22334455667")
                 }
 

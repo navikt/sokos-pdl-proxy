@@ -3,7 +3,6 @@ package no.nav.sokos.pdl.proxy.domain
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 
 import no.nav.pdl.hentperson.Metadata
 import no.nav.pdl.hentperson.Navn
@@ -30,7 +29,7 @@ internal class PersonDetaljerTest :
         }
 
         test("Sammenligning av navn med tomme lister av endringer feiler men ett navn går bra") {
-            assertDoesNotThrow {
+            shouldNotThrow<Exception> {
                 PersonDetaljer.fra(
                     emptyList(),
                     Person(
