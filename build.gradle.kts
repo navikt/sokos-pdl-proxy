@@ -154,10 +154,6 @@ tasks {
         serializer = GraphQLSerializer.KOTLINX
     }
 
-    withType<Wrapper> {
-        gradleVersion = "9.3.0"
-    }
-
     ("build") {
         dependsOn("copyPreCommitHook")
     }
