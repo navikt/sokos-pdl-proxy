@@ -85,7 +85,7 @@ components:
       type: object
       properties:
         identer:
-          maxItems: 10
+          maxItems: 30
           type: array
           description: List av Identer til person.
           items:
