@@ -1,0 +1,474 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Pdl Proxy API",
+    "description": "Proxy tjeneste som lar z/OS Connect kalle Pdl.",
+    "contact": {
+      "name": "Team Motta og Beregne",
+      "url": "https://nav-it.slack.com/archives/CKZADNFBP",
+      "email": "okonomi@nav.no"
+    },
+    "version": "1.0.0"
+  },
+  "basePath": "/api/pdl-proxy",
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "tags": [
+    {
+      "name": "pdl-proxy",
+      "description": "Opplysninger fra PDL"
+    }
+  ],
+  "paths": {
+    "/v1/hent-person": {
+      "post": {
+        "tags": [
+          "sokos-pdl-proxy.v1"
+        ],
+        "summary": "Henter identer og et subset av persondata fra PDL",
+        "operationId": "hent-person",
+        "parameters": [
+          {
+            "name": "x-correlation-id",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "hentPerson",
+            "in": "body",
+            "required": true,
+            "description": "ident som skal hente person fra PDL. Bruk 24117920441 å teste som er skrevet på PDL dokument - https://navikt.github.io/pdl/#_hentperson",
+            "schema": {
+              "$ref": "#/definitions/IdentRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Vellykket forespørsel",
+            "schema": {
+              "$ref": "#/definitions/PersonDetaljer"
+            }
+          },
+          "404": {
+            "description": "Fant ikke forespurt(e) entitet(er)",
+            "schema": {
+              "$ref": "#/definitions/TjenestefeilResponse"
+            }
+          },
+          "500": {
+            "description": "Noe gikk galt",
+            "schema": {
+              "$ref": "#/definitions/TjenestefeilResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "description": "OIDC-token (JWT via OAuth2.0).\n Følgende format må brukes i input-feltet \"Value\" under: <strong>\"Bearer {token}\"</strong>.\n Eksempel på verdi i input-felt: <strong>Bearer eYdmifml0ejugm</strong>",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "IdentRequest": {
+      "type": "object",
+      "required": [
+        "ident"
+      ],
+      "properties": {
+        "ident": {
+          "type": "string",
+          "description": "11 siffer identnummer",
+          "example": "11 siffer identnummer"
+        }
+      }
+    },
+    "HentPerson": {
+      "type": "object",
+      "required": [
+        "ident"
+      ],
+      "properties": {
+        "ident": {
+          "type": "string",
+          "description": "Ident til person.",
+          "example": "24117920441"
+        }
+      }
+    },
+    "PersonDetaljer": {
+      "type": "object",
+      "title": "PersonDetaljer",
+      "description": "Nøkkelinformasjon om person",
+      "properties": {
+        "identer": {
+          "type": "array",
+          "description": "List av Identer til person.",
+          "maxItems": 30,
+          "items": {
+            "$ref": "#/definitions/Ident"
+          }
+        },
+        "fornavn": {
+          "type": "string",
+          "description": "Person Fornavn",
+          "example": "ÅPENHJERTIG"
+        },
+        "mellomnavn": {
+          "type": "string",
+          "description": "Person mellomnavn",
+          "example": ""
+        },
+        "etternavn": {
+          "type": "string",
+          "description": "Person etternavn",
+          "example": "STAUDE"
+        },
+        "forkortetNavn": {
+          "type": "string",
+          "description": "Person forkortetNavn",
+          "example": "STAUDE ÅPENHJERTIG"
+        },
+        "bostedsadresse": {
+          "$ref": "#/definitions/Bostedsadresse"
+        },
+        "kontaktadresse": {
+          "type": "array",
+          "description": "For å avhjelpe begrensninger på stormaskin, settes en maks her som tilsvarer det som teoretisk kan komme fra PDL",
+          "maxItems": 3,
+          "items": {
+            "$ref": "#/definitions/Kontaktadresse"
+          }
+        },
+        "oppholdsadresse": {
+          "type": "array",
+          "description": "For å avhjelpe begrensninger på stormaskin, settes en maks her som tilsvarer det som teoretisk kan komme fra PDL",
+          "maxItems": 2,
+          "items": {
+            "$ref": "#/definitions/Oppholdsadresse"
+          }
+        }
+      }
+    },
+    "Ident": {
+      "type": "object",
+      "properties": {
+        "ident": {
+          "type": "string",
+          "description": "Ident til person.",
+          "example": "24117920441"
+        },
+        "aktiv": {
+          "type": "boolean",
+          "description": "Hvis er aktiv ident.",
+          "example": true
+        },
+        "identifikatorType": {
+          "type": "string",
+          "description": "Hva slags identifikator FOLKEREGISTERIDENTIFIKATOR eller N_PID eller AKTOR_ID",
+          "example": "FOLKEREGISTERIDENTIFIKATOR"
+        }
+      }
+    },
+    "Bostedsadresse": {
+      "type": "object",
+      "properties": {
+        "angittFlyttedato": {
+          "type": "string"
+        },
+        "gyldigFraOgMed": {
+          "type": "string"
+        },
+        "gyldigTilOgMed": {
+          "type": "string"
+        },
+        "coAdressenavn": {
+          "type": "string"
+        },
+        "vegadresse": {
+          "$ref": "#/definitions/Vegadresse"
+        },
+        "matrikkeladresse": {
+          "$ref": "#/definitions/Matrikkeladresse"
+        },
+        "utenlandskAdresse": {
+          "$ref": "#/definitions/UtenlandskAdresse"
+        },
+        "ukjentBosted": {
+          "$ref": "#/definitions/UkjentBosted"
+        },
+        "metadata": {
+          "$ref": "#/definitions/Metadata"
+        }
+      }
+    },
+    "Oppholdsadresse": {
+      "type": "object",
+      "properties": {
+        "oppholdAnnetSted": {
+          "type": "string"
+        },
+        "coAdressenavn": {
+          "type": "string"
+        },
+        "gyldigFraOgMed": {
+          "type": "string"
+        },
+        "gyldigTilOgMed": {
+          "type": "string"
+        },
+        "utenlandskAdresse": {
+          "$ref": "#/definitions/UtenlandskAdresse"
+        },
+        "vegadresse": {
+          "$ref": "#/definitions/Vegadresse"
+        },
+        "matrikkeladresse": {
+          "$ref": "#/definitions/Matrikkeladresse"
+        },
+        "metadata": {
+          "$ref": "#/definitions/Metadata"
+        }
+      }
+    },
+    "Kontaktadresse": {
+      "type": "object",
+      "properties": {
+        "gyldigFraOgMed": {
+          "type": "string"
+        },
+        "gyldigTilOgMed": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "coAdressenavn": {
+          "type": "string"
+        },
+        "postboksadresse": {
+          "$ref": "#/definitions/Postboksadresse"
+        },
+        "vegadresse": {
+          "$ref": "#/definitions/Vegadresse"
+        },
+        "postadresseIFrittFormat": {
+          "$ref": "#/definitions/PostadresseIFrittFormat"
+        },
+        "utenlandskAdresse": {
+          "$ref": "#/definitions/UtenlandskAdresse"
+        },
+        "utenlandskAdresseIFrittFormat": {
+          "$ref": "#/definitions/UtenlandskAdresseIFrittFormat"
+        },
+        "metadata": {
+          "$ref": "#/definitions/Metadata"
+        }
+      }
+    },
+    "Vegadresse": {
+      "type": "object",
+      "properties": {
+        "husnummer": {
+          "type": "string"
+        },
+        "husbokstav": {
+          "type": "string"
+        },
+        "bruksenhetsnummer": {
+          "type": "string"
+        },
+        "adressenavn": {
+          "type": "string"
+        },
+        "kommunenummer": {
+          "type": "string"
+        },
+        "bydelsnummer": {
+          "type": "string"
+        },
+        "tilleggsnavn": {
+          "type": "string"
+        },
+        "postnummer": {
+          "type": "string"
+        }
+      }
+    },
+    "Matrikkeladresse": {
+      "type": "object",
+      "properties": {
+        "bruksenhetsnummer": {
+          "type": "string"
+        },
+        "tilleggsnavn": {
+          "type": "string"
+        },
+        "postnummer": {
+          "type": "string"
+        },
+        "kommunenummer": {
+          "type": "string"
+        }
+      }
+    },
+    "UtenlandskAdresse": {
+      "type": "object",
+      "properties": {
+        "adressenavnNummer": {
+          "type": "string"
+        },
+        "bygningEtasjeLeilighet": {
+          "type": "string"
+        },
+        "postboksNummerNavn": {
+          "type": "string"
+        },
+        "postkode": {
+          "type": "string"
+        },
+        "bySted": {
+          "type": "string"
+        },
+        "regionDistriktOmraade": {
+          "type": "string"
+        },
+        "landkode": {
+          "type": "string"
+        }
+      }
+    },
+    "UkjentBosted": {
+      "type": "object",
+      "properties": {
+        "bostedskommune": {
+          "type": "string"
+        }
+      }
+    },
+    "Postboksadresse": {
+      "type": "object",
+      "properties": {
+        "postbokseier": {
+          "type": "string"
+        },
+        "postboks": {
+          "type": "string"
+        },
+        "postnummer": {
+          "type": "string"
+        }
+      }
+    },
+    "PostadresseIFrittFormat": {
+      "type": "object",
+      "properties": {
+        "adresselinje1": {
+          "type": "string"
+        },
+        "adresselinje2": {
+          "type": "string"
+        },
+        "adresselinje3": {
+          "type": "string"
+        },
+        "postnummer": {
+          "type": "string"
+        }
+      }
+    },
+    "UtenlandskAdresseIFrittFormat": {
+      "type": "object",
+      "properties": {
+        "adresselinje1": {
+          "type": "string"
+        },
+        "adresselinje2": {
+          "type": "string"
+        },
+        "adresselinje3": {
+          "type": "string"
+        },
+        "postkode": {
+          "type": "string"
+        },
+        "byEllerStedsnavn": {
+          "type": "string"
+        },
+        "landkode": {
+          "type": "string"
+        }
+      }
+    },
+    "Metadata": {
+      "type": "object",
+      "properties": {
+        "opplysningsId": {
+          "type": "string"
+        },
+        "endringer": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Endring"
+          }
+        },
+        "historisk": {
+          "type": "boolean"
+        },
+        "master": {
+          "type": "string"
+        }
+      }
+    },
+    "Endring": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "registrert": {
+          "type": "string"
+        },
+        "registrertAv": {
+          "type": "string"
+        },
+        "systemkilde": {
+          "type": "string"
+        },
+        "kilde": {
+          "type": "string"
+        }
+      }
+    },
+    "TjenestefeilResponse": {
+      "type": "object",
+      "title": "TjenestefeilResponse",
+      "description": "Responsobjekt ved feil i tjeneste",
+      "properties": {
+        "melding": {
+          "type": "string",
+          "description": "Informasjon om hva som er feil"
+        }
+      }
+    }
+  }
+}

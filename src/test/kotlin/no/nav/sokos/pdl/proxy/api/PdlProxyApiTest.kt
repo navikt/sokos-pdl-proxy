@@ -34,7 +34,7 @@ private const val PORT = 9090
 
 private lateinit var server: EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration>
 
-private val validationFilter = OpenApiValidationFilter("openapi/sokos-pdl-proxy-v1-swagger.yaml")
+private val validationFilter = OpenApiValidationFilter("openapi/sokos-pdl-proxy-v1-swagger.json")
 private val pdlClientService = mockk<PdlClientService>()
 
 internal class PdlProxyApiTest :
