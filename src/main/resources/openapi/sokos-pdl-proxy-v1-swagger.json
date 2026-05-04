@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Pdl Proxy API",
+    "title": "Pdl Connect Proxy API",
     "description": "Proxy tjeneste som lar z/OS Connect kalle Pdl.",
     "contact": {
       "name": "Team Motta og Beregne",
