@@ -10,6 +10,11 @@
 * [8. Swagger](#8-swagger)
 * [9. Henvendelser](#9-henvendelser)
 
+> `sokos-pdl-proxy-v1-swagger.json` skal ikke redigeres uten videre.
+> Stormaskin OS og UR bruker denne swagger-filen til å generere copybooks.
+> Endringer i filen medfører ikke automatisk endringer i kodebasen til `sokos-pdl-proxy`,
+> men kan utgjøre feilsituasjoner dersom swagger-filen ikke er i synk med OS og UR.
+
 ---
 
 # 2. Funksjonelle Krav
