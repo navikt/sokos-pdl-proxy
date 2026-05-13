@@ -105,9 +105,9 @@ configurations.all {
                 useVersion("4.2.13.Final")
                 because("Netty HTTP/2 CONTINUATION Frame Flood DoS via Zero-Byte Frame Bypass. Affected version >= 4.2.0.Alpha1, < 4.2.10.Final")
             }
-            if (requested.group == "io.netty" && requested.name == "etty-transport-native-epoll") {
+            if (requested.group == "io.netty" && requested.name == "netty-transport-native-epoll") {
                 useVersion("4.2.13.Final")
-                because("CVE-2026-42577 Affected version >= 4.2.0.Alpha1, < 4.2.10.Final")
+                because("CVE-2026-42577 Affected version < 4.2.13.Final")
             }
             if (requested.group == "org.bouncycastle" && requested.name == "bcprov-jdk18on") {
                 useVersion("1.84")
