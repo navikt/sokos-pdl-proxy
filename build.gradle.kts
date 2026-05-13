@@ -113,10 +113,6 @@ configurations.all {
                 useVersion("1.84")
                 because("Bouncy Castle Has Covert Timing Channel Vulnerability. Affected version >= 1.71, < 1.84")
             }
-            if (requested.group == "org.eclipse.jetty" && requested.name == "jetty-http") {
-                useVersion("11.0.28")
-                because("CVE-2026-2332 Affected version >= 11.0.0, <= 11.0.27")
-            }
         }
     }
 }
