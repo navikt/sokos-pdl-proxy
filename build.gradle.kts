@@ -105,9 +105,17 @@ configurations.all {
                 useVersion("4.2.13.Final")
                 because("Netty HTTP/2 CONTINUATION Frame Flood DoS via Zero-Byte Frame Bypass. Affected version >= 4.2.0.Alpha1, < 4.2.10.Final")
             }
+            if (requested.group == "io.netty" && requested.name == "etty-transport-native-epoll") {
+                useVersion("4.2.13.Final")
+                because("CVE-2026-42577 Affected version >= 4.2.0.Alpha1, < 4.2.10.Final")
+            }
             if (requested.group == "org.bouncycastle" && requested.name == "bcprov-jdk18on") {
                 useVersion("1.84")
                 because("Bouncy Castle Has Covert Timing Channel Vulnerability. Affected version >= 1.71, < 1.84")
+            }
+            if (requested.group == "org.eclipse.jetty" && requested.name == "jetty-http") {
+                useVersion("11.0.28")
+                because("CVE-2026-2332 Affected version >= 11.0.0, <= 11.0.27")
             }
         }
     }
