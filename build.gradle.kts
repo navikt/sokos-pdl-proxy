@@ -22,7 +22,7 @@ repositories {
     mavenCentral()
 }
 
-val ktorVersion = "3.4.2"
+val ktorVersion = "3.4.3"
 val kotlinxSerializationVersion = "1.11.0"
 val logbackVersion = "1.5.32"
 val logstashVersion = "9.0"
@@ -33,7 +33,7 @@ val janionVersion = "3.1.12"
 val mockkVersion = "1.14.9"
 val graphqlClientVersion = "9.2.0"
 val swaggerRequestValidatorVersion = "2.46.1"
-val mockOAuth2ServerVersion = "3.0.1"
+val mockOAuth2ServerVersion = "3.0.3"
 val kotestVersion = "6.1.11"
 val wiremockVersion = "3.13.2"
 
