@@ -109,10 +109,6 @@ configurations.all {
                 useVersion("4.2.13.Final")
                 because("CVE-2026-42577 Affected version < 4.2.13.Final")
             }
-            if (requested.group == "org.bouncycastle" && requested.name == "bcprov-jdk18on") {
-                useVersion("1.84")
-                because("Bouncy Castle Has Covert Timing Channel Vulnerability. Affected version >= 1.71, < 1.84")
-            }
         }
     }
 }
