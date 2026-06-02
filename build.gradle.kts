@@ -33,7 +33,7 @@ val janionVersion = "3.1.12"
 val mockkVersion = "1.14.9"
 val graphqlClientVersion = "9.2.0"
 val swaggerRequestValidatorVersion = "2.46.1"
-val mockOAuth2ServerVersion = "3.0.3"
+val mockOAuth2ServerVersion = "4.0.0"
 val kotestVersion = "6.1.11"
 val wiremockVersion = "3.13.2"
 
