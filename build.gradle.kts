@@ -109,6 +109,10 @@ configurations.all {
                 useVersion("4.2.13.Final")
                 because("CVE-2026-42577 Affected version < 4.2.13.Final")
             }
+            if (requested.group == "io.netty" && requested.name == "netty-handler") {
+                useVersion("4.2.15.Final")
+                because("CVE-2026-44249 and CVE-2026-45416")
+            }
         }
     }
 }
