@@ -36,6 +36,7 @@ val swaggerRequestValidatorVersion = "2.46.1"
 val mockOAuth2ServerVersion = "4.0.0"
 val kotestVersion = "6.1.11"
 val wiremockVersion = "3.13.2"
+val nettyResolutionVersion = "4.2.15.Final"
 
 dependencies {
 
@@ -88,26 +89,38 @@ dependencies {
 
 configurations.all {
     resolutionStrategy {
+        val pinnedResolutions =
+            mapOf(
+                "tools.jackson.core:jackson-core" to
+                    Pair(
+                        "3.1.1",
+                        "Jackson Core: Document length constraint bypass in blocking, async, and DataInput parsers. Affected version >= 3.0.0, <= 3.1.0",
+                    ),
+                "com.fasterxml.jackson.core:jackson-core" to
+                    Pair(
+                        "2.21.1",
+                        "jackson-core: Number Length Constraint Bypass in Async Parser Leads to Potential DoS Condition. Affected version >= 2.19.0, < 2.21.1",
+                    ),
+                "io.netty:netty-codec-http" to
+                    Pair(
+                        nettyResolutionVersion,
+                        "Netty: HTTP Request Smuggling via Chunked Extension Quoted-String Parsing. Affected version >= 4.2.0.Alpha1, < 4.2.10.Final",
+                    ),
+                "io.netty:netty-codec-http2" to
+                    Pair(
+                        nettyResolutionVersion,
+                        "Netty HTTP/2 CONTINUATION Frame Flood DoS via Zero-Byte Frame Bypass. Affected version >= 4.2.0.Alpha1, < 4.2.10.Final",
+                    ),
+                "io.netty:netty-transport-native-epoll" to
+                    Pair(nettyResolutionVersion, "CVE-2026-42577 Affected version < 4.2.13.Final"),
+                "io.netty:netty-handler" to Pair(nettyResolutionVersion, "CVE-2026-44249 and CVE-2026-45416"),
+            )
+
         eachDependency {
-            if (requested.group == "tools.jackson.core" && requested.name == "jackson-core") {
-                useVersion("3.1.1")
-                because("Jackson Core: Document length constraint bypass in blocking, async, and DataInput parsers. Affected version >= 3.0.0, <= 3.1.0")
-            }
-            if (requested.group == "com.fasterxml.jackson.core" && requested.name == "jackson-core") {
-                useVersion("2.21.1")
-                because("jackson-core: Number Length Constraint Bypass in Async Parser Leads to Potential DoS Condition. Affected version >= 2.19.0, < 2.21.1")
-            }
-            if (requested.group == "io.netty" && requested.name == "netty-codec-http") {
-                useVersion("4.2.13.Final")
-                because("Netty: HTTP Request Smuggling via Chunked Extension Quoted-String Parsing. Affected version >= 4.2.0.Alpha1, < 4.2.10.Final")
-            }
-            if (requested.group == "io.netty" && requested.name == "netty-codec-http2") {
-                useVersion("4.2.13.Final")
-                because("Netty HTTP/2 CONTINUATION Frame Flood DoS via Zero-Byte Frame Bypass. Affected version >= 4.2.0.Alpha1, < 4.2.10.Final")
-            }
-            if (requested.group == "io.netty" && requested.name == "netty-transport-native-epoll") {
-                useVersion("4.2.13.Final")
-                because("CVE-2026-42577 Affected version < 4.2.13.Final")
+            val module = "${requested.group}:${requested.name}"
+            pinnedResolutions[module]?.let { (version, reason) ->
+                useVersion(version)
+                because(reason)
             }
         }
     }
