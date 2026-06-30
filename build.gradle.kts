@@ -22,7 +22,7 @@ repositories {
     mavenCentral()
 }
 
-val ktorVersion = "3.4.3"
+val ktorVersion = "3.5.0"
 val kotlinxSerializationVersion = "1.11.0"
 val logbackVersion = "1.5.34"
 val logstashVersion = "9.0"
