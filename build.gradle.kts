@@ -31,10 +31,10 @@ val kotlinLoggingVersion = "3.0.5"
 val natpryceVersion = "1.6.10.0"
 val janionVersion = "3.1.12"
 val mockkVersion = "1.14.11"
-val graphqlClientVersion = "10.0.0"
+val graphqlClientVersion = "10.0.1"
 val swaggerRequestValidatorVersion = "2.46.1"
-val mockOAuth2ServerVersion = "4.0.0"
-val kotestVersion = "6.1.11"
+val mockOAuth2ServerVersion = "4.0.1"
+val kotestVersion = "6.2.1"
 val wiremockVersion = "3.13.2"
 
 dependencies {
