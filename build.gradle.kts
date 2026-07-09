@@ -24,16 +24,16 @@ repositories {
 
 val ktorVersion = "3.4.3"
 val kotlinxSerializationVersion = "1.11.0"
-val logbackVersion = "1.5.32"
+val logbackVersion = "1.5.34"
 val logstashVersion = "9.0"
-val micrometerVersion = "1.16.5"
+val micrometerVersion = "1.17.0"
 val kotlinLoggingVersion = "3.0.5"
 val natpryceVersion = "1.6.10.0"
-val mockkVersion = "1.14.9"
-val graphqlClientVersion = "9.2.0"
+val mockkVersion = "1.14.11"
+val graphqlClientVersion = "10.0.1"
 val swaggerRequestValidatorVersion = "2.46.1"
-val mockOAuth2ServerVersion = "3.0.3"
-val kotestVersion = "6.1.11"
+val mockOAuth2ServerVersion = "4.0.1"
+val kotestVersion = "6.2.1"
 val wiremockVersion = "3.13.2"
 
 dependencies {
@@ -87,25 +87,25 @@ dependencies {
 configurations.all {
     resolutionStrategy {
         eachDependency {
+            if (requested.group == "io.netty") {
+                useVersion("4.2.15.Final")
+                because("Multiple versions of netty has vulnerable dependencies. Affected version < 4.2.15.Final")
+            }
+            if (requested.group == "tools.jackson.core" && requested.name == "jackson-databind") {
+                useVersion("3.2.0")
+                because("Multiple versions of jackson-databind has vulnerable dependencies. Affected version < >= 3.0.0, <= 3.1.3")
+            }
             if (requested.group == "tools.jackson.core" && requested.name == "jackson-core") {
-                useVersion("3.1.1")
-                because("Jackson Core: Document length constraint bypass in blocking, async, and DataInput parsers. Affected version >= 3.0.0, <= 3.1.0")
+                useVersion("3.2.0")
+                because("Multiple versions of jackson-core has vulnerable dependencies. Affected version >= 3.0.0, <= 3.1.0")
+            }
+            if (requested.group == "com.fasterxml.jackson.core" && requested.name == "jackson-databind") {
+                useVersion("2.21.4")
+                because("Multiple versions of jackson-databind has vulnerable dependencies. Affected version >= 2.19.0, <= 2.21.3")
             }
             if (requested.group == "com.fasterxml.jackson.core" && requested.name == "jackson-core") {
-                useVersion("2.21.1")
-                because("jackson-core: Number Length Constraint Bypass in Async Parser Leads to Potential DoS Condition. Affected version >= 2.19.0, < 2.21.1")
-            }
-            if (requested.group == "io.netty" && requested.name == "netty-codec-http") {
-                useVersion("4.2.13.Final")
-                because("Netty: HTTP Request Smuggling via Chunked Extension Quoted-String Parsing. Affected version >= 4.2.0.Alpha1, < 4.2.10.Final")
-            }
-            if (requested.group == "io.netty" && requested.name == "netty-codec-http2") {
-                useVersion("4.2.13.Final")
-                because("Netty HTTP/2 CONTINUATION Frame Flood DoS via Zero-Byte Frame Bypass. Affected version >= 4.2.0.Alpha1, < 4.2.10.Final")
-            }
-            if (requested.group == "io.netty" && requested.name == "netty-transport-native-epoll") {
-                useVersion("4.2.13.Final")
-                because("CVE-2026-42577 Affected version < 4.2.13.Final")
+                useVersion("2.21.4")
+                because("Multiple versions of jackson-core has vulnerable dependencies.. Affected version >= 2.19.0, <= 2.21.1")
             }
         }
     }
