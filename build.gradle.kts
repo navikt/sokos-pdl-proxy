@@ -29,7 +29,6 @@ val logstashVersion = "9.0"
 val micrometerVersion = "1.16.5"
 val kotlinLoggingVersion = "3.0.5"
 val natpryceVersion = "1.6.10.0"
-val janionVersion = "3.1.12"
 val mockkVersion = "1.14.9"
 val graphqlClientVersion = "9.2.0"
 val swaggerRequestValidatorVersion = "2.46.1"
@@ -64,7 +63,6 @@ dependencies {
 
     // Logging
     implementation("io.github.microutils:kotlin-logging-jvm:$kotlinLoggingVersion")
-    runtimeOnly("org.codehaus.janino:janino:$janionVersion")
     runtimeOnly("ch.qos.logback:logback-classic:$logbackVersion")
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:$logstashVersion")
 
