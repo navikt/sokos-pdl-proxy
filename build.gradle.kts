@@ -24,7 +24,7 @@ repositories {
 
 val ktorVersion = "3.5.2"
 val kotlinxSerializationVersion = "1.11.0"
-val logbackVersion = "1.6.1"
+val logbackVersion = "1.6.3"
 val logstashVersion = "9.0"
 val micrometerVersion = "1.17.0"
 val kotlinLoggingVersion = "3.0.5"
@@ -32,8 +32,8 @@ val natpryceVersion = "1.6.10.0"
 val mockkVersion = "1.14.11"
 val graphqlClientVersion = "10.2.1"
 val swaggerRequestValidatorVersion = "2.46.1"
-val mockOAuth2ServerVersion = "6.0.0"
-val kotestVersion = "6.2.3"
+val mockOAuth2ServerVersion = "6.0.1"
+val kotestVersion = "6.2.4"
 val wiremockVersion = "3.13.2"
 
 dependencies {
