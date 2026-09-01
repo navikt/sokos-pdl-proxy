@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "2.4.10"
     kotlin("plugin.serialization") version "2.4.10"
-    id("com.expediagroup.graphql") version "10.2.1"
+    id("com.expediagroup.graphql") version "10.2.2"
     id("org.jlleitschuh.gradle.ktlint") version "14.2.0"
     id("org.jetbrains.kotlinx.kover") version "0.9.9"
 
@@ -24,16 +24,16 @@ repositories {
 
 val ktorVersion = "3.5.2"
 val kotlinxSerializationVersion = "1.11.0"
-val logbackVersion = "1.6.1"
+val logbackVersion = "1.6.3"
 val logstashVersion = "9.0"
-val micrometerVersion = "1.17.0"
+val micrometerVersion = "1.17.1"
 val kotlinLoggingVersion = "3.0.5"
 val natpryceVersion = "1.6.10.0"
 val mockkVersion = "1.14.11"
-val graphqlClientVersion = "10.2.1"
+val graphqlClientVersion = "10.2.2"
 val swaggerRequestValidatorVersion = "2.46.1"
-val mockOAuth2ServerVersion = "6.0.0"
-val kotestVersion = "6.2.3"
+val mockOAuth2ServerVersion = "6.0.2"
+val kotestVersion = "6.2.4"
 val wiremockVersion = "3.13.2"
 
 dependencies {
