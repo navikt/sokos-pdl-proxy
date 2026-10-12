@@ -87,9 +87,25 @@ dependencies {
 configurations.all {
     resolutionStrategy {
         eachDependency {
-            if (requested.group == "io.netty") {
+            if (requested.group == "io.netty" && requested.name == "netty-codec-http") {
                 useVersion("4.2.17.Final")
-                because("Multiple versions of netty has vulnerable dependencies. Affected version < 4.2.15.Final")
+                because("Cache Poisoning and Information Disclosure via CORS Vary Header Overwrite. Affected version < 4.2.17.Final")
+            }
+            if (requested.group == "tools.jackson.core" && requested.name == "jackson-databind") {
+                useVersion("3.2.3")
+                because("Multiple versions of jackson-databind has vulnerable dependencies. Affected version >= 3.2.0, <= 3.2.2")
+            }
+            if (requested.group == "tools.jackson.core" && requested.name == "jackson-core") {
+                useVersion("3.2.3")
+                because("Multiple versions of jackson-core has vulnerable dependencies. Affected version >= 3.2.0, <= 3.2.1")
+            }
+            if (requested.group == "com.fasterxml.jackson.core" && requested.name == "jackson-databind") {
+                useVersion("2.22.3")
+                because("Multiple versions of jackson-databind has vulnerable dependencies. Affected version >= 2.22.0, < 2.22.2")
+            }
+            if (requested.group == "com.fasterxml.jackson.core" && requested.name == "jackson-core") {
+                useVersion("2.22.3")
+                because("Multiple versions of jackson-core has vulnerable dependencies. Affected version >= 2.22.0, <= 2.22.2")
             }
             if (requested.group == "org.apache.httpcomponents.client5" && requested.name == "httpclient5") {
                 useVersion("5.6.3")
