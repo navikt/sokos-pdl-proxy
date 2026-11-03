@@ -92,8 +92,10 @@ dependencies {
         implementation("com.google.guava:guava:33.7.2-jre") {
             because("GHSA-xxph-c9ww-hj94 affects Guava versions before 33.7.2")
         }
-        implementation("tools.jackson.core:jackson-databind:3.2.3") {
-            because("Multiple versions of jackson-databind has vulnerable dependencies. Affected version >= 3.2.0, <= 3.2.2")
+        listOf("implementation", "graphqlClient", "graphqlGraalVM", "graphqlSDL").forEach { configuration ->
+            add(configuration, "tools.jackson.core:jackson-databind:3.2.3") {
+                because("Multiple versions of jackson-databind has vulnerable dependencies. Affected version >= 3.2.0, <= 3.2.2")
+            }
         }
         implementation("com.fasterxml.jackson.core:jackson-databind:2.22.3") {
             because("Multiple versions of jackson-databind has vulnerable dependencies. Affected version >= 2.22.0, < 2.22.2")
