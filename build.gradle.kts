@@ -29,10 +29,10 @@ val logstashVersion = "9.0"
 val micrometerVersion = "1.17.2"
 val kotlinLoggingVersion = "3.0.5"
 val natpryceVersion = "1.6.10.0"
-val mockkVersion = "1.14.11"
+val mockkVersion = "1.14.12"
 val graphqlClientVersion = "11.0.0"
 val swaggerRequestValidatorVersion = "2.46.1"
-val mockOAuth2ServerVersion = "6.1.3"
+val mockOAuth2ServerVersion = "6.1.5"
 val kotestVersion = "6.2.6"
 val wiremockVersion = "3.13.2"
 
@@ -89,15 +89,15 @@ dependencies {
     }
 
     constraints {
-        implementation("com.google.guava:guava:33.7.2-jre") {
+        implementation("com.google.guava:guava:33.8.0-jre") {
             because("GHSA-xxph-c9ww-hj94 affects Guava versions before 33.7.2")
         }
         listOf("implementation", "graphqlClient", "graphqlGraalVM", "graphqlSDL").forEach { configuration ->
-            add(configuration, "tools.jackson.core:jackson-databind:3.2.3") {
+            add(configuration, "tools.jackson.core:jackson-databind:3.3.0") {
                 because("Multiple versions of jackson-databind has vulnerable dependencies. Affected version >= 3.2.0, <= 3.2.2")
             }
         }
-        implementation("com.fasterxml.jackson.core:jackson-databind:2.22.3") {
+        implementation("com.fasterxml.jackson.core:jackson-databind:2.23.0") {
             because("Multiple versions of jackson-databind has vulnerable dependencies. Affected version >= 2.22.0, < 2.22.2")
         }
     }
