@@ -23,8 +23,8 @@ repositories {
 }
 
 val ktorVersion = "3.6.1"
-val kotlinxSerializationVersion = "1.12.0"
-val logbackVersion = "1.6.6"
+val kotlinxSerializationVersion = "1.13.0"
+val logbackVersion = "1.6.7"
 val logstashVersion = "9.0"
 val micrometerVersion = "1.17.2"
 val kotlinLoggingVersion = "3.0.5"
@@ -33,7 +33,7 @@ val mockkVersion = "1.14.12"
 val graphqlClientVersion = "11.0.0"
 val swaggerRequestValidatorVersion = "2.46.1"
 val mockOAuth2ServerVersion = "6.1.5"
-val kotestVersion = "6.2.6"
+val kotestVersion = "6.2.7"
 val wiremockVersion = "3.13.2"
 
 dependencies {
@@ -84,7 +84,7 @@ dependencies {
     }
 
     // Sårbarheter
-    implementation(platform("io.netty:netty-bom:4.2.20.Final")) {
+    implementation(platform("io.netty:netty-bom:4.2.21.Final")) {
         because("Align Netty modules on the latest stable patch release")
     }
 
