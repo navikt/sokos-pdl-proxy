@@ -32,7 +32,7 @@ val natpryceVersion = "1.6.10.0"
 val mockkVersion = "1.14.12"
 val graphqlClientVersion = "11.0.0"
 val swaggerRequestValidatorVersion = "2.46.1"
-val mockOAuth2ServerVersion = "6.1.5"
+val mockOAuth2ServerVersion = "7.0.1"
 val kotestVersion = "6.2.6"
 val wiremockVersion = "3.13.2"
 
